@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 BullsFX Content Engine
------------------------
+----------------------
 Ogni run:
   1. Prende notizie fresche (<=5 giorni) da Google News RSS su piu' temi/lingue.
   2. Deduplica per URL rispetto agli item gia' presenti in index.html.
@@ -39,7 +39,7 @@ FEED_TIMEOUT = 15
 # Ogni "canale" = una ricerca Google News + i metadati dell'item.
 # solo="alberto" + lang="es"  => contenuto visibile SOLO ad Alberto (spagnolo).
 CHANNELS = [
-    # ---- MACRO USA / globale -----------------------------------------------
+    # ---- MACRO USA / globale ------------------------------------------------
     dict(cat="Macro",    area="USA / Mercati globali", lang="it", solo=None,
          q="wall street s&p 500 nasdaq when:5d", hl="en", gl="US", ceid="US:en"),
     dict(cat="Macro",    area="USA / Fed",             lang="it", solo=None,
@@ -243,7 +243,7 @@ def generate_item(client, c):
     obj = json.loads(txt[a:b + 1])
     # blindatura compliance lato codice
     cap = obj.get("caption", "")
-    cap = re.split(r'\u26a0', cap)[0].rstrip()          # via eventuale warning
+    cap = re.split(r"\u26a0", cap)[0].rstrip()          # via eventuale warning
     obj["caption"] = cap
     item = {
         "id": 0,
@@ -307,7 +307,25 @@ def main():
     chosen = pick_spread(cands, TARGET)
     print(f"[info] selezionati: {len(chosen)}")
 
-    client = Anthropic()
+    # --- diagnostica connettivita' verso l'API (aiuta a capire i "Connection error") ---
+    try:
+        ip = socket.gethostbyname("api.anthropic.com")
+        print(f"[net] DNS api.anthropic.com -> {ip}")
+    except Exception as ex:
+        print(f"[net] DNS FAIL: {ex!r}", file=sys.stderr)
+    try:
+        import httpx as _httpx
+        r = _httpx.get("https://api.anthropic.com/v1/models", timeout=30,
+                       headers={"x-api-key": os.environ.get("ANTHROPIC_API_KEY", ""),
+                                "anthropic-version": "2023-06-01"})
+        print(f"[net] GET /v1/models -> HTTP {r.status_code}")
+    except Exception as ex:
+        print(f"[net] handshake FAIL: {type(ex).__name__}: {ex!r} cause={getattr(ex, '__cause__', None)!r}",
+              file=sys.stderr)
+
+    # client con retry automatici e timeout generoso (i runner a volte hanno la
+    # prima connessione lenta: senza retry basta un singolo intoppo per perdere l'item)
+    client = Anthropic(max_retries=5, timeout=60.0)
     added = 0
     for c in chosen:
         try:
@@ -316,7 +334,8 @@ def main():
             added += 1
             print(f"[ok] + {item['categoria']:8} {item['titolo'][:55]}")
         except Exception as ex:
-            print(f"[skip] {c['headline'][:45]}: {ex}", file=sys.stderr)
+            print(f"[skip] {c['headline'][:45]}: {type(ex).__name__}: {ex!r} "
+                  f"cause={getattr(ex, '__cause__', None)!r}", file=sys.stderr)
         time.sleep(1)
 
     # prune > KEEP_DAYS
@@ -341,7 +360,7 @@ def main():
 
     # safety: nessun warning residuo nelle caption
     for i in kept:
-        i["caption"] = re.split(r'\u26a0', i.get("caption", ""))[0].rstrip()
+        i["caption"] = re.split(r"\u26a0", i.get("caption", ""))[0].rstrip()
 
     write_html(h, m, data)
     oggi = sum(1 for i in kept if i.get("date") == today.isoformat())
