@@ -106,12 +106,20 @@ REGOLE DI CONFORMITA' (assolute):
 - NON nominare MAI un broker. Usa sempre l'espressione "un partner regolamentato". Mai scrivere nomi di broker.
 - ZERO cifre di profitto, ZERO percentuali di vincita, ZERO garanzie o promesse di guadagno.
 - Cita SEMPRE la fonte a schermo (outlet + testata + data): screenshot o overlay, non serve per forza green screen.
-- NON inserire alcun disclaimer o avviso di rischio sul trading nella caption (niente warning, niente "non e' consulenza"). La caption finisce con la CTA soft.
+- NON inserire alcun disclaimer o avviso di rischio sul trading nella caption (niente warning, niente "non e' consulenza").
 
 DIREZIONE CREATIVA:
 - Hook che ferma il pollice entro 1-2 secondi. Vari il formato tra i contenuti (Screen-recording, Talking head, B-roll + testo, POV / personale). Green screen OPZIONALE.
 - La nota di regia deve dare un'idea di ripresa concreta e virale (inquadratura, testo a schermo, montaggio) pensata per l'algoritmo di TikTok/Instagram.
-- CTA soft verso l'approfondimento (es. "link in bio", "commenta X"), mai spingente.
+
+SCALA DELLE CTA (regola fondamentale: NON ogni contenuto vende):
+Scegli il "cta_type" in base al TIPO di contenuto, non mettere sempre la stessa CTA:
+- "none"  -> contenuti personali/aneddotici/lifestyle/storytelling emotivo. NESSUNA CTA: lo script chiude con una frase finale che lascia respirare il contenuto. Il campo "cta" resta VUOTO e lo script NON contiene la riga "CTA:".
+- "engage"-> newsjacking / opinione / reaction a caldo. La CTA e' UNA domanda secca che spinge i commenti (es. "E tu come la leggi? 👇"). Resta in-app.
+- "save"  -> contenuti educativi/di valore ("capire il denaro", spiegazioni). CTA di retention: "salva questo", "salva e rileggilo". Resta in-app.
+- "follow"-> contenuti serializzabili ("parte 1 di..."). CTA: "segui per la parte 2". Resta in-app.
+- "link"  -> SOLO circa 1 contenuto su 5, i piu' operativi/di metodo: CTA verso il canale/approfondimento ("nel canale", "link in bio"). Non abusarne: se e' ovunque, non converte.
+Regole: mai spingente; vari SEMPRE il testo (non ripetere "nel canale" su ogni link); privilegia CTA native (salva/commenta/condividi/segui) che non fanno uscire dall'app.
 
 Rispondi ESCLUSIVAMENTE con un oggetto JSON valido (nessun testo prima o dopo), con ESATTAMENTE queste chiavi:
 {
@@ -122,9 +130,10 @@ Rispondi ESCLUSIVAMENTE con un oggetto JSON valido (nessun testo prima o dopo), 
  "durata": "<es. 20-35s>",
  "titolo": "<titolo interno breve della scheda>",
  "overlay": "<testo grande da mettere a schermo>",
- "script": "HOOK: ...\\nBODY: ...\\nCTA: ...",
+ "script": "HOOK: ...\\nBODY: ...\\nCTA: ...   (ometti del tutto la riga CTA se cta_type=none)",
  "caption": "<caption pronta con hashtag, SENZA disclaimer>",
- "cta": "<call to action / link soft>",
+ "cta_type": "<none|engage|save|follow|link>",
+ "cta": "<testo della CTA coerente col cta_type; VUOTO se cta_type=none>",
  "fornire": "<cosa deve preparare il talent per girarlo>",
  "regia": "<nota di regia concreta e virale>"
 }
@@ -245,6 +254,17 @@ def generate_item(client, c):
     cap = obj.get("caption", "")
     cap = re.split(r"\u26a0", cap)[0].rstrip()          # via eventuale warning
     obj["caption"] = cap
+    # normalizza la CTA in base al cta_type
+    cta_type = (obj.get("cta_type") or "").strip().lower()
+    if cta_type not in ("none", "engage", "save", "follow", "link"):
+        cta_type = "engage"
+    scr = obj.get("script", "")
+    if cta_type == "none":
+        obj["cta"] = ""
+        # rimuovi l'eventuale riga "CTA: ..." dallo script
+        scr = "\n".join(l for l in scr.split("\n")
+                        if not l.strip().lower().startswith("cta:")).rstrip()
+        obj["script"] = scr
     item = {
         "id": 0,
         "date": (c["pub"].isoformat() if c["pub"] else datetime.now(timezone.utc).date().isoformat()),
@@ -257,6 +277,7 @@ def generate_item(client, c):
         "overlay": obj.get("overlay", ""),
         "script": obj.get("script", ""),
         "caption": obj["caption"],
+        "cta_type": cta_type,
         "cta": obj.get("cta", ""),
         "fornire": obj.get("fornire", ""),
         "source": {"outlet": c["outlet"], "headline": c["headline"],
