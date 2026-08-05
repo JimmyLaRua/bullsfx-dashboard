@@ -295,8 +295,14 @@ def write_html(h, m, data):
 # MAIN
 # ----------------------------------------------------------------------------
 def main():
-    if not os.environ.get("ANTHROPIC_API_KEY"):
+    # Il secret puo' essere stato incollato con spazi/newline finali: se il valore
+    # della chiave contiene '\n' diventa un header HTTP illegale e OGNI chiamata
+    # fallisce con "Connection error" (LocalProtocolError). Ripuliamo qui una volta
+    # e riscriviamo l'env cosi' anche l'SDK (che lo legge da solo) usa la versione pulita.
+    api_key = (os.environ.get("ANTHROPIC_API_KEY") or "").strip()
+    if not api_key:
         raise SystemExit("ANTHROPIC_API_KEY mancante")
+    os.environ["ANTHROPIC_API_KEY"] = api_key
 
     h, m, data = read_html()
     items = data.get("items", [])
@@ -316,7 +322,7 @@ def main():
     try:
         import httpx as _httpx
         r = _httpx.get("https://api.anthropic.com/v1/models", timeout=30,
-                       headers={"x-api-key": os.environ.get("ANTHROPIC_API_KEY", ""),
+                       headers={"x-api-key": api_key,
                                 "anthropic-version": "2023-06-01"})
         print(f"[net] GET /v1/models -> HTTP {r.status_code}")
     except Exception as ex:
@@ -325,7 +331,7 @@ def main():
 
     # client con retry automatici e timeout generoso (i runner a volte hanno la
     # prima connessione lenta: senza retry basta un singolo intoppo per perdere l'item)
-    client = Anthropic(max_retries=5, timeout=60.0)
+    client = Anthropic(api_key=api_key, max_retries=5, timeout=60.0)
     added = 0
     for c in chosen:
         try:
