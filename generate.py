@@ -53,13 +53,24 @@ CHANNELS = [
          q="bce tassi euro inflazione when:5d",        hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Macro",    area="Europa",                lang="it", solo=None,
          q="dax cac borse europee francoforte parigi when:5d", hl="it", gl="IT", ceid="IT:it"),
-    # ---- POLITICA ----------------------------------------------------------
+    # ---- POLITICA (che impatta i mercati) ----------------------------------
     dict(cat="Politica", area="Italia",                lang="it", solo=None,
          q="governo manovra economia tasse italia when:5d", hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Politica", area="USA",                   lang="it", solo=None,
          q="usa dazi tariffe economia when:5d",        hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Politica", area="Mondo",                 lang="it", solo=None,
          q="elezioni economia mercati politica when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Politica", area="USA / Dazi",            lang="it", solo=None,
+         q="dazi trump mercati borse reazione when:5d", hl="en", gl="US", ceid="US:en"),
+    dict(cat="Politica", area="Italia / Risparmio",    lang="it", solo=None,
+         q="tasse patrimoniale risparmio conti correnti when:5d", hl="it", gl="IT", ceid="IT:it"),
+    # ---- CRONACA (attualita' / problematiche sociali) ----------------------
+    dict(cat="Cronaca",  area="Italia / Truffe",       lang="it", solo=None,
+         q="truffe online risparmi soldi vittime italia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Cronaca",  area="Italia / Giovani",      lang="it", solo=None,
+         q="caro affitti stipendi giovani precari italia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Cronaca",  area="Espana",                lang="es", solo="alberto",
+         q="estafas online ahorros jovenes alquiler espana when:5d", hl="es", gl="ES", ceid="ES:es"),
     # ---- GEO / energia -----------------------------------------------------
     dict(cat="Geo",      area="Medio Oriente",         lang="it", solo=None,
          q="medio oriente petrolio tensioni when:5d",  hl="it", gl="IT", ceid="IT:it"),
@@ -67,13 +78,9 @@ CHANNELS = [
          q="petrolio gas prezzo energia when:5d",      hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Geo",      area="Cina / Asia",           lang="it", solo=None,
          q="cina economia esportazioni yuan when:5d",  hl="it", gl="IT", ceid="IT:it"),
-    # ---- TRADING / cripto / commodities / forex ----------------------------
+    # ---- TRADING / cripto / commodities / forex (ridotto: 3 canali) ---------
     dict(cat="Trading",  area="Cripto",                lang="it", solo=None,
          q="bitcoin prezzo when:5d",                   hl="it", gl="IT", ceid="IT:it"),
-    dict(cat="Trading",  area="Cripto",                lang="it", solo=None,
-         q="ethereum altcoin cripto when:5d",          hl="it", gl="IT", ceid="IT:it"),
-    dict(cat="Trading",  area="Cripto",                lang="it", solo=None,
-         q="crypto etf bitcoin regolamentazione when:5d", hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Trading",  area="Materie prime",         lang="it", solo=None,
          q="oro argento prezzo record when:5d",        hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Trading",  area="Valute",                lang="it", solo=None,
@@ -112,6 +119,14 @@ DIREZIONE CREATIVA:
 - Hook che ferma il pollice entro 1-2 secondi. Vari il formato tra i contenuti (Screen-recording, Talking head, B-roll + testo, POV / personale). Green screen OPZIONALE.
 - La nota di regia deve dare un'idea di ripresa concreta e virale (inquadratura, testo a schermo, montaggio) pensata per l'algoritmo di TikTok/Instagram.
 
+POLITICA & CRONACA (contenuti ad alta viralita' - schema "INDIGNAZIONE -> CONSAPEVOLEZZA -> RISCATTO"):
+Questi contenuti NON parlano di trading in modo tecnico: partono da una notizia che tocca un nervo scoperto (tasse, truffe, affitti, stipendi fermi, dazi, caro-vita, giovani precari) e la trasformano in un messaggio virale che genera commenti e condivisioni.
+- HOOK = INDIGNAZIONE: apri sull'ingiustizia grezza, sul "ti stanno prendendo in giro", sulla cosa che fa arrabbiare la gente comune. Empatia con chi si sente fregato dal sistema.
+- BODY = CONSAPEVOLEZZA: spiega il meccanismo dietro la notizia (perche' succede, chi ci guadagna) e CITA la fonte a schermo. Fai capire che "il sistema non te lo insegna a scuola".
+- CHIUSURA = RISCATTO / SPERANZA: ribalta dall'indignazione alla presa di coscienza. Il messaggio finale e' "informati, prendi in mano i tuoi soldi, non restare spettatore". MAI promesse di guadagno, MAI cifre, MAI il partner regolamentato dentro questi contenuti: qui l'obiettivo e' la VIRALITA' (commenti/condivisioni), non vendere.
+- Deve indignare MA anche dare speranza: mai lasciare l'utente solo nella rabbia. Tono Mik Cosentino: diretto, sveglia-le-coscienze, "apri gli occhi".
+- Per Cronaca/Politica il cta_type ideale e' quasi sempre "engage" (una domanda secca che scatena i commenti) oppure "save"; usa "link" solo rarissimamente.
+
 SCALA DELLE CTA (regola fondamentale: NON ogni contenuto vende):
 Scegli il "cta_type" in base al TIPO di contenuto, non mettere sempre la stessa CTA:
 - "none"  -> contenuti personali/aneddotici/lifestyle/storytelling emotivo. NESSUNA CTA: lo script chiude con una frase finale che lascia respirare il contenuto. Il campo "cta" resta VUOTO e lo script NON contiene la riga "CTA:".
@@ -123,7 +138,7 @@ Regole: mai spingente; vari SEMPRE il testo (non ripetere "nel canale" su ogni l
 
 Rispondi ESCLUSIVAMENTE con un oggetto JSON valido (nessun testo prima o dopo), con ESATTAMENTE queste chiavi:
 {
- "categoria": "<Macro|Geo|Politica|Trading|Random>",
+ "categoria": "<Macro|Geo|Politica|Cronaca|Trading|Random>",
  "area": "<area geografica>",
  "format": "<Screen-recording|Talking head|B-roll + testo|POV / personale>",
  "tipo": "<breve tipo di video>",
