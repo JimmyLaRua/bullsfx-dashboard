@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 BullsFX Content Engine
-----------------------
+-----------------------
 Ogni run:
   1. Prende notizie fresche (<=5 giorni) da Google News RSS su piu' temi/lingue.
   2. Deduplica per URL rispetto agli item gia' presenti in index.html.
@@ -31,12 +31,15 @@ FRESH_DAYS = 5          # notizie usate solo se pubblicate negli ultimi N giorni
 KEEP_DAYS  = 7          # item piu' vecchi di N giorni vengono eliminati
 TARGET     = int(os.environ.get("ITEMS_PER_RUN", "12"))   # item da generare per run
 PER_QUERY  = 8          # candidati letti da ogni query
-socket.setdefaulttimeout(15)
+# NB: NON impostare socket.setdefaulttimeout() a livello globale: rompe il
+# client httpx dell'SDK Anthropic (handshake SSL) -> "Connection error" su ogni
+# chiamata API. Il timeout si applica SOLO durante la lettura dei feed RSS.
+FEED_TIMEOUT = 15
 
 # Ogni "canale" = una ricerca Google News + i metadati dell'item.
 # solo="alberto" + lang="es"  => contenuto visibile SOLO ad Alberto (spagnolo).
 CHANNELS = [
-    # ---- MACRO USA / globale ------------------------------------------------
+    # ---- MACRO USA / globale -----------------------------------------------
     dict(cat="Macro",    area="USA / Mercati globali", lang="it", solo=None,
          q="wall street s&p 500 nasdaq when:5d", hl="en", gl="US", ceid="US:en"),
     dict(cat="Macro",    area="USA / Fed",             lang="it", solo=None,
@@ -165,26 +168,30 @@ def collect_candidates(existing_urls):
     # cambiano ora dopo ora e non si pesca sempre dallo stesso feed.
     off = datetime.now(timezone.utc).hour % len(CHANNELS)
     rotated = CHANNELS[off:] + CHANNELS[:off]
-    for ch in rotated:
-        try:
-            feed = feedparser.parse(gnews_url(ch))
-        except Exception as ex:
-            print(f"[warn] feed error {ch['q'][:30]}: {ex}", file=sys.stderr)
-            continue
-        picked = 0
-        for e in feed.entries:
-            c = parse_entry(e, ch)
-            if not c["url"] or not c["headline"]:
+    socket.setdefaulttimeout(FEED_TIMEOUT)   # timeout SOLO per i feed RSS
+    try:
+        for ch in rotated:
+            try:
+                feed = feedparser.parse(gnews_url(ch))
+            except Exception as ex:
+                print(f"[warn] feed error {ch['q'][:30]}: {ex}", file=sys.stderr)
                 continue
-            if c["pub"] and c["pub"] < cutoff:
-                continue
-            if c["url"] in existing_urls:
-                continue
-            cands.append(c)
-            existing_urls.add(c["url"])
-            picked += 1
-            if picked >= PER_QUERY:
-                break
+            picked = 0
+            for e in feed.entries:
+                c = parse_entry(e, ch)
+                if not c["url"] or not c["headline"]:
+                    continue
+                if c["pub"] and c["pub"] < cutoff:
+                    continue
+                if c["url"] in existing_urls:
+                    continue
+                cands.append(c)
+                existing_urls.add(c["url"])
+                picked += 1
+                if picked >= PER_QUERY:
+                    break
+    finally:
+        socket.setdefaulttimeout(None)
     return cands
 
 def pick_spread(cands, n):
@@ -236,7 +243,7 @@ def generate_item(client, c):
     obj = json.loads(txt[a:b + 1])
     # blindatura compliance lato codice
     cap = obj.get("caption", "")
-    cap = re.split(r"\u26a0", cap)[0].rstrip()          # via eventuale warning
+    cap = re.split(r'\u26a0', cap)[0].rstrip()          # via eventuale warning
     obj["caption"] = cap
     item = {
         "id": 0,
@@ -334,7 +341,7 @@ def main():
 
     # safety: nessun warning residuo nelle caption
     for i in kept:
-        i["caption"] = re.split(r"\u26a0", i.get("caption", ""))[0].rstrip()
+        i["caption"] = re.split(r'\u26a0', i.get("caption", ""))[0].rstrip()
 
     write_html(h, m, data)
     oggi = sum(1 for i in kept if i.get("date") == today.isoformat())
