@@ -2,8 +2,14 @@ name: BullsFX content refresh
 
 on:
   schedule:
-    # Ogni ora (UTC). GitHub puo' ritardare l'avvio di qualche minuto sotto carico.
+    # Ogni ora (UTC). GitHub puo' ritardare/saltare qualche run sotto carico.
     - cron: "0 * * * *"
+    # Ridondanza nella fascia pre-mattina CEST (03-06 UTC = 05-08 Milano):
+    # se GitHub salta un run orario, questi :30 garantiscono il feed pieno alle 7.
+    - cron: "30 3 * * *"
+    - cron: "30 4 * * *"
+    - cron: "30 5 * * *"
+    - cron: "30 6 * * *"
   workflow_dispatch:   # permette di lanciarlo a mano dal tab "Actions"
 
 permissions:
@@ -19,7 +25,7 @@ jobs:
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       ANTHROPIC_MODEL: claude-sonnet-5   # per spendere meno: claude-haiku-4-5-20251001
-      ITEMS_PER_RUN: "5"                 # item generati per run (~120/giorno)
+      ITEMS_PER_RUN: "8"                 # item generati per run
     steps:
       - name: Checkout
         uses: actions/checkout@v4
