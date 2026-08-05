@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 BullsFX Content Engine
------------------------
+----------------------
 Ogni run:
   1. Prende notizie fresche (<=5 giorni) da Google News RSS su piu' temi/lingue.
   2. Deduplica per URL rispetto agli item gia' presenti in index.html.
@@ -36,20 +36,63 @@ socket.setdefaulttimeout(15)
 # Ogni "canale" = una ricerca Google News + i metadati dell'item.
 # solo="alberto" + lang="es"  => contenuto visibile SOLO ad Alberto (spagnolo).
 CHANNELS = [
+    # ---- MACRO USA / globale ------------------------------------------------
     dict(cat="Macro",    area="USA / Mercati globali", lang="it", solo=None,
-         q="wall street s&p 500 fed borsa when:5d", hl="en", gl="US", ceid="US:en"),
+         q="wall street s&p 500 nasdaq when:5d", hl="en", gl="US", ceid="US:en"),
+    dict(cat="Macro",    area="USA / Fed",             lang="it", solo=None,
+         q="federal reserve tassi inflazione when:5d", hl="en", gl="US", ceid="US:en"),
+    dict(cat="Macro",    area="USA / Big Tech",        lang="it", solo=None,
+         q="nvidia apple microsoft tesla azioni when:5d", hl="en", gl="US", ceid="US:en"),
+    # ---- MACRO Europa / Italia ---------------------------------------------
     dict(cat="Macro",    area="Europa / Italia",       lang="it", solo=None,
-         q="borsa mercati spread btp when:5d",       hl="it", gl="IT", ceid="IT:it"),
+         q="borsa milano ftse mib spread btp when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Macro",    area="Europa / BCE",          lang="it", solo=None,
+         q="bce tassi euro inflazione when:5d",        hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Macro",    area="Europa",                lang="it", solo=None,
+         q="dax cac borse europee francoforte parigi when:5d", hl="it", gl="IT", ceid="IT:it"),
+    # ---- POLITICA ----------------------------------------------------------
     dict(cat="Politica", area="Italia",                lang="it", solo=None,
-         q="politica economia Italia governo manovra when:5d", hl="it", gl="IT", ceid="IT:it"),
-    dict(cat="Geo",      area="Mondo",                 lang="it", solo=None,
-         q="geopolitica medio oriente petrolio guerra when:5d", hl="it", gl="IT", ceid="IT:it"),
+         q="governo manovra economia tasse italia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Politica", area="USA",                   lang="it", solo=None,
+         q="usa dazi tariffe economia when:5d",        hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Politica", area="Mondo",                 lang="it", solo=None,
+         q="elezioni economia mercati politica when:5d", hl="it", gl="IT", ceid="IT:it"),
+    # ---- GEO / energia -----------------------------------------------------
+    dict(cat="Geo",      area="Medio Oriente",         lang="it", solo=None,
+         q="medio oriente petrolio tensioni when:5d",  hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Geo",      area="Energia",               lang="it", solo=None,
+         q="petrolio gas prezzo energia when:5d",      hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Geo",      area="Cina / Asia",           lang="it", solo=None,
+         q="cina economia esportazioni yuan when:5d",  hl="it", gl="IT", ceid="IT:it"),
+    # ---- TRADING / cripto / commodities / forex ----------------------------
     dict(cat="Trading",  area="Cripto",                lang="it", solo=None,
-         q="bitcoin ethereum cripto when:5d",        hl="it", gl="IT", ceid="IT:it"),
+         q="bitcoin prezzo when:5d",                   hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Trading",  area="Cripto",                lang="it", solo=None,
+         q="ethereum altcoin cripto when:5d",          hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Trading",  area="Cripto",                lang="it", solo=None,
+         q="crypto etf bitcoin regolamentazione when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Trading",  area="Materie prime",         lang="it", solo=None,
+         q="oro argento prezzo record when:5d",        hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Trading",  area="Valute",                lang="it", solo=None,
+         q="euro dollaro cambio forex when:5d",        hl="it", gl="IT", ceid="IT:it"),
+    # ---- RANDOM / finanza personale ---------------------------------------
     dict(cat="Random",   area="Italia",                lang="it", solo=None,
-         q="caro vita bollette stipendi risparmio famiglie when:5d", hl="it", gl="IT", ceid="IT:it"),
+         q="caro vita bollette stipendi risparmio when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Random",   area="Italia",                lang="it", solo=None,
+         q="mutui tassi casa prestiti when:5d",        hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Random",   area="Italia",                lang="it", solo=None,
+         q="pensioni inps risparmio investimenti when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Random",   area="Lavoro",                lang="it", solo=None,
+         q="lavoro stipendi occupazione italia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    # ---- SPAGNOLO (visibile solo ad Alberto) -------------------------------
     dict(cat="Macro",    area="Espana",                lang="es", solo="alberto",
-         q="economia Espana bolsa paro ibex when:5d", hl="es", gl="ES", ceid="ES:es"),
+         q="economia espana bolsa ibex when:5d",       hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Macro",    area="Espana / BCE",          lang="es", solo="alberto",
+         q="bce tipos inflacion euro when:5d",         hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Trading",  area="Cripto (ES)",           lang="es", solo="alberto",
+         q="bitcoin criptomonedas precio when:5d",     hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Random",   area="Espana",                lang="es", solo="alberto",
+         q="hipotecas ahorro precios luz espana when:5d", hl="es", gl="ES", ceid="ES:es"),
 ]
 
 SYSTEM_PROMPT = """Sei il SOCIAL MEDIA MANAGER del pool "BullsFX": una squadra di talent che pubblica video verticali (TikTok/Instagram/YouTube Shorts) partendo dalle notizie del giorno.
@@ -106,7 +149,7 @@ def parse_entry(e, ch):
     m = re.search(r"\s-\s([^-]+)$", title)
     if m and not outlet:
         outlet = clean(m.group(1))
-    headline = re.sub(r"\s-\s([^-]+)$", "", title).strip() if m else title
+    headline = re.sub(r"\s-\s[^-]+$", "", title).strip() if m else title
     # data
     d = None
     if getattr(e, "published_parsed", None):
@@ -118,7 +161,11 @@ def collect_candidates(existing_urls):
     today = datetime.now(timezone.utc).date()
     cutoff = today - timedelta(days=FRESH_DAYS)
     cands = []
-    for ch in CHANNELS:
+    # rotazione: ogni run parte da un canale diverso, cosi' i temi in cima
+    # cambiano ora dopo ora e non si pesca sempre dallo stesso feed.
+    off = datetime.now(timezone.utc).hour % len(CHANNELS)
+    rotated = CHANNELS[off:] + CHANNELS[:off]
+    for ch in rotated:
         try:
             feed = feedparser.parse(gnews_url(ch))
         except Exception as ex:
