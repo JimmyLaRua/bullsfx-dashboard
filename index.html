@@ -80,6 +80,18 @@
   .card.claimed .claimtag{display:inline-block}
   .caret{color:var(--mut);transition:.15s;font-size:12px}
   .card.open .caret{transform:rotate(90deg)}
+  .viralbadge{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:20px;white-space:nowrap;border:1px solid transparent}
+  .viralbadge.v-hi{color:#0b0e14;background:var(--green)}
+  .viralbadge.v-mid{color:var(--amber);border-color:var(--amber)}
+  .viralbadge.v-lo{color:var(--mut);border-color:var(--line)}
+  .hotbadge{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:20px;white-space:nowrap;border:1px solid transparent}
+  .hotbadge.h-hot{color:var(--red);border-color:var(--red);background:rgba(255,71,87,.10)}
+  .hotbadge.h-warm{color:var(--amber);border-color:var(--amber)}
+  .hotbadge.h-cold{color:var(--mut);border-color:var(--line)}
+  .hookvars{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+  .hookvars .hookv{display:flex;gap:8px;align-items:center;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02)}
+  .hookvars .hookv>b{color:var(--green);font-weight:800;flex:0 0 auto;width:16px;text-align:center}
+  .hookvars .hookv .ht{flex:1;min-width:0}
 
   .cbody{display:none;padding:0 16px 16px;border-top:1px solid var(--line)}
   .card.open .cbody{display:block}
@@ -227,29 +239,6 @@
   "items": [
     {
       "id": 1,
-      "date": "2026-08-06",
-      "categoria": "Trading",
-      "area": "Cripto",
-      "format": "Talking head",
-      "tipo": "Reaction a caldo su crollo crypto",
-      "durata": "25-35s",
-      "titolo": "Bitcoin crolla oltre il 10%: cosa succede davvero",
-      "overlay": "BITCOIN -10% IN POCHE ORE 😱",
-      "script": "HOOK: Bitcoin è appena crollato di oltre il 10%, e sai qual è la cosa pazzesca? La maggior parte della gente sta guardando il grafico invece di guardare il proprio piano.\nBODY: Vietnam.vn, 6 agosto 2026: il crollo ha travolto anche altre criptovalute, in alcuni casi con cali ancora più pesanti. Questo è il momento in cui il 90% delle persone fa la cosa peggiore possibile: entra o esce di pancia, senza un piano, senza gestione del rischio. Il mercato non punisce chi sbaglia direzione, punisce chi non ha una struttura. Ecco perché chi lavora sul serio ha sempre un metodo definito e opera su un partner regolamentato, con regole chiare su rischio e capitale, prima ancora di guardare il prezzo.\nCTA: Salva questo video, ti servirà la prossima volta che il mercato crolla.",
-      "caption": "Bitcoin -10% in poche ore. 📉 Il problema non è il crollo, è come reagisci. Fonte: Vietnam.vn, 6/08/2026. #bitcoin #crypto #btc #criptovalute #trading #mikcosentino #bullsfx #mercatifinanziari",
-      "cta_type": "save",
-      "cta": "Salva questo video, ti servirà la prossima volta che il mercato crolla.",
-      "fornire": "Screenshot dell'articolo Vietnam.vn con titolo e data visibili, grafico BTC in calo (candele rosse) da mostrare in overlay, ambiente pulito per talking head, tono deciso ma controllato.",
-      "source": {
-        "outlet": "Vietnam.vn",
-        "headline": "Il valore del Bitcoin è crollato di oltre il 10%, e molte altre criptovalute hanno subito cali ancora più drastici.",
-        "date": "2026-08-06",
-        "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNQnh2VHgtMlAtS1ZHakR5Y01FQnRBS0l0V3N2YlJKY0RWX1VUTW51SDZWQ2Y2aENaN0tCelhiaFM3TkJlWHE2T2tVanVXd3Rlc0JfRnA2aTFQYi01NHhVakFMMmtiR3lEeElXcXhQaFBOaEtzcjBLMFJvWE8wdGY4OUQ1UVBLMEZ5cnMzUzVxZ195ZDgyY2RlWTBBQnZ5dzA?oc=5"
-      },
-      "regia": "Apertura in primo piano viso serio con overlay grafico BTC in caduta a tutto schermo sopra la testa. Zoom improvviso sul volto al momento dell'hook. A metà video, split screen: a sinistra screenshot fonte con testata/data, a destra il talking head che commenta. Testo a schermo pulsante '-10%' che vibra leggermente per dare urgenza. Chiusura con inquadratura fissa, tono calmo, per contrasto con l'agitazione iniziale del mercato."
-    },
-    {
-      "id": 2,
       "date": "2026-08-05",
       "categoria": "Trading",
       "area": "Cripto",
@@ -272,7 +261,7 @@
       "cta_type": "link"
     },
     {
-      "id": 3,
+      "id": 2,
       "date": "2026-08-05",
       "categoria": "Trading",
       "area": "Cripto",
@@ -295,7 +284,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 4,
+      "id": 3,
       "date": "2026-08-05",
       "categoria": "Trading",
       "area": "Valute",
@@ -318,7 +307,7 @@
       "cta_type": "link"
     },
     {
-      "id": 5,
+      "id": 4,
       "date": "2026-08-05",
       "categoria": "Random",
       "area": "Italia",
@@ -341,7 +330,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 6,
+      "id": 5,
       "date": "2026-08-05",
       "categoria": "Trading",
       "area": "Valute",
@@ -364,7 +353,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 7,
+      "id": 6,
       "date": "2026-08-05",
       "categoria": "Random",
       "area": "Italia",
@@ -387,7 +376,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 8,
+      "id": 7,
       "date": "2026-08-05",
       "categoria": "Macro",
       "area": "España",
@@ -412,336 +401,6 @@
       "cta_type": "engage"
     },
     {
-      "id": 9,
-      "date": "2026-08-05",
-      "categoria": "Macro",
-      "area": "España",
-      "format": "Screen-recording",
-      "tipo": "Reacción a máximo histórico del Ibex 35",
-      "durata": "20-30s",
-      "titolo": "Ibex en máximos por Oriente Medio",
-      "overlay": "IBEX 35 ROMPE MÁXIMOS: 20.057 PUNTOS 🚀",
-      "script": "HOOK: Mientras tú dormías, el Ibex 35 acaba de marcar un máximo histórico... ¿y sabes por qué?\nBODY: El índice español ha tocado los 20.057 puntos gracias a los rumores de un posible acuerdo en Oriente Medio, según publica El Imparcial este 5 de agosto de 2026 (muestro pantalla con el titular). Cuando baja la tensión geopolítica, baja el miedo en los mercados... y el dinero vuelve a moverse hacia la renta variable. Esto no es casualidad: los mercados anticipan, no reaccionan. Por eso quien entiende de macro ve estas subidas venir antes que el resto.\nCTA: Guarda este video, así tienes el dato a mano la próxima vez que se hable de este máximo.",
-      "caption": "El Ibex 35 tocando máximos históricos 📈 Todo por un posible acuerdo en Oriente Medio. Los mercados se mueven por expectativas, no por certezas. 🧠 #Ibex35 #Bolsa #Economia #MercadosFinancieros #OrienteMedio #Espana #Macroeconomia",
-      "cta_type": "save",
-      "cta": "Guarda este video para tener el dato siempre a mano",
-      "fornire": "Captura de pantalla del artículo de El Imparcial con el titular y fecha visibles, gráfico del Ibex 35 en máximos (puede ser de una web financiera pública), buena luz para grabar la pantalla con el móvil o directamente grabación de pantalla del gráfico.",
-      "source": {
-        "outlet": "El Imparcial - Diario liberal e independiente",
-        "headline": "El Ibex firma un nuevo máximo en 20.057 puntos por el posible acuerdo en Oriente Medio - El Imparcial",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPYWJPV0JsWEZuQTg0dWlMakdORzBxbEt4TzEzTmwyMWhYd082UzIzYkRNek1nMlk4QkpsYjVIZ0txZ2cxWFRvNHBJNXJOei10d1V1dThVNkpHRHdOeFVPN1dzaGRaN3NSTzIzRExMQmdZbGJVQlpUekdFVzhNM2lXWkI1VEM2aWFOOXB4dXNfNktqb09nUjR3LTdMY0tYVm40MnJnZEtubm9hSUpIemc3RzdERkVXenZjUURXQ0JzT0diX0JxWXZJVGVFWWJqTmN0MklDNnlKZ0R3UQ?oc=5"
-      },
-      "regia": "Graba en formato vertical con screen-recording: primero el gráfico del Ibex 35 subiendo en tiempo real (2-3 segundos, zoom in al número 20.057), luego corta al titular de El Imparcial con overlay de fecha 05/08/2026. Añade texto grande en pantalla durante el hook ('MÁXIMO HISTÓRICO') con efecto de zoom rápido. Ritmo ágil, cortes cada 2-3 segundos, música de tensión/energía tipo trading. Cierra con la CTA en overlay y flecha apuntando al botón de guardar.",
-      "solo": "alberto",
-      "lang": "es"
-    },
-    {
-      "id": 10,
-      "date": "2026-08-05",
-      "categoria": "Trading",
-      "area": "Cripto (ES)",
-      "format": "Screen-recording",
-      "tipo": "Análisis rápido de mercado cripto",
-      "durata": "25-35s",
-      "titolo": "BTC y ETH se mueven - resumen europeo 5 agosto",
-      "overlay": "BITCOIN Y ETHEREUM SE MUEVEN AHORA MISMO 👀",
-      "script": "HOOK: Para el scroll. Bitcoin y Ethereum se están moviendo JUSTO AHORA y el 90% de la gente ni se ha enterado.\nBODY: Según FXStreet, en su resumen europeo del 5 de agosto de 2026, tanto BTC como ETH muestran movimientos clave que pueden marcar la sesión de hoy. [Mostrar pantalla con el artículo de FXStreet, título y fecha visibles]. Esto no es un capricho: los niveles técnicos que se están tocando ahora mismo suelen anticipar la dirección de las próximas horas. La clave está en entender el CONTEXTO antes de mirar el precio: volumen, soporte y resistencia, y qué está pasando en el resto del mercado cripto. Si operas sin esta info, vas a ciegas.\nCTA: Guarda este video y ábrelo antes de operar hoy - te va a servir.",
-      "caption": "BTC y ETH moviéndose fuerte según el resumen europeo de FXStreet (05/08) 📊🔥 Antes de operar, entiende el contexto. #Bitcoin #Ethereum #Crypto #BTC #ETH #TradingCrypto #FXStreet #MercadoCripto #BullsFX",
-      "cta_type": "save",
-      "cta": "Guarda este video y ábrelo antes de operar hoy",
-      "fornire": "Smartphone o PC con la pantalla del artículo de FXStreet abierta (título, outlet y fecha visibles), gráfico de BTC/ETH abierto en una plataforma de análisis (TradingView o similar) para grabar la pantalla, buena conexión para grabación fluida sin cortes.",
-      "source": {
-        "outlet": "FXStreet",
-        "headline": "Criptomonedas Predicción del Precio: Ethereum, Bitcoin y Crypto – Resumen Europeo 5 de agosto",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxNXzg0VjdHdHVBcjZXQTNfdm12MWI2NnZMZmt0MEQtUWZob2tkS1EwQk5zOFNYRTFISUl3LWpVZ0QxSXBSTlV5ZF9Md0NvOFE0N2RQOHpjb0g0NWhRTWFKSTFIRFV6SEl0NnRtZEdLZGRkU0swa1Npd3doSm5Rbmx6aTdxT25sM1o3MWJDSEE1eGlnVFNyRFoyclhIellnOFdlT2syMUhnZFpJcm5EaEdWaGtPZDh1cWN2bWlSQzR3dXdBTFJNc1gtSlZTR1pRcFUyNVR0WkU2MEtvMkVQX2Y0NC00QTY4cTDSAecBQVVfeXFMTV84NFY3R3R1QXI2V0EzX3ZtdjFiNjZ2TGZrdDBELVFmaG9rZEtRMEJOczhTWEUxSElJdy1qVWdEMUlwUk5VeWRfTHdDbzhRNDdkUDh6Y29INDVoUU1hSkkxSERVekhJdDZ0bWRHS2RkZFNLMGtTaXd3aEpuUW5semk3cU9ubDNaNzFiQ0hBNXhpZ1RTckRaMnJYSHpZZzhXZU9rMjFIZ2RaSXJuRGhHVmhrT2Q4dXFjdm1pUkM0d3V3QUxSTXNYLUpWU0daUXBVMjVUdFpFNjBLbzJFUF9mNDQtNEE2OHEw?oc=5"
-      },
-      "regia": "Screen-recording en vertical: primeros 2 segundos con zoom rápido al gráfico de BTC en rojo/verde con texto GRANDE en overlay 'SE MUEVEN AHORA'. Luego corte a la pantalla del artículo de FXStreet (mostrar título+fecha 2-3 segundos, nítido y legible). Vuelta al gráfico con anotaciones en pantalla (flechas, círculos) marcando soporte/resistencia mientras se habla en voz en off con ritmo rápido. Música tensión/suspense de fondo, subtítulos automáticos grandes y sincronizados. Cierre con zoom out del gráfico completo y texto CTA en pantalla.",
-      "solo": "alberto",
-      "lang": "es"
-    },
-    {
-      "id": 11,
-      "date": "2026-08-05",
-      "categoria": "Macro",
-      "area": "USA / Mercati globali",
-      "format": "Screen-recording",
-      "tipo": "Reaction a notizia + spiegazione mercato",
-      "durata": "25-35s",
-      "titolo": "S&P 500 record - la corsa continua grazie alle trimestrali",
-      "overlay": "S&P 500 AI MASSIMI STORICI 📈",
-      "script": "HOOK: Fermi tutti. L'S&P 500 ha appena toccato un nuovo record storico e la maggior parte delle persone sta guardando dall'altra parte.\nBODY: Reuters lo scrive chiaro il 5 agosto 2026: il mercato azionario USA potrebbe continuare a salire spinto dalla forza delle trimestrali. Cosa significa in pratica? Le aziende stanno guadagnando più di quanto ci si aspettasse, e quando gli utili battono le stime il mercato reagisce con nuovi acquisti. Non è magia, è meccanismo: earnings season forte = fiducia degli investitori = nuovi massimi. Questo è il tipo di informazione che sposta i mercati nel breve termine, e chi la ignora resta sempre un passo indietro.\nCTA: Salva questo video, ti serve per capire cosa muove davvero i prezzi.",
-      "caption": "L'S&P 500 tocca un nuovo record 📈 Reuters lo spiega: sono le trimestrali a spingere il mercato. Capire QUESTO meccanismo ti fa vedere il mercato con occhi diversi. #sp500 #wallstreet #mercatifinanziari #trading #economia #borsa #usa #reuters #investimenti #finanza",
-      "cta_type": "save",
-      "cta": "Salva questo video, ti serve per capire cosa muove davvero i prezzi.",
-      "fornire": "Screenshot dell'articolo Reuters (titolo + data 5 agosto 2026) e uno screenshot/grafico del S&P 500 ai massimi storici da mostrare in overlay durante il BODY.",
-      "source": {
-        "outlet": "Reuters",
-        "headline": "US stock market could ride earnings strength to more gains after S&P 500 hits record",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPRDhYYlFmZ3FHcjh0dS1TQ2Z3ampQM2tjSmZha3pHMzhVelB5Q0xzTE8zVThKM1haMFVuTWlpNkFXUHA3WlRORjE0NFhBcExMS1hWeVRIbUtxU3RmbEI2NS1FNmNtamhnZXY5QXlUa1FGN1FMRWc4cF9PMVVJM0pfeEFWQmJfY291UFVtLWFiN292QzMzQjNRQWFmY0RIeDBLQlZKS1dPbEZUMDVidHI3d1RSNkVqYjhlX2Y0Z295M3hDb0k?oc=5"
-      },
-      "regia": "Apri con il talent che guarda dritto in camera con espressione sorpresa/allarmata, poi swipe rapido su schermo che mostra il grafico S&P 500 in salita (screen-recording). Testo overlay 'RECORD STORICO' che appare a scatti sincronizzato con l'hook. A metà video taglio secco su screenshot Reuters con logo/testata ben visibile per 2-3 secondi. Ritmo tagliato, zoom-in sul numero del record per enfasi. Chiusura con talent che punta il dito in camera sulla CTA finale."
-    },
-    {
-      "id": 12,
-      "date": "2026-08-05",
-      "categoria": "Macro",
-      "area": "Europa / Italia",
-      "format": "Screen-recording",
-      "tipo": "Reaction a caldo su mercati + spiegazione",
-      "durata": "25-35s",
-      "titolo": "Milano +0,4%: chi vola e perché (Leonardo, Tim, Safilo)",
-      "overlay": "PIAZZA AFFARI VOLA E (QUASI) NESSUNO SE NE ACCORGE",
-      "script": "HOOK: Fermati un secondo: mentre parli di bollette e stipendi fermi, la Borsa di Milano oggi fa +0,4% insieme all'Europa. E c'è chi ci sta guadagnando parecchio, in silenzio.\nBODY: Guarda lo schermo: sto scorrendo la pagina di SoldiOnline.it, articolo di oggi 5 agosto 2026. In evidenza tre nomi: Leonardo, Tim e Safilo. Non è un caso che siano proprio questi titoli a muoversi: dietro ogni rialzo c'è un motivo preciso, contratti, riorganizzazioni, aspettative del mercato. Il punto è che questi movimenti succedono ogni giorno, che tu li guardi o no. Il sistema finanziario non si ferma ad aspettare che tu capisca come funziona: o impari a leggerlo, o resti fuori a guardare gli altri muoversi.\nCTA: Salva questo video, ti servirà per la prossima volta che sentirai parlare di Piazza Affari al telegiornale.",
-      "caption": "Milano +0,4% insieme all'Europa. In evidenza Leonardo, Tim e Safilo 📈 Fonte: SoldiOnline.it, 5 agosto 2026. Il mercato si muove ogni giorno: la domanda è se tu lo stai guardando o lo stai capendo. #borsa #piazzaaffari #economia #finanza #mercatifinanziari #leonardo #tim #safilo #news #soldionline",
-      "cta_type": "save",
-      "cta": "Salva questo video, ti servirà per la prossima volta che sentirai parlare di Piazza Affari al telegiornale.",
-      "fornire": "Screenshot/scroll della pagina SoldiOnline.it con articolo e data ben visibili; eventuale grafico indice FTSE MIB in salita da mostrare in overlay; talent in primo piano per la parte finale (talking head breve).",
-      "source": {
-        "outlet": "SoldiOnline.it",
-        "headline": "Borsa Milano +0,4% con l’Europa: in evidenza Leonardo, Tim e Safilo",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOYWZOV1VrUnZEZ2lpdDhCWjJMcURERVVOSThveExIOUtvYmk1TWJfcHlWeUxzbnFHY0pyaEZQYlFkSzNudGE4emJSWmd5R3I4dTBOUHNkams5eUVsUGZQREhKNVJhSDRmWDR0MUNId3ZUV2JNS2tHZWtCSnROcURwYmNPSGFZa3BQZ0w2ZG8tMU9hcGl1UERMSk1xSTdGeTJURmlSeldLNWluZjhpQUZxUw?oc=5"
-      },
-      "regia": "Apertura con inquadratura ravvicinata sul volto del talent che parla dritto in camera (hook), poi stacco secco su screen-recording dello smartphone che scorre l'articolo di SoldiOnline.it evidenziando titolo e data con zoom/cerchio rosso sui tre nomi (Leonardo, Tim, Safilo). Testo overlay grande e statico in alto per tutta la durata. Ritmo di montaggio veloce, tagli ogni 3-4 secondi, musica trend in sottofondo bassa. Chiusura tornando sul volto del talent per la CTA, sguardo dritto in camera."
-    },
-    {
-      "id": 13,
-      "date": "2026-08-05",
-      "categoria": "Macro",
-      "area": "España / BCE",
-      "format": "Screen-recording",
-      "tipo": "Reaction a noticia + explicación macro",
-      "durata": "25-35s",
-      "titolo": "Fed vs BCE Agosto 2026 - Diferencial de tasas",
-      "overlay": "ESTO MUEVE TODO TU DINERO Y NADIE TE LO EXPLICA",
-      "script": "HOOK: Para. Mientras tú miras el precio de la gasolina, el diferencial entre la Fed y el BCE está a punto de mover TODOS los mercados... y casi nadie lo está mirando.\nBODY: Según dailyforex.com, el 5 de agosto de 2026 el diferencial de tasas entre Estados Unidos y la Eurozona vuelve al centro de la conversación. ¿Qué significa esto en cristiano? Cuando la Fed y el BCE se mueven en direcciones distintas, el dólar y el euro se reordenan, y con ellos se mueven bolsas, materias primas y hasta tu hipoteca si tienes tipo variable. Esto no es un dato para economistas encorbatados: esto define cuánto vale tu dinero mañana. Lo pongo en pantalla, fuente citada, para que lo veas tú mismo.\nCTA: Guarda este video, porque en unas semanas vas a necesitar acordarte de esto.",
-      "caption": "El diferencial Fed-BCE vuelve a estar en el centro del tablero 📊 Fuente: dailyforex.com (05/08/2026). Esto es lo que casi nadie te explica sobre cómo se mueve realmente tu dinero. #economia #fed #bce #macroeconomia #finanzaspersonales #noticias #euro #dolar",
-      "cta_type": "save",
-      "cta": "Guarda este video, lo vas a necesitar",
-      "fornire": "Captura de pantalla del artículo de dailyforex.com bien visible con fecha, gráfico simple Fed vs BCE (puede ser dibujado o de una app de gráficos), y el talent con energía tipo 'noticia urgente'",
-      "source": {
-        "outlet": "es.dailyforex.com",
-        "headline": "Fed vs BCE Agosto 2026: Diferencial de Tasas Vuelve al Foco",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPTXQ5LWtMcWJxV0QzQUlNTWM1amF2ZG1QZU9Pd2E3bFNkdEVCdl9PV2x0XzZkZnI4RzJ3a1JONk5uMk95V1hHS3NaOVFHVEdWeThlYWpZSVE5dm12THdtbnNEVWlmSUVSOTdrUVY2SXVIemlqdEVGVzY0X2FnZ3I5dUhnTU50X0hza0pKbXpLbmNMeHJHRHNkckR2RjZrc1Zy?oc=5"
-      },
-      "regia": "Abre con el talent mirando directo a cámara con cara de alerta, texto gigante en overlay desde el segundo 0. Corte rápido a screen-recording del artículo citando la fuente en pantalla (subrayado o círculo rojo sobre fecha y outlet). Vuelve a talking head para la explicación con manos moviéndose para simular 'balanza' Fed vs BCE. Ritmo de corte cada 3-4 segundos, subtítulos grandes tipo Mik Cosentino, música tensión creciente de fondo.",
-      "solo": "alberto",
-      "lang": "es"
-    },
-    {
-      "id": 14,
-      "date": "2026-08-05",
-      "categoria": "Trading",
-      "area": "Cripto (ES)",
-      "format": "Screen-recording",
-      "tipo": "Reaction a noticia + análisis rápido",
-      "durata": "25-35s",
-      "titolo": "Bitcoin se queda atrás mientras las bolsas vuelan",
-      "overlay": "BITCOIN NO AGUANTA EL RITMO 📉📈",
-      "script": "HOOK: Para el dedo. Mientras tú revisas tu bitcoin en rojo, las bolsas globales están marcando MÁXIMOS HISTÓRICOS. ¿Qué está pasando?\nBODY: Según CoinDesk, 5 de agosto 2026, el mercado cripto en general no logra seguir el ritmo de las acciones. Esto no es casualidad: cuando el dinero institucional entra fuerte en renta variable, el capital especulativo de cripto suele quedarse rezagado, esperando confirmación. Es un patrón que se repite: rotación de capital, no pánico. La clave está en entender POR QUÉ se mueve el dinero, no solo mirar el precio en rojo y asustarte.\nCTA: Guarda este video, así cuando vuelva a pasar ya sabrás leer la señal.",
-      "caption": "Bitcoin se queda atrás, las bolsas en máximos históricos 🚨 Esto es lo que casi nadie te explica sobre la rotación de capital. Fuente: CoinDesk, 5 agosto 2026. #bitcoin #cripto #mercados #trading #bolsa #inversion #economia #finanzas",
-      "cta_type": "save",
-      "cta": "Guarda este video, así la próxima vez que veas rojo en bitcoin ya sabes qué está pasando de verdad.",
-      "fornire": "Captura de pantalla del artículo de CoinDesk (titular + fecha visibles), gráfico rápido de bitcoin vs índice bursátil (puede ser genérico/ilustrativo), ropa neutra, buena luz para talking segments cortos si se intercala.",
-      "source": {
-        "outlet": "CoinDesk",
-        "headline": "Bitcoin y el mercado en general no logran mantener el ritmo mientras las acciones globales alcanzan máximos históricos: Mercados Cripto Hoy",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOSE9uQXpaUElIQ2I3TUxXdUFPMWhnNU1wWnA0aFJnUG5iWUtHaFpTSHp6WGl3RVlfVW9mQmJvVjNjZHhrMEV3eWdiSGdESldYb0hUY0NzMWpINElCUFlFOTBWclkxc19DZzhSM2ozRnI4MXFPbEdoLXJPTGh3ZEhyZk9FNUhVQV82b09FTU1razQyZTZuZnN2cGhQczRHSFhQT1VLeW10SHRNT0x6TzFBclhlRnYzT1VsOG13UDRuMEU?oc=5"
-      },
-      "regia": "Abre con screen-recording del teléfono mostrando el titular de CoinDesk (2-3 seg, zoom in en la fecha para credibilidad). Corta a un gráfico simple con dos líneas: una subiendo (bolsas) y otra plana/roja (bitcoin), con texto grande 'MÁXIMOS HISTÓRICOS' vs 'BITCOIN NO SIGUE'. Voz en off rápida y directa, cambia de plano cada 3-4 segundos para mantener retención. Texto en pantalla resaltando 'rotación de capital' en amarillo. Cierra con talent hablando a cámara mirando fijo, tono de complicidad, para el CTA de guardar.",
-      "solo": "alberto",
-      "lang": "es"
-    },
-    {
-      "id": 15,
-      "date": "2026-08-05",
-      "categoria": "Macro",
-      "area": "Europa / BCE",
-      "format": "Screen-recording",
-      "tipo": "Reaction a notizia + spiegazione rapida",
-      "durata": "25-35s",
-      "titolo": "Euro digitale: le banche italiane accelerano",
-      "overlay": "L'EURO DIGITALE STA ARRIVANDO 🇪🇺",
-      "script": "HOOK: Fermati un secondo: la BCE ha appena detto che l'euro digitale non è più un'ipotesi, è geopolitica pura.\nBODY: Guarda qui, fonte PPN ADI - Agenzia delle Infrastrutture, 5 agosto 2026 [mostro schermo con titolo]. Le banche italiane stanno correndo per adattarsi prima che parta ufficialmente. Perché? Perché chi controlla la moneta digitale controlla anche i flussi, i dati, e in parte la sovranità finanziaria di un continente intero. Non è fantascienza, è la direzione che sta prendendo l'Europa per non restare indietro rispetto a Cina e Stati Uniti che già hanno le loro valute digitali sotto controllo statale.\nCTA: Tu la vedi come un'opportunità o come un rischio per la privacy? Scrivilo qui sotto 👇",
-      "caption": "La BCE parla chiaro: l'euro digitale è geopolitica, non solo tecnologia 🇪🇺💶 Fonte: PPN ADI, 5 agosto 2026. Le banche italiane si stanno muovendo in fretta, e tu lo sapevi? #euro digitale #BCE #economia #finanza #geopolitica #news #newsjacking #Italia #banche #futuro",
-      "cta_type": "engage",
-      "cta": "Tu la vedi come un'opportunità o come un rischio per la privacy? Scrivilo qui sotto 👇",
-      "fornire": "Screenshot/articolo PPN ADI con titolo e data ben visibili, smartphone o pc per screen-recording, luce frontale se si aggiunge inquadratura talking head in overlay circolare",
-      "source": {
-        "outlet": "PPN ADI - Agenzia delle Infrastrutture -",
-        "headline": "La BCE guarda alla geopolitica. Le banche italiane corrono sull’euro digitale - PPN ADI - Agenzia delle Infrastrutture -",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPdTlZZjc0UzNSZERjbDg0a3BERHFxWmF6SXN4OEhVYy1qRUEySVRJNlNBamFxQ3ZPeXpQNmZ0WFR1ZzF2SkJXczk0OEIyQmkzcTJpbk1iekZ5d3RfRGlzdmZHVngwMHhxUzN0R0EtSGV5S2REa2o4cUJIQXpyV29WNnJpbG9GTXQtSVZLVmd6OWRsRTNqQk1VX1VkWEExTzZvTHpqNXhZLUhLOTFaYjFRZHcxQnRweUttU2c?oc=5"
-      },
-      "regia": "Apri con screen-recording che scrolla velocemente su siti/news finché non si ferma sul titolo dell'articolo (effetto 'stop scroll'). Testo overlay grande ‘EURO DIGITALE: CI SIAMO?’ che appare con animazione a scatto. A metà video taglio secco su talking head in webcam-style per il commento personale, poi torna su screen-recording per mostrare la fonte con zoom lento sul nome outlet e data. Musica in trend con drop leggero sul momento hook. Chiusura con CTA a schermo in caratteri cubitali e freccia animata verso i commenti."
-    },
-    {
-      "id": 16,
-      "date": "2026-08-05",
-      "categoria": "Politica",
-      "area": "Italia",
-      "format": "Talking head",
-      "tipo": "Reaction a caldo / newsjacking politico",
-      "durata": "25-35s",
-      "titolo": "Clausola di salvaguardia UE: niente bonus, tasca tua paga",
-      "overlay": "NIENTE NUOVI BONUS. INDOVINA CHI PAGA?",
-      "script": "HOOK: Fermi un attimo. Il governo sta per attivare una clausola che si chiama 'salvaguardia UE' e sai cosa significa in italiano? Niente bonus, niente aiuti nuovi. E i soldi... li mettiamo comunque.\nBODY: Oggi today.it, 5 agosto 2026, lo scrive chiaro: la clausola serve a coprire dei conti che altrimenti non tornano nel bilancio dello Stato. Tradotto: prima di pensare a darti qualcosa, il governo deve prima tappare un buco. E quel buco, alla fine, lo tappiamo sempre noi, tra tasse che restano uguali e bonus che non arrivano mai. Questo è il meccanismo che a scuola non ti spiegano: i margini di manovra dello Stato dipendono da regole europee, e quando quelle regole si stringono, il primo taglio è sempre sulle cose che aiuterebbero le famiglie.\nCTA: Ma secondo te chi dovrebbe pagare il conto, i cittadini o chi il debito lo ha fatto? Scrivilo qui sotto 👇",
-      "caption": "Niente nuovi bonus, ma la clausola si attiva lo stesso 👀 Fonte: today.it, 5/8/2026. Il sistema decide, noi paghiamo. Sveglia. #governo #tasse #bonus #economia #italia #politica #ue #newsjacking #casapropria #stipendi",
-      "cta_type": "engage",
-      "cta": "Ma secondo te chi dovrebbe pagare il conto, i cittadini o chi il debito lo ha fatto? Scrivilo qui sotto 👇",
-      "fornire": "Talent in primo piano, luce frontale pulita, articolo di today.it aperto sul telefono/tablet pronto per screenshot/insert a metà video, tono deciso e diretto, niente sorriso nel primo hook.",
-      "source": {
-        "outlet": "today.it",
-        "headline": "Il governo Meloni vuole attivare la clausola di salvaguardia Ue: a cosa serviranno i soldi (niente nuovi bonus)",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE53R1RacjNQaG1xUXUzRG9nXy1LOXgyWW1BSmZvdDB2YllqWnl3YzdvVE96bmpubkc4aXVOUlZ6VFA3akIzYzNHZ205MFpxMk0wVGRkY19jVDZudkJxeENyOEluUklwZ2ZXekNIMXFhd1FKWTE2bTQxZjhlWjlObVnSAX9BVV95cUxOd0dUWnIzUGhtcVF1M0RvZ18tSzl4MlltQUpmb3QwdmJZalp5d2M3b1RPem5qbm5HOGl1TlJWelRQN2pCM2MzR2dtOTBacTJNMFRkZGNfY1Q2bnZCcXhDcjhJblJJcGdmV3pDSDFxYXdRSlkxNm00MWY4ZVo5Tm1Z?oc=5"
-      },
-      "regia": "Apertura in primissimo piano sul volto, mano che punta verso camera sull'hook per creare tensione visiva. A metà video, stacco rapido (0.5s) su screenshot reale dell'articolo today.it con data ben visibile in overlay, poi ritorno su talking head per il body. Testo a schermo in caps bianco su nero durante tutta la frase chiave ('NIENTE NUOVI BONUS'). Chiusura con zoom lento verso il volto mentre si pone la domanda, per spingere il commento in loop di retention tipico Cosentino."
-    },
-    {
-      "id": 17,
-      "date": "2026-08-05",
-      "categoria": "Politica",
-      "area": "Italia / Risparmio",
-      "format": "Talking head",
-      "tipo": "Reaction/opinione a caldo su notizia",
-      "durata": "25-35s",
-      "titolo": "I tuoi soldi fermi in banca ti stanno fregando",
-      "overlay": "I TUOI SOLDI IN BANCA STANNO PERDENDO VALORE OGNI GIORNO",
-      "script": "HOOK: Se hai dei risparmi fermi sul conto corrente, fermati e ascolta questo, perché ti stanno prendendo in giro.\nBODY: Economyup il 5 agosto ha pubblicato la guida ai 'migliori conti deposito del 2026'. Bello no? Ma nessuno ti spiega perché esistono questi prodotti: le banche prendono i tuoi soldi fermi, li girano, ci guadagnano, e a te ridanno le briciole, spesso sotto l'inflazione reale. Nel frattempo il tuo potere d'acquisto si sgretola mentre tu pensi di essere 'al sicuro'. Il sistema non ti insegna a leggere un tasso netto, non ti insegna cos'è il vincolo, non ti insegna che 'sicuro' non vuol dire 'conveniente'. Lo fanno apposta: un risparmiatore che non si informa è un risparmiatore che non chiede di più.\nCTA: Tu il tuo conto lo controlli davvero o lo dai per scontato? Scrivilo nei commenti 👇",
-      "caption": "I tuoi risparmi fermi ti stanno costando di più di quanto pensi 💸 Fonte: Economyup, 5 agosto 2026 #risparmio #contodeposito #inflazione #economia #soldiitalia #finanzapersonale #bancheitaliane",
-      "cta_type": "engage",
-      "cta": "Tu il tuo conto lo controlli davvero o lo dai per scontato? Scrivilo nei commenti 👇",
-      "fornire": "Talent in primo piano, luce naturale, tono diretto e leggermente indignato; screenshot dell'articolo Economyup pronto da mostrare a schermo per 2-3 secondi durante il BODY.",
-      "source": {
-        "outlet": "Economyup",
-        "headline": "Guida ai migliori conti deposito del 2026 (secondo noi)",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE95NXg5TjU4RDdRWEZRcGg5Mk1mTFczOHNiaHpaVjJscmhucDdPSnNkTm5kQlV5VmtaZ1lORVNuNWo1QjFzM0xmRW1fSk1CREV4aU1vaEs1dG5IazBXdzFkcFBHNFVWeEVk?oc=5"
-      },
-      "regia": "Apertura in primo piano con zoom leggero sul volto per enfatizzare l'hook nei primi 2 secondi. Testo overlay grande in bianco su nero appare subito con l'hook. A metà video, taglio secco su screenshot dell'articolo Economyup con data ben visibile in basso. Ritmo di montaggio veloce con jump cut ogni 3-4 secondi per tenere alta la retention. Chiusura con il talent che guarda dritto in camera per la domanda finale, testo della CTA che appare in basso a schermo."
-    },
-    {
-      "id": 18,
-      "date": "2026-08-05",
-      "categoria": "Trading",
-      "area": "Cripto",
-      "format": "Screen-recording",
-      "tipo": "Newsjacking / analisi reaction",
-      "durata": "25-35s",
-      "titolo": "Bitcoin sotto 50k? I due eventi di agosto",
-      "overlay": "BITCOIN A RISCHIO SOTTO $50.000 😱",
-      "script": "HOOK: Fermati un secondo: se hai Bitcoin in portafoglio, agosto potrebbe farti male. Te lo dice Yahoo Finanza, non io.\nBODY: [Screen-record dell'articolo, scrolla fino al titolo] Guarda qui, 5 agosto 2026: si parla di due eventi specifici di questo mese che potrebbero spingere Bitcoin sotto i 50.000 dollari. Non è terrorismo, è quello che scrivono le testate finanziarie serie. Il punto è questo: la maggior parte delle persone su Bitcoin ci sta solo 'sperando', senza sapere leggere questi segnali, senza un piano se il prezzo scende, senza capire cosa muove davvero il mercato in queste settimane. Ecco perché quando arrivano notizie così, c'è chi va nel panico e vende nel momento peggiore, e chi invece aveva già uno scenario pronto. La differenza non è la fortuna, è la preparazione: sapere quali eventi seguire, come si muove il mercato prima che si muova davvero, e come proteggere quello che hai già investito.\nCTA: Salva questo video, ti serve per rileggerlo quando agosto farà sul serio.",
-      "caption": "Bitcoin sotto 50.000$? Yahoo Finanza lancia l'allarme per agosto 2026 🚨 Due eventi da monitorare, te li spiego in 30 secondi. Fonte in video. #bitcoin #crypto #btc #criptovalute #finanza #tradingview #economia #news",
-      "cta_type": "save",
-      "cta": "Salva questo video, ti serve per rileggerlo quando agosto farà sul serio.",
-      "fornire": "Screenshot/scroll dell'articolo Yahoo Finanza (titolo + data visibili), grafico BTC recente su TradingView o simile, luce buona per eventuale volto in overlay piccolo.",
-      "source": {
-        "outlet": "Yahoo Finanza",
-        "headline": "Bitcoin sotto $50.000? Questi due temuti eventi di agosto potrebbero scatenarlo",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQNmxRbkQzWmRWTHpDQ3JFQzM0YVJEQ3hUYkJKTy13WmRORzhoUGJpaVlaM1lpM0J4QnQxQlc2M3p6RHl0dHBXeS1tYmN0VXItWVM1RDBjSlQwZFNLWXpoNGFhbVd2MF8tUDM0MWwzU0JYRFFOajQ1VFI4bmptMkJfMFFCaVY3dw?oc=5"
-      },
-      "regia": "Apri con screen-record del telefono che scrolla il feed news, zoom rapido sul titolo Yahoo Finanza con data ben visibile (prova sociale immediata). Mentre parli, passa a un grafico BTC con linea rossa lampeggiante sui 50.000$ come riferimento visivo. Testo overlay a caratteri cubitali sulle parole chiave ('AGOSTO', '50.000$', 'DUE EVENTI'). Ritmo veloce, tagli ogni 2-3 secondi, nessun tempo morto. Chiudi con volto in camera per la CTA finale, tono diretto e sicuro."
-    },
-    {
-      "id": 19,
-      "date": "2026-08-05",
-      "categoria": "Politica",
-      "area": "Italia",
-      "format": "Talking head",
-      "tipo": "Reaction a caldo su notizia energia/accise",
-      "durata": "25-35s",
-      "titolo": "Niente fondi accise: bolletta scarica su di te",
-      "overlay": "IL GOVERNO CHIEDE ALL'UE... MA NON PER TE",
-      "script": "HOOK: Fermi un secondo. Mentre voi guardate la bolletta con il terrore, il governo sta trattando con l'Europa una clausola di salvaguardia... e non è per tagliarvi le accise sulla benzina o sulla luce.\nBODY: Fonte QuiFinanza, 5 agosto 2026 [mostra screenshot titolo]: 'Governo chiede massimo all'Ue sulla clausola di salvaguardia per energia. Niente fondi per accise'. Traduzione vera: chiedono margini di flessibilità sul deficit per gestire i costi energia, ma i soldi per abbassare le accise su benzina e bollette NON ci sono. Quindi chi paga la differenza? Sempre la stessa persona: tu, che fai benzina per andare a lavorare e paghi la bolletta di casa. Il problema è che queste manovre si decidono a tavoli dove tu non hai voce, e i media te la raccontano come 'buona notizia per i conti pubblici'. Buona per chi?\nCTA: Tu la bolletta la senti già pesante? Scrivilo qui sotto 👇",
-      "caption": "Il governo tratta con l'UE ma le accise restano lì dove sono. 📌 Fonte: QuiFinanza, 5/8/2026. Chi ci guadagna in questi giochi di bilancio? Non chi lavora, quello è certo. #accise #energia #bollette #governo #costodellavita #italia #economia #newsjacking #politicaitaliana #svegliati",
-      "cta_type": "engage",
-      "cta": "Tu la bolletta la senti già pesante? Scrivilo qui sotto 👇",
-      "fornire": "Screenshot chiaro del titolo QuiFinanza con data visibile, ambiente semplice (casa/ufficio), luce frontale buona per talking head, tono diretto e leggermente indignato ma controllato",
-      "source": {
-        "outlet": "QuiFinanza",
-        "headline": "Governo chiede massimo all’Ue sulla clausola di salvaguardia per energia. Niente fondi per accise",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPOHBGbjV2QlVsbDdFa051YkhySHRCWkpUSUpmWi14V3dkV2lveDdEcUdVTFI1SGpXOFJteE90dlIwRmxyS0Vka3VlS192SnZlZzdhQnFXVmVpUVA2WW1xZUFHMURpbk5jNmdFREs3T3c5ZVhuV0lFWGdINXJndThHRWZQVGZndy1LWEctOGdtMEphZkRLcVJJMdIBngFBVV95cUxPY0o4OTllcWVQNDdHLTNyaGgxRXkwWkY1andwbzFtekxxMGV0ZTBTb2pUTkdVeGRhejhFdzkwUjNLNTZfSEFnZGtfRTVQTGRVejdFOEFFam5ocTlEejJoTmR0VndpTnNsM0dlM1hUS1V2SzZOUHA0cVROOTFjRkIwN19JM3ZXVmRHSHNIaEJxZXFmSUdmQUpNUTZSMzRoUQ?oc=5"
-      },
-      "regia": "Apertura in primo piano stretto, sguardo dritto in camera, tono basso e cospirativo tipo 'devo dirti una cosa'. A metà frase HOOK stacco veloce su screenshot dell'articolo con overlay testo 'NIENTE FONDI PER ACCISE' che pulsa. Ritorno su talking head per il BODY con gesti delle mani per scandire i punti chiave, zoom leggero in avanti quando dice 'chi paga la differenza? Tu'. Testo a schermo con parole chiave che appaiono a scatti (ACCISE, BOLLETTE, TU PAGHI). Chiusura con domanda diretta in camera, jump cut finale per creare urgenza nella risposta nei commenti."
-    },
-    {
-      "id": 20,
-      "date": "2026-08-05",
-      "categoria": "Trading",
-      "area": "Cripto",
-      "format": "Screen-recording",
-      "tipo": "Reaction/analisi a notizia crypto",
-      "durata": "25-35s",
-      "titolo": "Miner abbandonano Bitcoin: è un segnale?",
-      "overlay": "I MINER STANNO SCAPPANDO DA BITCOIN",
-      "script": "HOOK: Fermati due secondi: i miner di Bitcoin stanno spegnendo le macchine. E se te lo dico è perché la rete te lo sta urlando.\nBODY: BeInCrypto, 5 agosto 2026: l'hashrate sta calando, sempre più operatori stanno abbandonando il mining. [mostra schermata articolo] Perché succede? Semplice: quando il mining non è più sostenibile, i miner più piccoli chiudono, restano i colossi. Questo si chiama 'capitolazione dei miner' e storicamente ha sempre preceduto movimenti forti sul prezzo, in un senso o nell'altro. Non è panico, è meccanica di mercato: meno miner, meno pressione di vendita costante su BTC, ma anche meno sicurezza di rete nel breve. È un dato che il 90% delle persone che ha comprato BTC su un'app non sa nemmeno leggere.\nCTA: Salva questo video, ti serve per capire il prossimo movimento prima che succeda.",
-      "caption": "I miner stanno abbandonando Bitcoin. 👀 Cosa significa davvero per il prezzo? Fonte: BeInCrypto, 5 agosto 2026. #Bitcoin #BTC #Crypto #Mining #Blockchain #TradingCrypto #BullsFX",
-      "cta_type": "save",
-      "cta": "Salva questo video, ti serve per capire il prossimo movimento prima che succeda.",
-      "fornire": "Screenshot/schermata dell'articolo BeInCrypto con titolo e data visibili, eventuale grafico hashrate BTC (anche generico da TradingView), smartphone o schermo per screen-recording, luce frontale per riprendere anche il volto in un piccolo overlay se disponibile.",
-      "source": {
-        "outlet": "BeInCrypto",
-        "headline": "I miner stanno abbandonando la rete Bitcoin, avrà un impatto sul prezzo di BTC?",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5CTTJ5VmozYlpWSEpibFlCdFlHOTlrejl2a0xZaWhvUF9sRE45WTlYU2l5bGc2bk9qUnlBbnFQWGl4NVFMQ3BoUkhKdldYcGVvX05PNnJyelowZTBiUnZUWTI1MDJudkdLSUJVTnVn?oc=5"
-      },
-      "regia": "Apri con il volto in primo piano per 1 secondo mentre dici l'hook con tono sorpreso/serio, poi swipe rapido verso lo screen-recording dell'articolo BeInCrypto (evidenzia titolo e data con un cerchio rosso animato). Mentre spieghi il meccanismo dei miner, inserisci un grafico semplice dell'hashrate in calo con freccia rossa. Testo overlay a comparsa progressiva sulle parole chiave (HASHRATE, CAPITOLAZIONE, MENO VENDITE). Chiudi tornando sul volto per la CTA, tono diretto e complice, zoom leggero in avanti per dare urgenza."
-    },
-    {
-      "id": 21,
-      "date": "2026-08-05",
-      "categoria": "Politica",
-      "area": "USA",
-      "format": "Talking head",
-      "tipo": "Reaction newsjacking a caldo",
-      "durata": "25-35s",
-      "titolo": "Dazi Trump: 100 miliardi di rimborsi bocciati dalla Corte",
-      "overlay": "100 MILIARDI DI $ SBAGLIATI (E LI HAI PAGATI TU)",
-      "script": "HOOK: Fermati un secondo. Il governo USA ha appena ammesso di aver sbagliato per 100 MILIARDI di dollari. E li hai pagati tu, cittadino, con le tue tasse.\nBODY: Il Corriere della Sera, 5 agosto 2026, scrive nero su bianco: l'amministrazione Trump ha dovuto rimborsare 100 miliardi di dollari di dazi che la Corte Suprema ha dichiarato illegittimi. Oltre la META' di tutto quello che avevano incassato con quella manovra. Fermati a pensare cosa significa: per mesi, forse anni, milioni di persone e aziende hanno pagato dazi imposti senza base legale. Prezzi piu' alti al supermercato, aziende che hanno chiuso, posti di lavoro persi. E ora? Ora te lo restituiscono, forse, con calma, mentre il danno reale - inflazione, costo della vita, imprese fallite - quello NESSUNO te lo restituisce. Il sistema funziona cosi': decide, sbaglia, tu paghi il conto, e quando lo scoprono ti dicono 'scusa, eccoti i soldi' come se bastasse. Questo e' il motivo per cui NON puoi permetterti di stare a guardare senza capire dove vanno i tuoi soldi e come vengono decise le regole del gioco.\nCTA: Tu li hai sentiti sul portafoglio questi dazi sbagliati? Scrivimelo qui sotto 👇",
-      "caption": "100 miliardi di dollari di dazi ILLEGALI, rimborsati solo dopo che la Corte Suprema li ha bocciati. E nel frattempo chi ha pagato il conto vero? 🔥 Fonte: Corriere della Sera, 5/8/2026. #dazi #trump #usa #economia #tasse #cortesuprema #news #attualita #svegliaticoscienza #soldi",
-      "cta_type": "engage",
-      "cta": "Tu li hai sentiti sul portafoglio questi dazi sbagliati? Scrivimelo qui sotto 👇",
-      "fornire": "Talent davanti a camera, luce frontale, tono deciso e diretto da subito. Screenshot dell'articolo del Corriere della Sera pronto da mostrare a schermo con titolo e data ben visibili.",
-      "source": {
-        "outlet": "Corriere della Sera",
-        "headline": "Dazi Usa, l'amministrazione Trump ha pagato 100 miliardi di rimborsi per quelli bocciati dalla Corte Suprema (oltre la metà di quanto ottenuto)",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMirwJBVV95cUxPSEhmZFdXZzQ1Q0pzQUJ0RUVVOXVyaTJOV2JuNUItM1pYUFZoZS1kTmlSYTE1U3F6SWhPN3ZNYXZsS0JxczVzYVN3UVNIVXo3QUQxRXRWRkpmYThJeUxRUmFzemxHcXJxUHBxdkQwUWtjcDZ3TW81M21iaVNuTFMtdnhjOUVhMTRrZzBwR203dlgxTU16R2VydlFhd1gwcnh6UDVCakRYMWhOZXE1WXFXOEdxcGhoNG4tY3lCY0tKR21jbXNaU2xkMnAyMFBPdnktc2U1M096Z0hnRDN4OHRNbmE4UlN4X3F1dUtha1RrdzlFdVFQSDFvdFhmME5SMjZEQWo0OTdqNjFVTHZNVUM5TEg5ZG5PckRJZXhqUXd2eU4zd1hIX1J1cGltSko5QlXSAbQCQVVfeXFMUDhKM3dwcjBtRmNfenpXVHJET3U4Unh5ZjgzQnJVRUFPS0QwVHF4SWJmNVgxY2Rlci14LXptdG1TaGNQWEhRVzdTRnBTdzEyZWVpN3FyVklhOTBUNVZ1Z1d6bVZGUkYwb0M1R1B1aGM0azdzNldyUUUwSTE1UE5LbmUyN0RabXU5MmM0WUxkY0dKNFhXdDFkOEtHU2FMSVZza2pRT3JiQk13aFRxd0xpQktMeWd4d2ZnYXlqQzhFemFmUVZmc1E4dVBkcnV1eFBKWnc1Q1RZb1lwZEliZnA4M1Q5emgwLVRPbVVtUDhTMFh2Ulp4UUh0WXl1dzNEV2ZocndTcGMyRGN4MXlWOVdrWGphYUJoYkN6YUtkQTluZ1JEVk5EUG5mNmNyU1RjcGF3TkVTdEs?oc=5"
-      },
-      "regia": "Apertura in primo piano, camera leggermente dal basso per effetto 'confessione/denuncia'. Nei primi 2 secondi zoom improvviso sul volto sull'HOOK con testo overlay '100 MILIARDI DI $ SBAGLIATI' in caratteri enormi rosso/bianco. A meta' video stacco rapido su screenshot dell'articolo (fonte ben visibile) con effetto swipe. Sottotitoli bold sempre presenti per retention. Ultimo secondo: torna sul volto, tono piu' calmo e diretto per la domanda finale, pausa di 1 secondo prima del taglio per invitare al commento."
-    },
-    {
-      "id": 22,
-      "date": "2026-08-05",
-      "categoria": "Geo",
-      "area": "Energia",
-      "format": "Screen-recording",
-      "tipo": "Reaction a caldo su dati di mercato",
-      "durata": "25-35s",
-      "titolo": "Gas giù, bollette su? Il paradosso del mercato energetico",
-      "overlay": "GAS -3% ma la bolletta non scende. Perché?",
-      "script": "HOOK: Fermati un secondo: il gas è appena crollato del 3%, ma tu la bolletta la vedi scendere? Io no.\nBODY: Guardate qui, screenshot in mano: SoldiOnline.it, 5 agosto 2026, il gas scende a 54 euro al MegaWattora e le Borse europee restano caute, Milano +0,3%. Sembra una notizia positiva, ma il punto è questo: il mercato energetico si muove ogni giorno, minuto per minuto, e chi lo osserva con un partner regolamentato riesce a capire in anticipo certi movimenti. Chi invece aspetta la bolletta di casa per capire cosa sta succedendo al gas, arriva sempre tardi, perché tra il prezzo all'ingrosso e quello che paghi tu ci sono settimane, a volte mesi, di ritardo. Questo scollamento tra mercato reale e vita quotidiana è il motivo per cui tantissime persone hanno iniziato a guardare questi numeri non per curiosità, ma per capire come si muove davvero l'economia che li circonda.\nCTA: Tu la bolletta l'hai vista scendere o no? Scrivimelo nei commenti 👇",
-      "caption": "Il gas scende del 3% ma tu quando lo vedrai nella bolletta? 🤔 Fonte: SoldiOnline.it, 5 agosto 2026. Il mercato si muove sempre prima della vita reale. #gas #energia #borsa #economia #bollette #mercatienergetici #trading #finanza",
-      "cta_type": "engage",
-      "cta": "Tu la bolletta l'hai vista scendere o no? Scrivimelo nei commenti 👇",
-      "fornire": "Screenshot dell'articolo di SoldiOnline.it con titolo e data visibili, grafico o schermata del prezzo del gas (54€/MWh), eventualmente uno screenshot di una bolletta generica/anonima per il confronto visivo.",
-      "source": {
-        "outlet": "SoldiOnline.it",
-        "headline": "Gas giù del 3% a 54 €/MWh, Borse europee caute: Milano +0,3%",
-        "date": "2026-08-05",
-        "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNUTdMWUgyMW9lcWEyYWJjSHdQdXVRQTBsU0dzUlhTOUp3bjZiN1k3aVFrYVNiMHRhVnlTRXFuWm5Hb0ZRVjdiUDhDV3FhbVNGQV9fTTNLUTR0clR4TC1DRlc4cWY2Y1ExZkhHcTluVDA4RUtKNThNYVl2YW1ZZzEwdGJKRndBUWlZbGVYcnltSmpVcjJ2alJRYzR0dU5yTlJ4eFVwNHhKb20?oc=5"
-      },
-      "regia": "Apertura in screen-recording: mano che scorre veloce sull'app di trading/grafico del gas con numero -3% in evidenza (zoom rapido con effetto 'ding' sonoro). A metà video, stacco su inquadratura talking head mezzo busto, luce diretta, tono diretto e leggermente polemico, con overlay testo grande 'GAS -3%... BOLLETTA UGUALE?' che resta fisso in alto. Chiudere con zoom sul volto per la domanda finale, sottotitoli sincronizzati parola per parola per massimizzare la retention."
-    },
-    {
       "categoria": "Trading",
       "area": "🇮🇹 Italia",
       "format": "Talking head",
@@ -761,7 +420,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "Se vuoi il quadro completo te lo lascio nel canale — link in bio.",
-      "id": 23,
+      "id": 8,
       "cta_type": "link"
     },
     {
@@ -784,7 +443,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "Domanda vera: tu cosa faresti? 👇",
-      "id": 24,
+      "id": 9,
       "cta_type": "engage"
     },
     {
@@ -807,7 +466,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "Ne parlo per esteso nel canale, link in bio.",
-      "id": 25,
+      "id": 10,
       "cta_type": "link"
     },
     {
@@ -830,7 +489,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "Salva e rileggilo con calma, vale più di uno scroll.",
-      "id": 26,
+      "id": 11,
       "cta_type": "save"
     },
     {
@@ -853,7 +512,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "Tu da che parte stai? Commenta qui 👇",
-      "id": 27,
+      "id": 12,
       "cta_type": "engage"
     },
     {
@@ -876,7 +535,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "",
-      "id": 28,
+      "id": 13,
       "cta_type": "none"
     },
     {
@@ -899,7 +558,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "Salva e rileggilo con calma, vale più di uno scroll.",
-      "id": 29,
+      "id": 14,
       "cta_type": "save"
     },
     {
@@ -922,7 +581,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "E tu come la leggi? Scrivilo nei commenti 👇",
-      "id": 30,
+      "id": 15,
       "cta_type": "engage"
     },
     {
@@ -947,7 +606,7 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "Si quieres el cuadro completo, lo dejo en el canal — link en bio.",
-      "id": 31,
+      "id": 16,
       "cta_type": "link"
     },
     {
@@ -972,11 +631,11 @@
       "date": "2026-08-04",
       "durata": "30-45s",
       "cta": "",
-      "id": 32,
+      "id": 17,
       "cta_type": "none"
     },
     {
-      "id": 33,
+      "id": 18,
       "date": "2026-08-04",
       "categoria": "Trading",
       "area": "Cripto",
@@ -999,7 +658,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 34,
+      "id": 19,
       "date": "2026-08-04",
       "categoria": "Trading",
       "area": "Cripto",
@@ -1022,30 +681,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 35,
-      "date": "2026-08-04",
-      "categoria": "Geo",
-      "area": "Medio Oriente",
-      "format": "Screen-recording",
-      "tipo": "Newsjacking geopolitico-mercati",
-      "durata": "25-35s",
-      "titolo": "Petrolio su, Toronto su: la correlazione che (quasi) nessuno guarda",
-      "overlay": "MENTRE TUTTI GUARDANO IL TG... I MERCATI GIÀ SI MUOVONO",
-      "script": "HOOK: Fermo tutto. Mentre il mondo guarda le tensioni in Medio Oriente sul telegiornale, il petrolio sta già facendo il suo lavoro sui mercati. E c'è un effetto a catena che quasi nessuno ti spiega.\nBODY: MarketScreener Italia, 4 agosto 2026: i futures di Toronto salgono grazie al rialzo del petrolio, mentre restano le tensioni in Medio Oriente. Perché Toronto? Perché la borsa canadese, la TSX, è piena di aziende energetiche: quando il petrolio sale per paura geopolitica, quelle azioni tirano su l'intero indice. Questo è un pattern che si ripete da decenni: tensione geopolitica, greggio su, indici legati all'energia su. Non è magia, è correlazione. E chi la conosce, legge le notizie con occhi diversi: non solo cronaca, ma segnali di mercato.\nCTA: Se vuoi capire come si leggono davvero questi collegamenti tra geopolitica e mercati, trovi materiale nel canale.",
-      "caption": "Petrolio su, Toronto su. Non è coincidenza, è correlazione 🛢️📈 Fonte: MarketScreener Italia, 4 agosto 2026. #petrolio #medioriente #geopolitica #mercatifinanziari #trading #economia #tsx #newsjacking #finanza",
-      "cta_type": "link",
-      "cta": "Materiale su queste correlazioni nel canale, link in bio.",
-      "fornire": "Screenshot dell'articolo MarketScreener Italia, grafico petrolio (WTI/Brent) in salita, grafico futures TSX/Toronto, eventuale mappa Medio Oriente per contesto visivo.",
-      "source": {
-        "outlet": "MarketScreener Italia",
-        "headline": "I futures di Toronto salgono grazie al rialzo del petrolio; persistono le tensioni in Medio Oriente",
-        "date": "2026-08-04",
-        "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPV202ang0WjlXVDFQbUxKVE92WTJfWXdMR21WS2JNVW1hOVJuWjU0eUVIbDZtY1dBdlZsX0ZkNENidXR5TU1BR2ozQjVKRXRUR1VVN1A5TlZHR0FMUTBJdDdLUE91VFdzenhqRTY0cGw1MkhNOVhBYjhwWkhnWk1DZ0l6WVdmV1ZqeV83VjdaWldDMGZRZFN6SGVKWnNXWThGUWhCaTQ0N21lM25YY0tOdk1iZGVzT2UyMlBEZkxtU2g3ZklyZFRoLTZGXzRCZEt4WnFGcHBRUkRIZGVSZHk0c1hRMWI5YzR6?oc=5"
-      },
-      "regia": "Apertura con schermo diviso: a sinistra telegiornale/notizia Medio Oriente, a destra grafico petrolio che sale (screen-recording reale). Voce ferma e diretta sul hook, ritmo veloce. Durante il BODY mostra overlay testuale con la fonte (MarketScreener Italia + data) e poi taglio su grafico TSX/Toronto in salita con freccia animata. Zoom-in sul volto del talent per l'ultima frase del body ('non è magia, è correlazione') per creare pausa drammatica. Chiudi con testo CTA in basso e swipe-up gesture verso bio."
-    },
-    {
-      "id": 36,
+      "id": 20,
       "date": "2026-08-03",
       "categoria": "Trading",
       "area": "🌍 Internazionale",
@@ -1087,7 +723,7 @@
         "url": "https://ecampania.it/magazine/trading-sui-mercati-nel-2026-petrolio-oro-bitcoin-e-azioni-protagonisti-di-una-volatilita-record/"
       },
       "regia": "Grafico multi-asset. Tono didattico, focus sul rischio, nessuna previsione di guadagno.",
-      "id": 37,
+      "id": 21,
       "cta_type": "save"
     },
     {
@@ -1110,7 +746,7 @@
         "url": "https://www.soldionline.it/notizie/forex-commodities/oro-vicino-a-4100-dollari-loncia-perche-i-mercati-restano-cauti"
       },
       "regia": "Mappa/timeline geopolitica a schermo. Tono lucido, imparziale.",
-      "id": 38,
+      "id": 22,
       "cta_type": "engage"
     },
     {
@@ -1133,7 +769,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Il metodo completo è nel canale — link in bio.",
-      "id": 39,
+      "id": 23,
       "cta_type": "link"
     },
     {
@@ -1156,7 +792,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Domanda vera: tu cosa faresti? 👇",
-      "id": 40,
+      "id": 24,
       "cta_type": "engage"
     },
     {
@@ -1179,7 +815,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Salvatelo: ti torna utile al prossimo movimento.",
-      "id": 41,
+      "id": 25,
       "cta_type": "save"
     },
     {
@@ -1202,7 +838,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Secondo te regge o è solo rumore? Dimmelo sotto 👇",
-      "id": 42,
+      "id": 26,
       "cta_type": "engage"
     },
     {
@@ -1225,7 +861,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Salva questo prima che ti serva.",
-      "id": 43,
+      "id": 27,
       "cta_type": "save"
     },
     {
@@ -1248,7 +884,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Se vuoi il quadro completo te lo lascio nel canale — link in bio.",
-      "id": 44,
+      "id": 28,
       "cta_type": "link"
     },
     {
@@ -1271,7 +907,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Domanda vera: tu cosa faresti? 👇",
-      "id": 45,
+      "id": 29,
       "cta_type": "engage"
     },
     {
@@ -1294,7 +930,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Salva questo prima che ti serva.",
-      "id": 46,
+      "id": 30,
       "cta_type": "save"
     },
     {
@@ -1317,7 +953,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Salvatelo: ti torna utile al prossimo movimento.",
-      "id": 47,
+      "id": 31,
       "cta_type": "save"
     },
     {
@@ -1340,7 +976,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Se vuoi il quadro completo te lo lascio nel canale — link in bio.",
-      "id": 48,
+      "id": 32,
       "cta_type": "link"
     },
     {
@@ -1363,7 +999,7 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "Salva questo prima che ti serva.",
-      "id": 49,
+      "id": 33,
       "cta_type": "save"
     },
     {
@@ -1386,11 +1022,11 @@
       "format": "Reel parlato",
       "durata": "35-45s",
       "cta": "",
-      "id": 50,
+      "id": 34,
       "cta_type": "none"
     },
     {
-      "id": 51,
+      "id": 35,
       "date": "2026-08-03",
       "categoria": "Geo",
       "area": "Cina / Asia",
@@ -1413,7 +1049,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 52,
+      "id": 36,
       "date": "2026-08-03",
       "categoria": "Random",
       "area": "Italia - Lavoro",
@@ -1436,76 +1072,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 53,
-      "date": "2026-08-03",
-      "categoria": "Random",
-      "area": "Italia - Lavoro",
-      "format": "Talking head",
-      "tipo": "Reaction/opinione su notizia caro-vita e stipendi",
-      "durata": "30-40s",
-      "titolo": "Panda vs Golf: quanti stipendi servono oggi (e la fregatura)",
-      "overlay": "35 ANNI FA BASTAVANO 6 STIPENDI. OGGI?",
-      "script": "HOOK: Nel 1990 con 6 stipendi ti compravi una Panda nuova. Oggi con 6 stipendi non ti compri manco le gomme. E nessuno te lo dice.\nBODY: La Gazzetta dello Sport, 3 agosto 2026, lo scrive nero su bianco: hanno confrontato quanti stipendi servivano per comprare una Panda o una Golf 35 anni fa e quanti ne servono oggi. Il risultato è imbarazzante: le auto sono aumentate molto più degli stipendi. E non è un caso isolato, è lo stesso film per casa, spesa, bollette. Il tuo stipendio è fermo dal secolo scorso, ma tutto intorno corre. Questo è il vero motivo per cui ti senti sempre più povero anche se lavori uguale o di più.\nCTA: Tu quanti stipendi ti servono oggi per un'auto normale? Scrivilo nei commenti 👇",
-      "caption": "35 anni fa bastavano 6 stipendi per una Panda. Oggi? 😳 Fonte: La Gazzetta dello Sport, 3/08/2026. Il potere d'acquisto sta crollando e nessuno ce lo spiega a scuola. #stipendi #carovita #lavoro #italia #economia #gazzettadellosport #generazionesfigata #potereacquisto",
-      "cta_type": "engage",
-      "cta": "Tu quanti stipendi ti servono oggi per un'auto normale? Scrivilo nei commenti 👇",
-      "fornire": "Screenshot dell'articolo Gazzetta dello Sport ben visibile (titolo + data 3/8/2026), volto arrabbiato/indignato ma credibile, magari foto di una Panda o Golf per B-roll di richiamo visivo.",
-      "source": {
-        "outlet": "La Gazzetta dello Sport",
-        "headline": "Quanti stipendi per comprare Panda o Golf? Cosa è cambiato in 35 anni",
-        "date": "2026-08-03",
-        "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQLWNVT1JScTI0STJpbVFWWGhfaFlsUG1vM3g1ZlJiRGFQaXFzMnhGY0p3eEF0U3BzN2VRelN4UUJIdk1NbnpwZFJ3eDFPZFplZkpuRzFJd013ZEF0RmQxeWN6T1pJNmp5alJvS1hQb3ZPOXpPTUw0ZHFpWlZ2cnFQQ2cyd25fRW9oYzhjMHpFaklTRkhhZ3BsaWVzb2ZLbWdpRFA5bXJzOFhNeHQyekIzZ1h1WFI0c0tTWER3MkpCMXBEYnMx0gHEAUFVX3lxTFAtY1VPUlJxMjRJMmltUVZYaF9oWWxQbW8zeDVmUmJEYVBpcXMyeEZjSnd4QXRTcHM3ZVF6U3hRQkh2TU1uenBkUnd4MU9kWmVmSm5HMUl3TXdkQXRGZDF5Y3pPWkk2anlqUm9LWFBvdk85ek9NTDRkcWlaVnZycVBDZzJ3bl9Fb2hjOGMwekVqSVNGSGFncGxpZXNvZkttZ2lEUDltcnM4WE14dDJ6QjNnWHVYUjRzS1NYRHcySkIxcERiczE?oc=5"
-      },
-      "regia": "Apertura in primo piano, camera a altezza occhi, tono deciso e leggermente indignato dal primo frame. A metà frase mostra overlay con lo screenshot dell'articolo (2-3 secondi, ben leggibile con fonte/data). Testo a schermo con numeri grandi tipo '6 STIPENDI vs OGGI ?' che compare a scomparsa rapida per dare ritmo. Chiudi tornando in volto per la domanda finale, tono da 'apri gli occhi' ma con un sorriso complice, non rabbia sterile. Musica trend con beat che stacca sulla rivelazione del dato."
-    },
-    {
-      "id": 54,
-      "date": "2026-08-03",
-      "categoria": "Macro",
-      "area": "Europa / BCE",
-      "format": "Talking head",
-      "tipo": "Reaction/analisi a caldo su notizia macro",
-      "durata": "25-35s",
-      "titolo": "Fed spaccata + inflazione EU su: cosa cambia ora",
-      "overlay": "FED DIVISA. INFLAZIONE EU IN RISALITA.",
-      "script": "HOOK: Fermati un secondo: la Fed è spaccata in due e in Europa l'inflazione sta tornando a salire. Se pensi che non ti riguardi, ti sbagli di grosso.\nBODY: Secondo Altroconsumo (3 agosto 2026) dentro la Federal Reserve non c'è accordo su cosa fare: alcuni vogliono tagliare i tassi, altri frenare. Nel frattempo l'inflazione nell'Eurozona è tornata a salire. Questo scontro tra banche centrali muove valute, obbligazioni e mercati azionari in tempo reale: quando la Fed è indecisa, la volatilità sale ovunque, euro compreso. E' proprio in questi momenti di incertezza che chi segue i mercati con metodo si accorge prima degli altri di dove si stanno muovendo i flussi di denaro.\nCTA: Se vuoi capire come leggo questi scenari passo dopo passo, trovi tutto nel canale.",
-      "caption": "Fed divisa, inflazione UE in risalita: cosa significa per i mercati 👀 Fonte: Altroconsumo, 3/8/2026. #fed #inflazione #bce #economia #mercatifinanziari #macroeconomia #euro #newsjacking",
-      "cta_type": "link",
-      "cta": "Approfondimento completo nel canale, link in bio.",
-      "fornire": "Volto in primo piano (talking head), smartphone/laptop con articolo Altroconsumo aperto per screenshot overlay, eventuale grafico EUR/USD o inflazione EU da mostrare in B-roll rapido.",
-      "source": {
-        "outlet": "www.altroconsumo.it",
-        "headline": "Fed divisa, inflazione euro in risalita",
-        "date": "2026-08-03",
-        "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQNDlBSVpLX3l6d0RQYml5MTNUMnlxSjlvbnptUjdpV2YybGVCRnh1QzF1SWYtZ0hCXzIzS2lFOW02RGVKc2RsVnlRRGJQdUw3aDlCU1RteUFnZUIxU2ZRNTNyNC1PTFVuYTFJMHhUa2ZrVkRFSkxnaVZhYjY3M0wzRVRyOEZybVFzNTYzaVduU01lYU1SRGlzYjNzYWdxU3ZC?oc=5"
-      },
-      "regia": "Apertura in primo piano, tono deciso e leggermente teso (da 'notizia urgente'). Nei primi 2 secondi zoom rapido sul volto mentre appare overlay testo grande 'FED DIVISA'. A metà video taglio veloce (1-2s) su screenshot dell'articolo Altroconsumo con data ben visibile in basso. Chiudi tornando su talking head con leggero movimento camera per dare energia. Sottotitoli grandi sincronizzati, musica tensiva bassa in sottofondo, cut ogni 3-4 secondi per mantenere ritmo alto."
-    },
-    {
-      "id": 55,
-      "date": "2026-08-03",
-      "categoria": "Politica",
-      "area": "Mondo",
-      "format": "Talking head",
-      "tipo": "Reaction a caldo su notizia politica",
-      "durata": "25-35s",
-      "titolo": "Trump al 32%: il crollo che nessuno racconta bene",
-      "overlay": "32% DI GRADIMENTO. IL PIÙ BASSO DI SEMPRE",
-      "script": "HOOK: Il presidente più potente del mondo è appena crollato al 32%. E sai perché nessuno te lo spiega bene? Perché fa comodo che tu non capisca cosa c'è dietro.\nBODY: Italia Informa lo scrive chiaro, 3 agosto 2026: minimo storico di gradimento per Trump. Non è solo politica da salotto, è il termometro di quanto la gente comune si senta tradita dalle promesse su prezzi, lavoro, bollette. Quando un leader crolla così, di solito è perché chi doveva stare meglio, sta peggio. E il bello è che questo schema si ripete ovunque, non solo in America: promesse in campagna elettorale, poi la realtà che si scontra con l'economia vera. Il problema è che noi guardiamo il sondaggio e ci fermiamo lì, senza chiederci chi ci guadagna da questa instabilità e chi invece ci perde sempre: noi.\nCTA: Secondo te perché la gente si sente sempre più tradita dalla politica? Scrivilo qui sotto 👇",
-      "caption": "Trump al 32%, minimo storico. Ma il vero problema non è il sondaggio, è quello che c'è dietro 👀 Fonte: Italia Informa, 3 agosto 2026. Tu come la leggi? #trump #politica #sondaggi #economia #news #attualità #geopolitica",
-      "cta_type": "engage",
-      "cta": "Secondo te perché la gente si sente sempre più tradita dalla politica? Scrivilo qui sotto 👇",
-      "fornire": "Screenshot dell'articolo Italia Informa con titolo e data visibili, uno sfondo neutro o studio, luce frontale per talking head, tono deciso e diretto negli occhi in camera.",
-      "source": {
-        "outlet": "Italia Informa",
-        "headline": "Analisi/ Trump scende ai minimi di gradimento: 32%",
-        "date": "2026-08-03",
-        "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPMVV5RW40M0xEVWh2UTZzWmV4OG1TeFJZRm16cEk3YkY5Q01kdTFFQ2UwOHZzWVI1empWNTFTLXRSUFM0cjBvYXVxdHpPbXhBQ1haVmppOE40V1BFdmYyNDNCMjFXZmtUcUhBU2xDaEdzRlpnODNlTmM5QzJXQVo5S2MyV1BSZjVIazBRRTJHdG9kaU45ZWVF?oc=5"
-      },
-      "regia": "Apertura in primo piano viso, camera leggermente dal basso per dare forza al hook. Al minuto 0:02 taglio secco e comparsa a schermo del numero '32%' in grande con effetto zoom/pop. Overlay dello screenshot articolo in basso a sinistra per 3-4 secondi mentre il talent lo cita a voce. Ritmo alto: tagli ogni 3-4 secondi, jump cut sulle frasi chiave. Chiusura con talent che si ferma, guarda dritto in camera e pone la domanda finale per spingere i commenti, testo della domanda in overlay per rinforzare la CTA."
-    },
-    {
-      "id": 56,
+      "id": 37,
       "date": "2026-08-02",
       "categoria": "Random",
       "area": "🌍 Intl · 🇮🇹 IT · 🇪🇸 ES",
@@ -1547,7 +1114,7 @@
         "url": "https://www.mammemagazine.it/attualita/care-vacanze-prezzi-record-nel-2026-e-famiglie-indebitate-lintervista-ad-azzurra-rinaldi/"
       },
       "regia": "A schermo: con la schermata dell'articolo. Tono diretto, quasi incredulo. Nessuna località nominata.",
-      "id": 57,
+      "id": 38,
       "cta_type": "engage"
     },
     {
@@ -1570,7 +1137,7 @@
         "url": "https://www.mef.gov.it/focus/Principali-misure-della-legge-di-bilancio-2026/"
       },
       "regia": "A schermo: sul sito del MEF. Tono fermo, nessuna posizione politica di parte.",
-      "id": 58,
+      "id": 39,
       "cta_type": "engage"
     },
     {
@@ -1593,7 +1160,7 @@
         "url": "https://www.criptovaluta.it/165855/bitcoin-oro-non-basta-rotto/"
       },
       "regia": "Tono da chi ha visto i cicli. Nessuna promessa, nessun 'te l'avevo detto'.",
-      "id": 59,
+      "id": 40,
       "cta_type": "engage"
     },
     {
@@ -1618,11 +1185,11 @@
         "url": "https://www.elblogsalmon.com/economia/nuevo-sistema-revision-alquiler-puede-encarecer-tu-alquiler-4-600-euros-media-para-2026"
       },
       "regia": "A schermo: con el artículo. Tono cálido y directo. Sin nombres de broker.",
-      "id": 60,
+      "id": 41,
       "cta_type": "engage"
     },
     {
-      "id": 61,
+      "id": 42,
       "date": "2026-08-02",
       "categoria": "Random",
       "area": "Italia",
@@ -1645,7 +1212,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 62,
+      "id": 43,
       "date": "2026-08-01",
       "categoria": "Trading",
       "area": "🌍 Internazionale",
@@ -1668,7 +1235,7 @@
       "cta_type": "link"
     },
     {
-      "id": 63,
+      "id": 44,
       "date": "2026-08-01",
       "categoria": "Random",
       "area": "🌍 Intl · 🇮🇹 IT · 🇪🇸 ES",
@@ -1710,7 +1277,7 @@
         "url": "https://www.businesspeople.it/news/costo-della-vita-litalia-perde-terreno-sul-potere-dacquisto/"
       },
       "regia": "Grafico a barre semplice. Tono lucido, non lamentoso: costatazione + soluzione.",
-      "id": 64,
+      "id": 45,
       "cta_type": "engage"
     },
     {
@@ -1733,7 +1300,7 @@
         "url": "https://www.pmi.it/economia/mercati/494850/famiglie-fine-mese-ceto-medio-ricchezza.html"
       },
       "regia": "A schermo: articolo. Tono serio, empatico. Zero promesse.",
-      "id": 65,
+      "id": 46,
       "cta_type": "engage"
     },
     {
@@ -1758,34 +1325,11 @@
         "url": "https://www.deia.eus/economia/2026/07/15/indice-actualizar-alquileres-alcanza-2-11330601.html"
       },
       "regia": "Gráfico simple del índice. Tono educativo, cercano.",
-      "id": 66,
+      "id": 47,
       "cta_type": "save"
     },
     {
-      "id": 67,
-      "date": "2026-08-01",
-      "categoria": "Cronaca",
-      "area": "Italia",
-      "format": "Talking head",
-      "tipo": "Reaction/opinione a caldo su dato economico",
-      "durata": "30-40s",
-      "titolo": "25 anni fermi: lo stipendio che non cresce mai",
-      "overlay": "STIPENDI FERMI DA 25 ANNI. GLI ALTRI +35%. NOI ZERO.",
-      "script": "HOOK: Fermi tutti. Se hai 30, 40 o 50 anni, il tuo stipendio oggi vale ESATTAMENTE come 25 ANNI FA. Non è una sensazione, è un dato.\nBODY: Corriere della Sera, 1 agosto 2026: gli stipendi reali in Italia sono FERMI da 25 anni. Nello stesso periodo, negli altri Paesi Ocse sono cresciuti del 35%. Non del 3%, del 35%. Vuol dire che mentre tu compravi lo stesso pane con la stessa busta paga, in Francia, in Germania, negli Stati Uniti i lavoratori guadagnavano sul serio di più ogni anno. E nessuno te lo dice a scuola, nessuno te lo spiega al lavoro: il tuo potere d'acquisto sta scivolando via ogni giorno, silenziosamente, mentre affitti, spesa e bollette continuano a salire. Non è colpa tua se non ce la fai ad arrivare a fine mese: è il sistema che è fermo, non tu.\nCTA: Tu quanti anni sono che senti lo stipendio 'sempre uguale'? Scrivilo nei commenti 👇",
-      "caption": "25 anni. Un quarto di secolo con lo stesso potere d'acquisto, mentre il resto del mondo correva. 📉 Fonte: Corriere della Sera, 1 agosto 2026. Non è pigrizia, non è sfortuna: è un sistema fermo. Ma la prima cosa che ti salva è saperlo. #stipendi #lavoro #italia #poteredacquisto #economia #costodellavita #generazionezero #salari #corrieredellasera #svegliati",
-      "cta_type": "engage",
-      "cta": "Tu quanti anni sono che senti lo stipendio 'sempre uguale'? Scrivilo nei commenti 👇",
-      "fornire": "Talent in primo piano, luce frontale netta, tono serio/diretto (non sorridente); screenshot del titolo Corriere della Sera pronto da inserire come overlay/insert a metà video; numero '35%' e '25 anni' pronti come testo animato a schermo.",
-      "source": {
-        "outlet": "Corriere della Sera",
-        "headline": "Il gelo dei salari: in Italia gli stipendi reali fermi da 25 anni. Nei Paesi Ocse crescono del 35%",
-        "date": "2026-08-01",
-        "url": "https://news.google.com/rss/articles/CBMimwJBVV95cUxOSnFXS2FUWkgzR2x3d3NpLUxLeXVzbUhLTUpDZEo4MGNXR3FuVy1iVnB3VTRhRVZVWGhaMXZ1TjZXNUJReVRMZ2kzaUU0NzVyVW9HRHh2eDRBNy1kSE5Dc2NORHhhSkhaWTV0WnhWaEZKVVJ3UGNfckVpTjA3OF9waTYzWUpfdlhWOTRBbHlYVjJSTV9waWJkVFhQSjBnQUFfU2hVUDI2dlZaUGh2aXRJdU9YY3FteHVLYURpR0xzTkVjUGhNT2FTdjRjd2NJWFFGc0tYQXZTYzNMUW5tZC1xNFlMb0lNcGVyVVRFaEdzdW1lSVNBNmhxWXh1Unp5X19IdXR1OEV3U1hKT2V3cjVFZjRRZHBSZkZsdUFV0gGgAkFVX3lxTE0xZkdqaTZzNzRFQmh6TERFNXIwcWFNQVVhTWd4bV9KQ2dvQ1Y5Y2pWNXFDRUU1b1MyR29WM0ZqRUppT2JVNTBVcjlNVjQ5ekNTUExCUVk5TllMOVZIZ0t0Vkw1eEFuZ2Fyb0RJSmZCajV5eXpXTnBSRno3eDFmcTBVOWJTVnVra2ctMFNkVGo1eHJqNE9heXhkOElyWTg5N083UG42WlNoX3pvTEJMdlN2QUljeUtRQkVJWnk0cGlWRG1ZWkFxOE0yN19vNTdUV19yemJaMmdFRkRIOHdVZy1LNTNUSmo5U0hOa2Zsa09LMDRfbUNRN0RCMlVDbzJEODFjX0dYVHl6dW1yTng5RmF1dktvUzFscXF1UWRNa2lFaQ?oc=5"
-      },
-      "regia": "Apertura a mezzo busto, camera fissa, il talent guarda dritto in camera con espressione seria/indignata sulla frase hook. A metà frase (\"Corriere della Sera, 1 agosto 2026\") taglio secco su insert/screenshot dell'articolo per 2 secondi con zoom in leggero. Testo overlay che appare a scatti sulle cifre chiave (25 ANNI / +35%) sincronizzato col parlato per aumentare la retention. Ritorno su talking head per il finale, tono che si abbassa e rallenta sulla frase di consapevolezza (\"non è colpa tua\") per creare empatia. Chiusura con testo CTA in basso e talent che indica la fotocamera invitando al commento."
-    },
-    {
-      "id": 68,
+      "id": 48,
       "date": "2026-07-31",
       "categoria": "Macro",
       "area": "🌍 Intl · 🇮🇹 IT",
@@ -1808,7 +1352,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 69,
+      "id": 49,
       "date": "2026-07-31",
       "categoria": "Trading",
       "area": "🌍 Intl · 🇮🇹 IT",
@@ -1831,7 +1375,7 @@
       "cta_type": "link"
     },
     {
-      "id": 70,
+      "id": 50,
       "date": "2026-07-31",
       "categoria": "Geo",
       "area": "🌍 Internazionale",
@@ -1854,7 +1398,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 71,
+      "id": 51,
       "date": "2026-07-31",
       "categoria": "Politica",
       "area": "🌍 Internazionale",
@@ -1877,7 +1421,7 @@
       "cta_type": "save"
     },
     {
-      "id": 72,
+      "id": 52,
       "date": "2026-07-31",
       "categoria": "Random",
       "area": "🌍 Intl · 🇮🇹 IT · 🇪🇸 ES",
@@ -1919,7 +1463,7 @@
         "url": "https://www.corrieredeimilitari.com/caro-vita-debiti-risparmio-famiglie-italiane"
       },
       "regia": "Grafica pulita con le due percentuali. Tono educativo, non allarmista.",
-      "id": 73,
+      "id": 53,
       "cta_type": "save"
     },
     {
@@ -1942,7 +1486,7 @@
         "url": "https://www.italiaoggi.it/economia-e-politica/economia-e-finanza/legge-di-bilancio-quali-sono-le-misure-in-vigore-nel-2026-fisco-pensioni-imprese-e-bonus-casa-dpim5vrb"
       },
       "regia": "Grafica con le due aliquote a confronto. Tono analitico, zero esclamativi.",
-      "id": 74,
+      "id": 54,
       "cta_type": "engage"
     },
     {
@@ -1967,11 +1511,11 @@
         "url": "https://www.eldiario.es/economia/retos-mercado-laboral-paro-jovenes-larga-duracion-bajos-salarios-tiempo-parcial-indeseado_1_12968026.html"
       },
       "regia": "Tono empático, sin dramatizar. Cero promesas de dinero.",
-      "id": 75,
+      "id": 55,
       "cta_type": "engage"
     },
     {
-      "id": 76,
+      "id": 56,
       "date": "2026-07-31",
       "categoria": "Macro",
       "area": "Spagna / BCE",
@@ -1996,7 +1540,7 @@
       "cta_type": "link"
     },
     {
-      "id": 77,
+      "id": 57,
       "date": "2026-07-30",
       "categoria": "Macro",
       "area": "🌍 Internazionale",
@@ -2019,7 +1563,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 78,
+      "id": 58,
       "date": "2026-07-30",
       "categoria": "Macro",
       "area": "🌍 Internazionale",
@@ -2042,7 +1586,7 @@
       "cta_type": "save"
     },
     {
-      "id": 79,
+      "id": 59,
       "date": "2026-07-30",
       "categoria": "Trading",
       "area": "🌍 Internazionale",
@@ -2065,7 +1609,7 @@
       "cta_type": "engage"
     },
     {
-      "id": 80,
+      "id": 60,
       "date": "2026-07-30",
       "categoria": "Geo",
       "area": "🌍 Internazionale",
@@ -2088,7 +1632,7 @@
       "cta_type": "link"
     },
     {
-      "id": 81,
+      "id": 61,
       "date": "2026-07-30",
       "categoria": "Geo",
       "area": "🌍 Internazionale",
@@ -2111,7 +1655,7 @@
       "cta_type": "save"
     },
     {
-      "id": 82,
+      "id": 62,
       "date": "2026-07-30",
       "categoria": "Politica",
       "area": "🌍 Internazionale",
@@ -2153,7 +1697,7 @@
         "url": "https://www.internationalwebpost.org/economia-e-caro-vita-litalia-tra-inflazione-salari-e-pnnr/"
       },
       "regia": "Tono personale, come se parlassi a un amico. Nessuna cifra di guadagno.",
-      "id": 83,
+      "id": 63,
       "cta_type": "none"
     },
     {
@@ -2178,7 +1722,76 @@
         "url": "https://www.eldiariodemadrid.es/articulo/empresas/juventud-empresas-espana-paro-vivienda-impacto-pib/20260503102348129228.html"
       },
       "regia": "Tono profesional y cercano. Enfoque en lo que la persona sí controla.",
-      "id": 84,
+      "id": 64,
+      "cta_type": "engage"
+    },
+    {
+      "id": 65,
+      "date": "2026-07-29",
+      "categoria": "Macro",
+      "area": "🌍 Internazionale",
+      "format": "Reel parlato",
+      "tipo": "Newsjacking",
+      "durata": "35-45s",
+      "titolo": "La nuova Fed vuole parlarti di meno: perché dovrebbe preoccuparti",
+      "overlay": "Warsh: comunicati più corti, meno conferenze stampa",
+      "script": "HOOK: Il nuovo capo della Fed ha un piano dichiarato: dire meno. E i mercati sono già nervosi.\nBODY: Warsh ha accorciato i comunicati e valuta di eliminare le conferenze dopo ogni riunione. Meno parole dalla banca centrale significano più spazio all'interpretazione, e l'interpretazione crea volatilità. Non è un dettaglio da addetti ai lavori: meno trasparenza in alto vuol dire più movimento sui tuoi grafici.\nCTA: E tu come la leggi? Scrivilo nei commenti 👇",
+      "caption": "Una Fed che parla meno lascia parlare i mercati. E i mercati, quando indovinano, si muovono.",
+      "cta": "E tu come la leggi? Scrivilo nei commenti 👇",
+      "fornire": "Schermata articolo CNBC, grafico volatilità",
+      "source": {
+        "outlet": "CNBC",
+        "headline": "Warsh's plan for a more opaque Fed will get put to the test by markets on edge",
+        "date": "2026-07-29",
+        "url": "https://www.cnbc.com/2026/07/29/fed-kevin-warsh-markets.html"
+      },
+      "regia": "A schermo mostra l'articolo CNBC su Warsh. Fermo, tono lucido.",
+      "cta_type": "engage"
+    },
+    {
+      "id": 66,
+      "date": "2026-07-29",
+      "categoria": "Macro",
+      "area": "🌍 Internazionale",
+      "format": "Reel parlato",
+      "tipo": "Educativo macro",
+      "durata": "35-45s",
+      "titolo": "Dollaro ai massimi di un mese: la mappa che quasi nessuno guarda",
+      "overlay": "USD forte + Treasury su → pressione su oro e rischio",
+      "script": "HOOK: Il dollaro è ai massimi di un mese e questo cambia molte più cose di quante immagini.\nBODY: Un dollaro forte rende più caro comprare oro per chi sta fuori dagli Stati Uniti, e pesa sulle materie prime. Se in più i rendimenti dei Treasury salgono, il capitale trova rendimento senza rischio e si sposta. Non serve indovinare il singolo titolo: serve leggere la marea, cioè dollaro e tassi, che muove tutte le barche.\nCTA: Salva questo prima che ti serva.",
+      "caption": "Dollaro forte e Treasury in salita: la marea che muove tutto. Impara a leggerla.",
+      "cta": "Salva questo prima che ti serva.",
+      "fornire": "Grafico DXY e rendimenti Treasury, fonte",
+      "source": {
+        "outlet": "CNBC",
+        "headline": "Gold falls as dollar hovers near one-month peak ahead of Fed meeting",
+        "date": "2026-07-28",
+        "url": "https://www.cnbc.com/2026/07/28/gold-slips-as-firm-dollar-weighs-focus-turns-to-fed-meeting.html"
+      },
+      "regia": "Grafica a due linee: dollaro e tassi. Tono pacato.",
+      "cta_type": "save"
+    },
+    {
+      "id": 67,
+      "date": "2026-07-29",
+      "categoria": "Trading",
+      "area": "🌍 Internazionale",
+      "format": "Reel parlato",
+      "tipo": "Operativo/analisi",
+      "durata": "30-40s",
+      "titolo": "Dollaro forte contro oro: cosa guardo prima di premere",
+      "overlay": "USD ai massimi del mese · oro sotto pressione",
+      "script": "HOOK: Il dollaro ai massimi del mese sta tenendo l'oro sotto pressione. Non è un buy automatico.\nBODY: Un dollaro forte è vento contrario per l'oro. Io non compro perché è sceso: aspetto che un livello regga davvero e che la reazione sia leggibile. Prima il contesto, poi il livello, poi l'esecuzione con rischio definito. Saltare i primi due passi è il modo più veloce per farsi male.\nCTA: Tu da che parte stai? Commenta qui 👇",
+      "caption": "Dollaro forte, oro sotto pressione. Non si compra il ribasso: si aspetta il livello.",
+      "cta": "Tu da che parte stai? Commenta qui 👇",
+      "fornire": "Grafico XAUUSD e DXY sovrapposti, fonte",
+      "source": {
+        "outlet": "CNBC",
+        "headline": "Gold falls as dollar hovers near one-month peak ahead of Fed meeting",
+        "date": "2026-07-28",
+        "url": "https://www.cnbc.com/2026/07/28/gold-slips-as-firm-dollar-weighs-focus-turns-to-fed-meeting.html"
+      },
+      "regia": "Mostra la fonte del prezzo. Nessuna previsione di target.",
       "cta_type": "engage"
     }
   ]
@@ -2217,6 +1830,24 @@
   function freshLabel(n){ if(n<=0)return{t:"OGGI",c:"f0"}; if(n===1)return{t:"IERI",c:"f1"}; if(n<=2)return{t:n+" giorni fa",c:"f2"}; return{t:n+" giorni fa",c:"f3"}; }
   function dayHeader(iso){ var n=daysOld(iso); var lbl=n<=1?["OGGI","IERI"][n]:n+" GIORNI FA"; var d=new Date(iso+"T00:00:00"); return {lbl:lbl,date:d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}),fresh:n<=1}; }
   function esc(s){ return (s||"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // Viral score 0-100: usa it.viral se presente, altrimenti stima da categoria+freschezza (item vecchi).
+  function viralScore(it){
+    if(typeof it.viral==='number' && isFinite(it.viral)) return Math.max(0,Math.min(100,Math.round(it.viral)));
+    var base=({Cronaca:78,Politica:74,Macro:60,Geo:58,Trading:52,Random:50})[it.categoria]||55;
+    base-=daysOld(it.date)*4;
+    if((it.cta_type||'')==='engage') base+=4;
+    return Math.max(20,Math.min(92,Math.round(base)));
+  }
+  function viralClass(v){ return v>=75?'v-hi':(v>=55?'v-mid':'v-lo'); }
+  // Finestra newsjacking: quanto e' ancora "caldo" postarlo, per categoria.
+  function windowStatus(it){
+    var win=({Cronaca:2,Politica:2,Macro:2,Geo:3,Trading:4,Random:4})[it.categoria]||2;
+    var n=daysOld(it.date);
+    if(n<=0) return {c:'h-hot', t:'\uD83D\uDD25 CALDISSIMA'};
+    if(n<win) return {c:'h-warm', t:'\u23F3 ancora in tempo'};
+    if(n===win) return {c:'h-warm', t:'\u23F3 ultime ore'};
+    return {c:'h-cold', t:'\uD83E\uDDCA finestra chiusa'};
+  }
 
   function renderWhoami(){
     var b=document.getElementById('whoami-badge');
@@ -2252,8 +1883,17 @@
     var id='c'+Math.random().toString(36).slice(2,8);
     return '<div class=\"field\"><div class=\"flabel\">'+meta.lab+'<button class=\"copy\" data-copy=\"'+id+'\">copia</button></div><div class=\"fval\" id=\"'+id+'\">'+esc(it.cta)+'</div></div>';
   }
+  function hooksField(it){
+    if(!it.hooks || !it.hooks.length) return '';
+    var rows=it.hooks.map(function(h,i){
+      var id='c'+Math.random().toString(36).slice(2,8);
+      return '<div class="hookv"><b>'+(i+1)+'</b><div class="ht fval" id="'+id+'">'+esc(h)+'</div><button class="copy" data-copy="'+id+'">copia</button></div>';
+    }).join('');
+    return '<div class="field full"><div class="flabel">Hook alternativi \u00b7 A/B test</div><div class="hookvars">'+rows+'</div></div>';
+  }
   function card(it){
     var n=daysOld(it.date), f=freshLabel(n), s=it.source||{};
+    var vs=viralScore(it), ws=windowStatus(it);
     var takenBy=claims[it.id]||"";
     var mine = takenBy && takenBy===myId();
     var el=document.createElement('div'); el.className='card'+(takenBy?' claimed':'')+(openIds[it.id]?' open':'');
@@ -2270,6 +1910,7 @@
 
     var body='<div class="cbody">'+claimBar+'<div class="grid">'+
       fieldFull('Script (hook \u00b7 body \u00b7 CTA)',it.script,true)+
+      hooksField(it)+
       field('Titolo a schermo / overlay',it.overlay,true)+
       ctaField(it)+
       fieldFull('Caption',it.caption,true)+
@@ -2286,6 +1927,8 @@
     var head='<div class="chead"><span class="catpill '+it.categoria+'">'+it.categoria+'</span>'+
       '<span class="ctitle">'+esc(it.titolo)+'</span>'+
       '<span class="cmeta">'+esTag+'<span class="geotag">'+esc(it.area)+'</span></span>'+
+      '<span class="viralbadge '+viralClass(vs)+'" title="Potenziale virale">\uD83D\uDE80 '+vs+'</span>'+
+      '<span class="hotbadge '+ws.c+'" title="Finestra newsjacking">'+ws.t+'</span>'+
       claimHeadTag+'<span class="freshbadge '+f.c+'">'+f.t+'</span><span class="caret">\u25B6</span></div>';
 
     el.innerHTML=head+body;
@@ -2319,7 +1962,7 @@
     order.sort(function(a,b){return a<b?1:-1;});
     order.forEach(function(d){ var h=dayHeader(d); var g=document.createElement('div'); g.className='daygroup';
       g.innerHTML='<div class="dayhd"><span class="'+(h.fresh?'fresh':'')+'">'+h.lbl+'</span> \u00b7 '+h.date+'</div>';
-      groups[d].forEach(function(it){ g.appendChild(card(it)); }); feed.appendChild(g); });
+      groups[d].sort(function(a,b){ return viralScore(b)-viralScore(a); }).forEach(function(it){ g.appendChild(card(it)); }); feed.appendChild(g); });
 
     if(!shown.length) feed.innerHTML='<div class="archnote">Nessun contenuto per questi filtri.</div>';
 

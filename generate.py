@@ -105,6 +105,40 @@ CHANNELS = [
          q="hipotecas ahorro precios luz espana when:5d", hl="es", gl="ES", ceid="ES:es"),
 ]
 
+# Feed RSS DIRETTI da fonti autorevoli / veloci (testate, siti, blog).
+# Non passano da Google News: l'URL e' il link reale dell'articolo e l'outlet
+# e' noto. Un feed rotto viene semplicemente saltato (try/except), non blocca.
+PER_FEED = 6   # articoli letti al massimo da ogni feed diretto
+FEED_UA  = "Mozilla/5.0 (compatible; BullsFXBot/1.0; +https://bullsfx)"   # alcune testate bloccano UA vuoti
+FEEDS = [
+    # ---- Italia: testate autorevoli ---------------------------------------
+    dict(cat="Macro",    area="Italia / Finanza",  lang="it", solo=None, outlet="Il Sole 24 Ore Finanza",  url="https://www.ilsole24ore.com/rss/finanza.xml"),
+    dict(cat="Macro",    area="Italia / Economia",  lang="it", solo=None, outlet="Il Sole 24 Ore Economia", url="https://www.ilsole24ore.com/rss/economia.xml"),
+    dict(cat="Geo",      area="Mondo",              lang="it", solo=None, outlet="Il Sole 24 Ore Mondo",    url="https://www.ilsole24ore.com/rss/mondo.xml"),
+    dict(cat="Politica", area="Italia / Norme",     lang="it", solo=None, outlet="Il Sole 24 Ore Norme",    url="https://www.ilsole24ore.com/rss/norme-e-tributi.xml"),
+    dict(cat="Macro",    area="Italia / Mercati",   lang="it", solo=None, outlet="Wall Street Italia",     url="https://www.wallstreetitalia.com/feed/"),
+    dict(cat="Trading",  area="Italia / Risparmio", lang="it", solo=None, outlet="FinanzaOnline",           url="https://www.finanzaonline.com/feed"),
+    dict(cat="Macro",    area="Italia / Economia",  lang="it", solo=None, outlet="ANSA Economia",           url="https://www.ansa.it/sito/notizie/economia/economia_rss.xml"),
+    dict(cat="Politica", area="Italia",             lang="it", solo=None, outlet="ANSA Politica",           url="https://www.ansa.it/sito/notizie/politica/politica_rss.xml"),
+    dict(cat="Cronaca",  area="Italia",             lang="it", solo=None, outlet="ANSA Cronaca",            url="https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"),
+    dict(cat="Geo",      area="Mondo",              lang="it", solo=None, outlet="ANSA Mondo",              url="https://www.ansa.it/sito/notizie/mondo/mondo_rss.xml"),
+    # ---- Internazionali veloci --------------------------------------------
+    dict(cat="Macro",    area="USA / Finanza",      lang="it", solo=None, outlet="CNBC Finance",           url="https://www.cnbc.com/id/15839069/device/rss/rss.html"),
+    dict(cat="Macro",    area="USA / Mercati",      lang="it", solo=None, outlet="CNBC Markets",           url="https://www.cnbc.com/id/20910258/device/rss/rss.html"),
+    dict(cat="Macro",    area="USA / Mercati",      lang="it", solo=None, outlet="MarketWatch Top",        url="https://feeds.content.dowjones.io/public/rss/mw_topstories"),
+    dict(cat="Macro",    area="Mondo / Mercati",    lang="it", solo=None, outlet="Investing.com",          url="https://www.investing.com/rss/news.rss"),
+    dict(cat="Macro",    area="Mondo / Azioni",     lang="it", solo=None, outlet="Investing.com Stock",    url="https://www.investing.com/rss/news_25.rss"),
+    dict(cat="Macro",    area="USA / Finanza",      lang="it", solo=None, outlet="Yahoo Finance",          url="https://finance.yahoo.com/news/rssindex"),
+    # ---- Crypto / trading blog --------------------------------------------
+    dict(cat="Trading",  area="Crypto",             lang="it", solo=None, outlet="Cointelegraph",          url="https://cointelegraph.com/rss"),
+    dict(cat="Geo",      area="Energia / Oil",      lang="it", solo=None, outlet="OilPrice",               url="https://oilprice.com/rss/main"),
+    # ---- Spagnolo (visibile solo ad Alberto) ------------------------------
+    dict(cat="Macro",    area="Espana / Mercados",  lang="es", solo="alberto", outlet="Expansion Mercados",url="https://e00-expansion.uecdn.es/rss/mercados.xml"),
+    dict(cat="Macro",    area="Espana / Economia",  lang="es", solo="alberto", outlet="El Pais Economia",  url="https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/economia/portada"),
+    dict(cat="Trading",  area="Espana / Cripto",    lang="es", solo="alberto", outlet="BeInCrypto ES",     url="https://es.beincrypto.com/feed/"),
+    dict(cat="Trading",  area="Espana / Mercados",  lang="es", solo="alberto", outlet="Investing.com ES",  url="https://es.investing.com/rss/news.rss"),
+]
+
 SYSTEM_PROMPT = """Sei il SOCIAL MEDIA MANAGER del pool "BullsFX": una squadra di talent che pubblica video verticali (TikTok/Instagram/YouTube Shorts) partendo dalle notizie del giorno.
 
 Ricevi UNA notizia reale (outlet, titolo, data, link, categoria, area) e produci UN contenuto PRONTO DA GIRARE, in stile "Mik Cosentino" (newsjacking aggressivo, hook fortissimo nei primi 1-2 secondi, ritmo alto, forte retention).
@@ -118,6 +152,16 @@ REGOLE DI CONFORMITA' (assolute):
 DIREZIONE CREATIVA:
 - Hook che ferma il pollice entro 1-2 secondi. Vari il formato tra i contenuti (Screen-recording, Talking head, B-roll + testo, POV / personale). Green screen OPZIONALE.
 - La nota di regia deve dare un'idea di ripresa concreta e virale (inquadratura, testo a schermo, montaggio) pensata per l'algoritmo di TikTok/Instagram.
+
+HOOK MULTIPLI (A/B test - campo "hooks"):
+Oltre al gancio dentro lo script, fornisci 3 versioni ALTERNATIVE del gancio (i primi 1-2 secondi), pronte da leggere in camera. Ognuna con un MECCANISMO diverso, cosi' il talent testa quale performa meglio:
+- variante 1 = DOMANDA scomoda/diretta ("Perche' nessuno ti dice che...?").
+- variante 2 = DATO o CONTRASTO shock NON finanziario ("Nel 2015 con 1000 euro... oggi...", cifre di contesto/notizia, MAI profitti).
+- variante 3 = AFFERMAZIONE controcorrente / pattern-interrupt ("Smettila di credere che...").
+Devono essere BREVISSIME (max una frase), diverse tra loro, e rispettare tutte le regole di conformita' (nessuna cifra di profitto/percentuale di vincita, nessun broker).
+
+VIRAL SCORE (campo "viral"):
+Assegna un intero 0-100 = tuo giudizio ONESTO del potenziale virale del contenuto = forza del gancio + carica emotiva + attualita'/urgenza + condivisibilita' (quanto la gente lo manda agli amici o commenta). DISCRIMINA davvero: non dare 85+ a tutto. Indicativamente: 80-100 solo se il gancio e' fortissimo e l'argomento tocca un nervo di massa (tipico di Politica/Cronaca ben fatte); 55-79 buon contenuto solido; 30-54 contenuto tecnico/di nicchia o gancio debole.
 
 POLITICA & CRONACA (contenuti ad alta viralita' - schema "INDIGNAZIONE -> CONSAPEVOLEZZA -> RISCATTO"):
 Questi contenuti NON parlano di trading in modo tecnico: partono da una notizia che tocca un nervo scoperto (tasse, truffe, affitti, stipendi fermi, dazi, caro-vita, giovani precari) e la trasformano in un messaggio virale che genera commenti e condivisioni.
@@ -146,6 +190,8 @@ Rispondi ESCLUSIVAMENTE con un oggetto JSON valido (nessun testo prima o dopo), 
  "titolo": "<titolo interno breve della scheda>",
  "overlay": "<testo grande da mettere a schermo>",
  "script": "HOOK: ...\\nBODY: ...\\nCTA: ...   (ometti del tutto la riga CTA se cta_type=none)",
+ "hooks": ["<gancio alt 1: domanda scomoda (max 1 frase)>", "<gancio alt 2: dato/contrasto shock non finanziario>", "<gancio alt 3: affermazione controcorrente>"],
+ "viral": <intero 0-100: potenziale virale, onesto e discriminante>,
  "caption": "<caption pronta con hashtag, SENZA disclaimer>",
  "cta_type": "<none|engage|save|follow|link>",
  "cta": "<testo della CTA coerente col cta_type; VUOTO se cta_type=none>",
@@ -218,6 +264,52 @@ def collect_candidates(existing_urls):
         socket.setdefaulttimeout(None)
     return cands
 
+def parse_direct(e, ch):
+    """Come parse_entry ma per feed diretti: l'outlet e' noto, il titolo NON
+    va ripulito dal suffisso ' - Outlet' (rischierebbe di troncare titoli che
+    contengono un trattino)."""
+    headline = clean(getattr(e, "title", ""))
+    d = None
+    if getattr(e, "published_parsed", None):
+        d = datetime(*e.published_parsed[:6], tzinfo=timezone.utc).date()
+    elif getattr(e, "updated_parsed", None):
+        d = datetime(*e.updated_parsed[:6], tzinfo=timezone.utc).date()
+    return dict(outlet=ch.get("outlet", "Fonte"), headline=headline,
+                url=getattr(e, "link", ""), pub=d, ch=ch)
+
+def collect_direct(existing_urls):
+    """Legge i feed RSS diretti (FEEDS). Stessa logica di freschezza/dedup."""
+    today = datetime.now(timezone.utc).date()
+    cutoff = today - timedelta(days=FRESH_DAYS)
+    cands = []
+    socket.setdefaulttimeout(FEED_TIMEOUT)
+    try:
+        for f in FEEDS:
+            ch = dict(f)
+            ch.setdefault("q", "feed:" + ch.get("outlet", "?"))   # chiave per pick_spread
+            try:
+                feed = feedparser.parse(ch["url"], agent=FEED_UA)
+            except Exception as ex:
+                print(f"[warn] feed diretto {ch.get('outlet')}: {ex}", file=sys.stderr)
+                continue
+            picked = 0
+            for e in feed.entries:
+                c = parse_direct(e, ch)
+                if not c["url"] or not c["headline"]:
+                    continue
+                if c["pub"] and c["pub"] < cutoff:
+                    continue
+                if c["url"] in existing_urls:
+                    continue
+                cands.append(c)
+                existing_urls.add(c["url"])
+                picked += 1
+                if picked >= PER_FEED:
+                    break
+    finally:
+        socket.setdefaulttimeout(None)
+    return cands
+
 def pick_spread(cands, n):
     """Sceglie n candidati alternando i canali per varieta'."""
     buckets = {}
@@ -280,6 +372,19 @@ def generate_item(client, c):
         scr = "\n".join(l for l in scr.split("\n")
                         if not l.strip().lower().startswith("cta:")).rstrip()
         obj["script"] = scr
+    # normalizza le varianti di hook: lista di stringhe pulite, max 4
+    hooks = obj.get("hooks", [])
+    if isinstance(hooks, str):
+        hooks = [hooks]
+    if not isinstance(hooks, list):
+        hooks = []
+    hooks = [re.split(r"\u26a0", str(x))[0].strip() for x in hooks if str(x).strip()][:4]
+    # normalizza il viral score: intero 0-100 oppure None
+    try:
+        viral = int(round(float(obj.get("viral"))))
+        viral = max(0, min(100, viral))
+    except (TypeError, ValueError):
+        viral = None
     item = {
         "id": 0,
         "date": (c["pub"].isoformat() if c["pub"] else datetime.now(timezone.utc).date().isoformat()),
@@ -291,6 +396,8 @@ def generate_item(client, c):
         "titolo": obj.get("titolo", c["headline"][:80]),
         "overlay": obj.get("overlay", ""),
         "script": obj.get("script", ""),
+        "hooks": hooks,
+        "viral": viral,
         "caption": obj["caption"],
         "cta_type": cta_type,
         "cta": obj.get("cta", ""),
@@ -344,8 +451,11 @@ def main():
     items = data.get("items", [])
     existing_urls = {i.get("source", {}).get("url", "") for i in items}
 
-    cands = collect_candidates(set(existing_urls))
-    print(f"[info] candidati freschi: {len(cands)}")
+    seen = set(existing_urls)
+    cands = collect_candidates(seen)          # Google News RSS
+    n_gnews = len(cands)
+    cands += collect_direct(seen)             # feed diretti autorevoli
+    print(f"[info] candidati freschi: {len(cands)} (google={n_gnews}, feed diretti={len(cands)-n_gnews})")
     chosen = pick_spread(cands, TARGET)
     print(f"[info] selezionati: {len(chosen)}")
 
