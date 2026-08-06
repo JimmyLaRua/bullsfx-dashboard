@@ -344,19 +344,32 @@ def generate_item(client, c):
         f"- lingua: {lang}\n"
         f"Genera l'item JSON come da istruzioni."
     )
-    msg = client.messages.create(
-        model=MODEL,
-        max_tokens=1400,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user}],
-    )
-    txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
-    txt = txt.strip()
-    # estrai il primo blocco JSON
-    a, b = txt.find("{"), txt.rfind("}")
-    if a < 0 or b < 0:
-        raise ValueError("no JSON in response")
-    obj = json.loads(txt[a:b + 1])
+    # Alcuni modelli, con max_tokens basso, esauriscono i token prima di chiudere
+    # il JSON (o restituiscono testo vuoto) -> "no JSON in response". Diamo spazio
+    # ampio e riproviamo un paio di volte prima di scartare la notizia.
+    obj = None
+    last_len = 0
+    for attempt in range(3):
+        msg = client.messages.create(
+            model=MODEL,
+            max_tokens=3000,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user}],
+        )
+        txt = "".join(b.text for b in msg.content
+                      if getattr(b, "type", "") == "text").strip()
+        last_len = len(txt)
+        # estrai il primo blocco JSON
+        a, b = txt.find("{"), txt.rfind("}")
+        if a >= 0 and b > a:
+            try:
+                obj = json.loads(txt[a:b + 1])
+                break
+            except json.JSONDecodeError:
+                pass
+        time.sleep(1)
+    if obj is None:
+        raise ValueError(f"no JSON in response (len={last_len})")
     # blindatura compliance lato codice
     cap = obj.get("caption", "")
     cap = re.split(r"\u26a0", cap)[0].rstrip()          # via eventuale warning
@@ -387,7 +400,10 @@ def generate_item(client, c):
         viral = None
     item = {
         "id": 0,
-        "date": (c["pub"].isoformat() if c["pub"] else datetime.now(timezone.utc).date().isoformat()),
+        # La card e' datata col GIORNO in cui il contenuto viene prodotto (oggi):
+        # cosi' il feed mostra sempre "news di oggi". La data reale dell'articolo
+        # resta dentro "source" per la citazione a schermo.
+        "date": datetime.now(timezone.utc).date().isoformat(),
         "categoria": obj.get("categoria", ch["cat"]),
         "area": obj.get("area", ch["area"]),
         "format": obj.get("format", "Talking head"),
