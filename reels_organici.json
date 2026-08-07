@@ -1,0 +1,216 @@
+{
+  "_fonte": "Reel organici per talent. Encodati da: Video POV - Organico.docx (JJ/Simo), ALBERTO_EVANGELISTA_CONTENT_PACK + MASTER (Alberto ORG), bibbie (Marco/Claudia/Samantha). ORGANICO = SEMPRE PULITO per tutti: no numeri di profitto, no promesse, no disclaimer in caption.",
+  "_nota_news": "Questi sono reel evergreen nella voce del talent. I reel su NEWS ad hoc si generano feedback-driven: quando un talent chiede di parlare piu di un tema, si pescano news affini dal pool con script 'solo:<talent>'.",
+  "_schema": "id, talent, format, durata, testo_schermo, script_parlato, caption, cta, regia",
+  "reels": [
+    {
+      "id": "REEL-JJ-01",
+      "talent": "jj",
+      "format": "Testo-su-video (loop)",
+      "durata": "2-3s loop",
+      "testo_schermo": "I primi 1000 euro sono difficili / I successivi 10k sono piu facili / E i primi 100k? / Solo ripetizione.",
+      "script_parlato": "",
+      "caption": "Non sto dicendo che sia facile, ma e molto piu semplice di quanto la gente pensi, se operi con metodo e disciplina.",
+      "cta": "Trovi l'esatto sistema che uso in bio",
+      "regia": "Video 2-3s dello schermo con grafici, postazione da trader con luci. Loop per aumentare reach."
+    },
+    {
+      "id": "REEL-JJ-02",
+      "talent": "jj",
+      "format": "Testo-su-video (loop) + comment-bait",
+      "durata": "2-3s loop",
+      "testo_schermo": "100k all'anno sembrano impossibili / Finche non li scomponi: / Sono 400 euro al giorno / Un'entrata pulita su NY / E tutto quello che ti serve",
+      "script_parlato": "",
+      "caption": "Non farti spaventare dai grandi numeri: sono solo numeri piu piccoli sommati. Ma senza metodo, disciplina e costanza restano solo piccoli profitti sporadici.",
+      "cta": "Commenta con 'NY' e ti mando il mio sistema",
+      "regia": "Postazione trading. Ai commenti si invia il link del gruppo telegram pubblico."
+    },
+    {
+      "id": "REEL-JJ-03",
+      "talent": "jj",
+      "format": "POV lifestyle",
+      "durata": "2-3s",
+      "testo_schermo": "POV: il tuo fidanzato e un trader",
+      "script_parlato": "",
+      "caption": "",
+      "cta": "",
+      "regia": "Simo al pc al bar, al telefono al ristorante, in macchina, in piscina. Piu location e vestiti diversi = giorni diversi."
+    },
+    {
+      "id": "REEL-JJ-04",
+      "talent": "jj",
+      "format": "POV / call-out lavoro-trappola",
+      "durata": "4-5s",
+      "testo_schermo": "Studi per 20 anni / Lavori per 40 anni / Sei libero per 5-10 anni / Muori / E una truffa",
+      "script_parlato": "",
+      "caption": "Ti hanno fatto credere che lavorare di piu, stressarti di piu e riuscire a malapena ad andare avanti fosse normale. Io la chiamo col suo nome: truffa.",
+      "cta": "Commenta con 'REGOLE' e ti mostro come uscirne.",
+      "regia": "Simo che guida, si vede volante e strada, parcheggia davanti a una villa."
+    },
+    {
+      "id": "REEL-JJ-05",
+      "talent": "jj",
+      "format": "Manifesto lifestyle",
+      "durata": "3-4s",
+      "testo_schermo": "I soldi sono il mezzo, non il fine. / Il fine e la liberta. / Ricordalo sempre.",
+      "script_parlato": "",
+      "caption": "",
+      "cta": "",
+      "regia": "Location tranquilla, al sole, sobria (beach club/golf club), mentre beve un bicchiere di vino."
+    },
+    {
+      "id": "REEL-JJ-06",
+      "talent": "jj",
+      "format": "Analisi interattiva (split screen)",
+      "durata": "10-15s",
+      "testo_schermo": "",
+      "script_parlato": "Testiamo le tue abilita da trader. Secondo te sale o scende? Commenta 1 se pensi che salga o 2 se pensi che scenda, e ti mando la soluzione in DM.",
+      "caption": "Sale o scende? Di la tua sotto.",
+      "cta": "Commenta 1 o 2, soluzione in DM",
+      "regia": "Schermo diviso: sopra grafico, sotto Simo che parla."
+    },
+    {
+      "id": "REEL-JJ-07",
+      "talent": "jj",
+      "format": "Mindset",
+      "durata": "3s",
+      "testo_schermo": "Se sei un trader, hai gia la vita che hai sempre desiderato. E solo una questione di tempo.",
+      "script_parlato": "",
+      "caption": "Pazienza, disciplina e gestione del rischio battono il tuo bisogno di avere tutto e subito. La vera svolta arriva quando il tuo processo diventa noioso e ripetitivo.",
+      "cta": "Commenta con 'TEMPO' per entrare nella mia community gratuita",
+      "regia": "Simo alla scrivania mentre trada, ripreso da dietro."
+    },
+    {
+      "id": "REEL-JJ-08",
+      "talent": "jj",
+      "format": "Quote + educativo (carosello/video muto)",
+      "durata": "15-20s",
+      "testo_schermo": "Un trader milionario una volta disse: 'Le persone non hanno la pazienza di dedicare 3 anni per imparare a fare trading, ma hanno la pazienza di lavorare 40 anni per arricchire qualcun altro'",
+      "script_parlato": "",
+      "caption": "3 anni vs 40 anni. Cosa scegli? I mercati premiano pazienza, disciplina e costanza, mentre il lavoro tradizionale affitta il tuo tempo.",
+      "cta": "Commenta 'FOCUS' per scoprire lo stesso metodo che usano i membri della mia community",
+      "regia": "Montaggio clip mute con musica: Simo che trada, insegna, spiega una formazione (tono insegnante/formatore)."
+    },
+    {
+      "id": "REEL-JJ-09",
+      "talent": "jj",
+      "format": "Listicle educativo",
+      "durata": "30-45s",
+      "testo_schermo": "Se sei un trader tra i 18 e i 35 anni devi capire queste 11 cose prima che sia troppo tardi",
+      "script_parlato": "11 verita sul trading (estratto): 1) Non e un modo per arricchirsi velocemente. 2) La costanza batte la fortuna. 3) La gestione del rischio e essenziale. 4) Controlla le emozioni. 5) L'overtrading distrugge il conto. 6) La pazienza e il tuo vantaggio. 7) Tieni un diario. 8) Una strategia solida batte dieci. 9) Le prop sono strumenti, l'obiettivo e il tuo capitale. 10) Molti falliscono perche si arrendono presto. 11) Il mercato e uno specchio.",
+      "caption": "11 verita sul trading che devi sapere. Salvalo.",
+      "cta": "Commenta 'MERCATO' e ti invio l'accesso alla mia community",
+      "regia": "Simo che fa trading; testo a schermo sui punti."
+    },
+    {
+      "id": "REEL-JJ-10",
+      "talent": "jj",
+      "format": "Listicle mindset",
+      "durata": "30-40s",
+      "testo_schermo": "5 strani segni che stai per diventare un trader profittevole",
+      "script_parlato": "1) Non ti senti euforico dopo un take profit: sei emotivamente composto. 2) Non entri d'impulso, aspetti le conferme. 3) Hai smesso di spostare lo stop loss. 4) Hai smesso di rincorrere le perdite. 5) Hai smesso di aprire 10 operazioni frettolose: qualita batte quantita.",
+      "caption": "5 strani segni che stai per diventare davvero profittevole. Lascia un commento se ti riconosci.",
+      "cta": "Commenta se ti riconosci",
+      "regia": "Simo in balcone mentre beve un caffe davanti al pc."
+    },
+    {
+      "id": "REEL-ALB-01",
+      "talent": "alberto",
+      "format": "Selfie / anti-hype",
+      "durata": "15s",
+      "testo_schermo": "Il vero trading e noioso. Ed e un bene.",
+      "script_parlato": "Vuoi sapere com'e davvero la vita di un trader? E cosi. Caffe, grafici, analisi. Nessuna Lambo. Solo disciplina, ogni giorno uguale. Ed e per questo che funziona.",
+      "caption": "Il trading vero non e spettacolo. E ripetizione.",
+      "cta": "Link in bio",
+      "regia": "Selfie video da scrivania, caffe in mano, tono quasi annoiato."
+    },
+    {
+      "id": "REEL-ALB-02",
+      "talent": "alberto",
+      "format": "Storytime camminata",
+      "durata": "30s",
+      "testo_schermo": "Da imprenditore esaurito a trader libero. 11 anni su un'isola.",
+      "script_parlato": "11 anni fa ho caricato tutta la mia vita su una Golf. Mia moglie, i cani, zero certezze. Avevo chiuso due attivita, ero stanco di essere prigioniero delle mie aziende. Oggi questa e casa. E il trading e il motivo per cui posso restarci. Non e magia. E una scelta.",
+      "caption": "La liberta non e aprire un'altra azienda. E non doverne aprire piu nessuna.",
+      "cta": "Link in bio",
+      "regia": "Alberto cammina in spiaggia, alba/tramonto."
+    },
+    {
+      "id": "REEL-ALB-03",
+      "talent": "alberto",
+      "format": "Perche non vendo corsi",
+      "durata": "30s",
+      "testo_schermo": "",
+      "script_parlato": "Mi chiedono: perche non vendi un corso? Perche non ne ho bisogno. Guadagno dal trading. Il partner regolamentato mi paga per portargli trader seri. Nessun corso, nessun abbonamento.",
+      "caption": "Nessun corso da 2.000 euro. Solo operativita vera.",
+      "cta": "Link in bio",
+      "regia": "Al bar con caffe, tono colloquiale."
+    },
+    {
+      "id": "REEL-MAR-01",
+      "talent": "marco",
+      "format": "Educativo (causa prima del grafico)",
+      "durata": "20-30s",
+      "testo_schermo": "Prima le cause, poi il grafico.",
+      "script_parlato": "Ti sei mai chiesto perche l'oro sale quando escono certi dati? I mercati non si muovono a caso: si muovono per cause, e le cause si possono studiare. Prima il contesto, poi il grafico. E la differenza tra copiare per sempre e imparare davvero.",
+      "caption": "Il grafico non si legge senza il contesto che lo ha generato.",
+      "cta": "Analisi ogni mattina nel gruppo. Link in bio.",
+      "regia": "Postazione, calendario economico visibile. Tono pacato, zero esclamativi."
+    },
+    {
+      "id": "REEL-MAR-02",
+      "talent": "marco",
+      "format": "Storytime (dal turno al metodo)",
+      "durata": "30s",
+      "testo_schermo": "Studiavo i mercati di notte, tra un turno e l'altro.",
+      "script_parlato": "Facevo il capo turno in fabbrica. Ho imparato i mercati senza che nessuno mi spiegasse niente, perdendo tempo e soldi in errori che oggi eviterei in cinque minuti. Per questo condivido il ragionamento dietro ogni operazione: voglio che tu non debba passare da dove sono passato io.",
+      "caption": "Se un giorno non avrai piu bisogno di me, avro fatto il mio lavoro.",
+      "cta": "Link in bio",
+      "regia": "Terrazza sobria o camminando, luce naturale."
+    },
+    {
+      "id": "REEL-CLA-01",
+      "talent": "claudia",
+      "format": "Storytelling / mindset",
+      "durata": "30s",
+      "testo_schermo": "Il trading non e una promessa. E una competenza da costruire.",
+      "script_parlato": "Ho investito migliaia di euro in formazione e ho incontrato realta che vendevano promesse senza dare valore. Per anni ho pensato che il problema fossi io. Non lo ero: mi mancava un metodo davvero applicabile. Ho smesso di cercare la scorciatoia e ho iniziato a cercare competenza e trasparenza.",
+      "caption": "Non credo nelle scorciatoie. Credo nei percorsi.",
+      "cta": "Link in bio",
+      "regia": "Postazione elegante o divano, luce calda. Tono calmo, complice."
+    },
+    {
+      "id": "REEL-CLA-02",
+      "talent": "claudia",
+      "format": "Mindset / tempo e liberta",
+      "durata": "20-30s",
+      "testo_schermo": "Il valore piu grande che abbiamo e il nostro tempo.",
+      "script_parlato": "Per me la liberta non significa non fare nulla. Significa poter scegliere. Andare al mare una mattina qualsiasi senza chiedere il permesso a nessuno. Prima il tempo, poi il denaro: perche il tempo e la risorsa piu preziosa che abbiamo.",
+      "caption": "La liberta si costruisce. Prima la consapevolezza, poi i risultati.",
+      "cta": "Link in bio",
+      "regia": "Mare/terrazza, luce dorata, mai in costume. Eleganza vera, mai ostentazione."
+    },
+    {
+      "id": "REEL-SAM-01",
+      "talent": "samantha",
+      "format": "Storytime rinascita",
+      "durata": "30s",
+      "testo_schermo": "La svolta non arriva da fuori. Parte da te.",
+      "script_parlato": "Ho costruito un brand e pensavo di avercela fatta, ma non mi sentivo realizzata. Cosi ho rimesso in discussione tutto: relazioni, obiettivi, il percorso. Ho tagliato cio che mi limitava e ho ricostruito su basi mie. La vera svolta e arrivata quando ho capito che il benessere non si cerca fuori, si costruisce dentro.",
+      "caption": "Emergere, crescere e splendere puo partire soltanto da te.",
+      "cta": "Link in bio",
+      "regia": "In camera, luce curata, tono motivazionale ma concreto."
+    },
+    {
+      "id": "REEL-SAM-02",
+      "talent": "samantha",
+      "format": "Educativo / pensiero critico",
+      "durata": "20-30s",
+      "testo_schermo": "Riconoscere un'opportunita vera da una truffa.",
+      "script_parlato": "Investo da quando avevo 18 anni. Ho attraversato progetti sbagliati e perdite, e proprio quelle esperienze mi hanno insegnato a distinguere un'opportunita affidabile da un progetto poco solido. La consapevolezza non e un dono: si allena.",
+      "caption": "Le perdite mi hanno insegnato piu di qualsiasi corso.",
+      "cta": "Link in bio",
+      "regia": "In camera o in movimento, tono diretto."
+    }
+  ]
+}
