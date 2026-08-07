@@ -29,6 +29,7 @@ HTML_PATH  = os.path.join(HERE, "index.html")
 MODEL      = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 FRESH_DAYS = 5          # notizie usate solo se pubblicate negli ultimi N giorni
 KEEP_DAYS  = 7          # item piu' vecchi di N giorni vengono eliminati
+PER_DAY_CAP = int(os.environ.get("PER_DAY_CAP", "20"))  # max news per giorno: si tengono le piu' virali
 TARGET     = int(os.environ.get("ITEMS_PER_RUN", "12"))   # item da generare per run
 PER_QUERY  = 8          # candidati letti da ogni query
 # NB: NON impostare socket.setdefaulttimeout() a livello globale: rompe il
@@ -520,6 +521,20 @@ def main():
             kept.append(i)
     pruned = before - len(kept)
 
+    # cap per giorno: si tengono al massimo PER_DAY_CAP news, quelle a viralita' piu' alta.
+    # una nuova news della giornata resta solo se "scala la classifica" (viral piu' alto
+    # di quella attualmente 20esima), altrimenti viene scartata.
+    from collections import defaultdict
+    by_day = defaultdict(list)
+    for i in kept:
+        by_day[i.get("date", "")].append(i)
+    capped = []
+    for day, lst in by_day.items():
+        lst.sort(key=lambda i: (i.get("viral") if i.get("viral") is not None else -1), reverse=True)
+        capped.extend(lst[:PER_DAY_CAP])
+    capped_out = len(kept) - len(capped)
+    kept = capped
+
     # ordina per data desc e rinumera
     kept.sort(key=lambda i: i.get("date", ""), reverse=True)
     for idx, i in enumerate(kept, 1):
@@ -532,7 +547,7 @@ def main():
 
     write_html(h, m, data)
     oggi = sum(1 for i in kept if i.get("date") == today.isoformat())
-    print(f"[done] added={added} pruned={pruned} total={len(kept)} oggi={oggi}")
+    print(f"[done] added={added} pruned={pruned} cap_scartate={capped_out} total={len(kept)} oggi={oggi} (max {PER_DAY_CAP}/giorno)")
 
 if __name__ == "__main__":
     main()
