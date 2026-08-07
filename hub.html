@@ -44,6 +44,439 @@
   .badge.clean{color:var(--green)}
   .badge.orig{color:var(--gold)}
   /* Metriche */
+  .mcard{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;border-left:3px solid var(--accent,var(--gold))}
+  .mcard .mtop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .mcard .mtitle{font-weight:800}
+  .mcard .msub{color:var(--mut);font-size:12px}
+  .block{border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px}
+  .block.locked{opacity:.55}
+  .block h4{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+  .fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+  .field label{display:block;font-size:11px;color:var(--mut);margin-bottom:4px}
+  .field input{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;padding:7px}
+  .idx{font-weight:800;color:var(--accent,var(--gold))}
+  .pill{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;background:#1a2130;color:var(--mut)}
+  .pill.ig{color:#ff6b6b}.pill.tt{color:#5aa9ff}
+  /* Login */
+  .overlay{position:fixed;inset:0;background:rgba(6,9,14,.92);display:flex;align-items:center;justify-content:center;z-index:50}
+  .login{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;width:min(92vw,380px)}
+  .login h2{margin:0 0 6px}
+  .login .sub{color:var(--mut);font-size:13px;margin-bottom:16px}
+  .login input{width:100%;padding:12px;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;font-size:16px;letter-spacing:2px;text-align:center}
+  .login .err{color:var(--red);font-size:13px;min-height:18px;margin-top:8px}
+  /* Platform picker */
+  .pick{position:fixed;inset:0;background:rgba(6,9,14,.9);display:none;align-items:center;justify-content:center;z-index:60}
+  .pick .box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;width:min(92vw,340px);text-align:center}
+  .pick h3{margin:0 0 6px}.pick .psub{color:var(--mut);font-size:13px;margin-bottom:16px}
+  .pick .prow{display:flex;flex-direction:column;gap:8px}
+  .empty{color:var(--mut);text-align:center;padding:40px;border:1px dashed var(--line);border-radius:14px}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#0b0e14;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .note{font-size:12px;color:var(--mut);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Bulls <span>Content Hub</span></div>
+    <div class="whoami" id="whoami" style="display:none">
+      <span class="dot"></span><span id="whoami-txt"></span>
+      <button class="btn" id="logout" style="padding:6px 12px;font-size:12px">Esci</button>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs" style="display:none">
+    <div class="tab" data-view="generale">Generale (news)</div>
+    <div class="tab" data-view="reels">Reels organici</div>
+    <div class="tab on" data-view="ads">Ads</div>
+    <div class="tab" data-view="metriche">Metriche</div>
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<!-- LOGIN -->
+<div class="overlay" id="login">
+  <div class="login">
+    <h2>Accedi</h2>
+    <div class="sub">Inserisci il tuo <b>codice personale</b>.</div>
+    <input id="lg-code" type="password" inputmode="numeric" autocomplete="off" placeholder="••••">
+    <div class="err" id="lg-err"></div>
+    <button class="btn primary" id="lg-go" style="width:100%;margin-top:10px">Entra</button>
+  </div>
+</div>
+
+<!-- PLATFORM PICKER -->
+<div class="pick" id="pick">
+  <div class="box">
+    <h3>Dove l'hai pubblicato?</h3>
+    <div class="psub">Scegli la piattaforma: tracceremo le metriche separate.</div>
+    <div class="prow">
+      <button class="btn" data-pf="ig">Instagram Reels</button>
+      <button class="btn" data-pf="tiktok">TikTok</button>
+      <button class="btn primary" data-pf="both">Entrambe</button>
+      <button class="btn" data-pf="cancel" style="opacity:.7">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var SB_URL='https://iuvkbjmgxbkhrvuervrz.supabase.co';
+  var SB_KEY='sb_publishable_ntOoKJdAdZs0CcR_BClaew_oRsq1uiC';
+  var COLORS={alberto:'#3ecf8e',marco:'#5aa9ff',jj:'#e6b64c',claudia:'#b48cff',samantha:'#ff6b6b'};
+  var NAMES={alberto:'Alberto',marco:'Marco',jj:'JJ',claudia:'Claudia',samantha:'Samantha'};
+  var PLAT={ig:'IG Reels',tiktok:'TikTok'};
+  var NEWS_URL='index.html';
+
+  var sb=null;
+  function ensureSb(){ if(!sb && window.supabase){ try{ sb=window.supabase.createClient(SB_URL,SB_KEY);}catch(e){sb=null;} } return sb; }
+
+  var AUTH='bullshub_auth_v1';
+  function load(k,d){ try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
+  function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+  function del(k){ try{localStorage.removeItem(k);}catch(e){} }
+
+  var auth=load(AUTH,null);
+  var view='ads';
+  var reelsData=null;
+
+  var loginEl=document.getElementById('login');
+  var lgCode=document.getElementById('lg-code');
+  var lgErr=document.getElementById('lg-err');
+  var content=document.getElementById('content');
+
+  function setAccent(tid){ document.documentElement.style.setProperty('--accent', COLORS[tid]||'#e6b64c'); }
+
+  function showLogin(){ loginEl.style.display='flex'; lgErr.textContent=''; lgCode.value=''; setTimeout(function(){lgCode.focus();},50); }
+  function hideLogin(){ loginEl.style.display='none'; }
+
+  function doLogin(){
+    var code=(lgCode.value||'').trim();
+    if(!code){ lgErr.textContent='Inserisci il tuo codice.'; return; }
+    var s=ensureSb(); if(!s){ lgErr.textContent='Connessione non disponibile. Riprova.'; return; }
+    lgErr.textContent='Verifica\u2026';
+    s.rpc('aff_login_code',{p_pin:code}).then(function(res){
+      var row=(res.data&&res.data[0])||null;
+      if(res.error||!row){ lgErr.textContent='Codice errato. Riprova.'; return; }
+      auth={id:row.id,color:row.color}; save(AUTH,auth);
+      hideLogin(); boot();
+    }, function(){ lgErr.textContent='Errore di connessione. Riprova.'; });
+  }
+  document.getElementById('lg-go').onclick=doLogin;
+  lgCode.onkeydown=function(e){ if(e.key==='Enter') doLogin(); };
+  document.getElementById('logout').onclick=function(){ del(AUTH); auth=null; location.reload(); };
+
+  // ---------------- PLATFORM PICKER ----------------
+  var pickEl=document.getElementById('pick');
+  var pickCb=null;
+  Array.prototype.forEach.call(pickEl.querySelectorAll('[data-pf]'),function(b){
+    b.onclick=function(){
+      var v=b.getAttribute('data-pf'); pickEl.style.display='none';
+      var cb=pickCb; pickCb=null; if(!cb) return;
+      if(v==='cancel') cb(null);
+      else if(v==='both') cb(['ig','tiktok']);
+      else cb([v]);
+    };
+  });
+  function askPlatform(cb){ pickCb=cb; pickEl.style.display='flex'; }
+
+  // tabs
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(t){
+    t.onclick=function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){x.classList.remove('on');});
+      t.classList.add('on'); view=t.getAttribute('data-view'); render();
+    };
+  });
+
+  function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  // ---------------- ADS ----------------
+  function loadAds(){
+    var s=ensureSb();
+    content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Carico le ads\u2026</div>';
+    s.from('aff_ads').select('*').eq('talent_id',auth.id).eq('status','pending')
+     .order('batch',{ascending:true}).order('id',{ascending:true})
+     .then(function(res){
+       if(res.error){ content.innerHTML='<div class="empty">Errore nel caricamento. Riprova.</div>'; return; }
+       renderAds(res.data||[]);
+     });
+  }
+  function renderAds(ads){
+    var head='<div class="bar"><div><b>'+ads.length+'</b> ads pronte <span class="muted">— spunta quelle fatte: finiscono in Metriche</span></div>'+
+      '<button class="btn primary" id="gen20">+ Genera altre 20</button></div>';
+    if(!ads.length){
+      content.innerHTML=head+'<div class="empty">Nessuna ad in coda.<br>Premi <b>Genera altre 20</b> per crearne di nuove.</div>';
+      wireGen(); return;
+    }
+    var cards=ads.map(function(a){
+      var cl = a.compliance==='pulito' ? 'clean' : 'orig';
+      var clLabel = a.compliance==='pulito' ? 'PULITO' : 'ORIGINALE';
+      return '<div class="card" data-id="'+esc(a.id)+'">'+
+        '<div class="meta"><span class="angolo">'+esc(a.angolo||'')+'</span><span class="badge '+cl+'">'+clLabel+'</span></div>'+
+        '<div class="hook">'+esc(a.hook)+'</div>'+
+        '<div class="body">'+esc(a.body)+'</div>'+
+        (a.cta?'<div class="cta">'+esc(a.cta)+'</div>':'')+
+        (a.fonte_a_schermo?'<div class="fonte">Fonte a schermo: '+esc(a.fonte_a_schermo)+'</div>':'')+
+        (a.ambiente?'<div class="amb">'+esc(a.ambiente)+' \u00b7 '+esc(a.lingua).toUpperCase()+' \u00b7 batch '+a.batch+'</div>':'')+
+        '<div class="tick"><label class="check"><input type="checkbox" data-done="'+esc(a.id)+'"> fatta</label></div>'+
+      '</div>';
+    }).join('');
+    content.innerHTML=head+'<div class="grid">'+cards+'</div>';
+    wireGen();
+    Array.prototype.forEach.call(content.querySelectorAll('input[data-done]'),function(cb){
+      cb.onchange=function(){ if(cb.checked) markDone(ads, cb.getAttribute('data-done'), cb); };
+    });
+  }
+  function markDone(ads, id, cb){
+    var a=ads.filter(function(x){return x.id===id;})[0]; if(!a) return;
+    cb.disabled=true;
+    askPlatform(function(pfs){
+      if(!pfs){ cb.disabled=false; cb.checked=false; return; }
+      var card=content.querySelector('.card[data-id="'+CSS.escape(id)+'"]');
+      if(card){ card.style.opacity=.4; }
+      var s=ensureSb();
+      var rows=pfs.map(function(pf){ return {item_id:a.id,platform:pf,talent_id:a.talent_id,item_type:'ads',title:a.angolo,hook:a.hook,lingua:a.lingua}; });
+      s.from('aff_metrics').upsert(rows,{onConflict:'item_id,platform'}).then(function(r1){
+        if(r1.error){ cb.disabled=false; if(card)card.style.opacity=1; cb.checked=false; alert('Errore, riprova.'); return; }
+        s.from('aff_ads').delete().eq('id',a.id).then(function(){
+          if(card){ card.style.transition='opacity .3s'; card.style.opacity=0; setTimeout(function(){ card.remove(); },300); }
+        });
+      });
+    });
+  }
+  function wireGen(){
+    var g=document.getElementById('gen20'); if(!g) return;
+    g.onclick=function(){
+      if(!confirm('Generare 20 nuove ads per '+NAMES[auth.id]+'? Restano nella tua voce e compliance.')) return;
+      g.disabled=true; g.innerHTML='<span class="spin"></span> Genero\u2026';
+      var s=ensureSb();
+      s.functions.invoke('generate-ads',{body:{talent_id:auth.id}}).then(function(res){
+        g.disabled=false; g.textContent='+ Genera altre 20';
+        if(res.error || (res.data&&res.data.error)){
+          alert('Generazione non riuscita.\n'+((res.data&&res.data.error)||res.error&&res.error.message||'')+
+                '\n\nControlla che la chiave ANTHROPIC_API_KEY sia impostata nei secrets di Supabase.');
+          return;
+        }
+        loadAds();
+      }, function(e){ g.disabled=false; g.textContent='+ Genera altre 20'; alert('Errore di rete.'); });
+    };
+  }
+
+  // ---------------- REELS ORGANICI ----------------
+  function loadReels(){
+    var s=ensureSb();
+    content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Carico i reels\u2026</div>';
+    var pj = reelsData ? Promise.resolve(reelsData)
+      : fetch('reels_organici.json').then(function(r){return r.json();}).then(function(j){ reelsData=(j.reels||[]); return reelsData; });
+    pj.then(function(){
+      s.from('aff_metrics').select('item_id').eq('talent_id',auth.id).eq('item_type','reel').then(function(res){
+        var done={}; (res.data||[]).forEach(function(x){ done[x.item_id]=1; });
+        renderReels(done);
+      });
+    }).catch(function(){ content.innerHTML='<div class="empty">reels_organici.json non trovato.</div>'; });
+  }
+  function renderReels(done){
+    var mine=reelsData.filter(function(r){return r.talent===auth.id;});
+    if(!mine.length){ content.innerHTML='<div class="empty">Nessun reel organico per te al momento.</div>'; return; }
+    var cards=mine.map(function(r){
+      var isDone=done[r.id];
+      return '<div class="card" data-rid="'+esc(r.id)+'"'+(isDone?' style="opacity:.45"':'')+'>'+
+        '<div class="meta"><span class="angolo">'+esc(r.format||'')+'</span><span class="badge clean">ORGANICO</span></div>'+
+        (r.testo_schermo?'<div class="hook" style="font-size:15px;white-space:pre-wrap">'+esc(r.testo_schermo)+'</div>':'')+
+        (r.script_parlato?'<div class="body">'+esc(r.script_parlato)+'</div>':'<div class="body">'+esc(r.caption||'')+'</div>')+
+        (r.cta?'<div class="cta">'+esc(r.cta)+'</div>':'')+
+        (r.regia?'<div class="amb">'+esc(r.regia)+'</div>':'')+
+        '<div class="tick"><label class="check"><input type="checkbox" data-rdone="'+esc(r.id)+'"'+(isDone?' checked disabled':'')+'> '+(isDone?'in metriche':'fatto')+'</label></div>'+
+      '</div>';
+    }).join('');
+    content.innerHTML='<div class="bar"><div class="muted"><b>'+mine.length+'</b> reel organici nella tua voce \u00b7 spunta <b>fatto</b> quando pubblichi: finisce in Metriche</div></div><div class="grid">'+cards+'</div>';
+    Array.prototype.forEach.call(content.querySelectorAll('input[data-rdone]'),function(cb){
+      cb.onchange=function(){ if(cb.checked) reelDone(mine, cb.getAttribute('data-rdone'), cb); };
+    });
+  }
+  function reelDone(mine, id, cb){
+    var r=mine.filter(function(x){return x.id===id;})[0]; if(!r) return;
+    cb.disabled=true;
+    askPlatform(function(pfs){
+      if(!pfs){ cb.disabled=false; cb.checked=false; return; }
+      var card=content.querySelector('.card[data-rid="'+CSS.escape(id)+'"]');
+      var s=ensureSb();
+      var rows=pfs.map(function(pf){ return {item_id:r.id,platform:pf,talent_id:auth.id,item_type:'reel',title:r.format,hook:(r.testo_schermo||r.caption||'')}; });
+      s.from('aff_metrics').upsert(rows,{onConflict:'item_id,platform'}).then(function(res){
+        if(res.error){ cb.disabled=false; cb.checked=false; alert('Errore, riprova.'); return; }
+        if(card){ card.style.opacity=.45; }
+        var lab=cb.parentNode; if(lab){ lab.childNodes[lab.childNodes.length-1].nodeValue=' in metriche'; }
+      });
+    });
+  }
+
+  // ---------------- METRICHE ----------------
+  function engIndex(m,win){
+    var v = win==='7'?m.v7_views:m.v24_views;
+    if(!v||v<=0) return null;
+    var sv=(win==='7'?m.v7_saves:m.v24_saves)||0;
+    var sh=(win==='7'?m.v7_shares:m.v24_shares)||0;
+    var fo=(win==='7'?m.v7_follows:m.v24_follows)||0;
+    var ct=(win==='7'?m.v7_cta:m.v24_cta)||0;
+    return Math.round((sv + 2*sh + 3*fo + 4*ct)/v*1000*10)/10;
+  }
+  function loadMetriche(){
+    var s=ensureSb();
+    content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Carico le metriche\u2026</div>';
+    s.from('aff_metrics').select('*').eq('talent_id',auth.id).order('done_at',{ascending:false})
+     .then(function(res){
+       if(res.error){ content.innerHTML='<div class="empty">Errore nel caricamento.</div>'; return; }
+       renderMetriche(res.data||[]);
+     });
+  }
+  function fieldBlock(title,win,m,locked){
+    var p=win==='7'?'v7_':'v24_';
+    function f(key,label,step){
+      var val=m[p+key];
+      return '<div class="field"><label>'+label+'</label><input type="number" step="'+(step||'1')+'" data-mf="'+key+'" value="'+(val==null?'':val)+'" placeholder="0"'+(locked?' disabled':'')+'></div>';
+    }
+    var savedAt = win==='7'? m.v7_at : m.v24_at;
+    var stamp = savedAt ? ' \u00b7 salvato \u2713' : '';
+    return '<div class="block'+(locked?' locked':'')+'" data-win="'+win+'">'+
+      '<h4>'+title+stamp+(locked?' \u2014 completa prima le 24h':'')+'</h4>'+
+      '<div class="fields">'+
+        f('views','Views')+
+        f('retention','Retention %','0.1')+
+        f('saves','Salvataggi')+
+        f('shares','Condivisioni')+
+        f('follows','Nuovi follow')+
+        f('cta','Click CTA / bio')+
+      '</div>'+
+      (locked?'':'<button class="btn primary saveblock" data-win="'+win+'" style="margin-top:10px;padding:8px 14px;font-size:13px">Salva '+(win==='7'?'7 giorni':'24h')+'</button>')+
+    '</div>';
+  }
+  function renderMetriche(rows){
+    if(!rows.length){ content.innerHTML='<div class="empty">Nessun contenuto concluso ancora.<br>Spunta un\u2019ad o un reel come <b>fatto</b> per portarlo qui.</div>'; return; }
+    var cards=rows.map(function(m){
+      var pf = m.platform==='ig'?'ig':'tt';
+      var locked = !m.v24_at;
+      var f24 = fieldBlock('24h \u2014 primo snapshot','24',m,false);
+      var f7 = fieldBlock('7 giorni \u2014 snapshot finale','7',m,locked);
+      var i24=engIndex(m,'24'), i7=engIndex(m,'7');
+      var real = (i7!=null?i7:i24);
+      var cmp='<div class="msub" style="margin-top:10px">Viral: '+
+        (m.viral_pred!=null?'previsto <b>'+m.viral_pred+'</b>':'previsto \u2014')+
+        ' \u00b7 reale <span class="idx">'+(real!=null?real:'\u2014')+'</span> <span class="msub">(engagement / 1000 views)</span></div>';
+      return '<div class="mcard" data-id="'+esc(m.item_id)+'" data-pf="'+esc(m.platform)+'">'+
+        '<div class="mtop"><div><div class="mtitle">'+esc(m.title||m.item_id)+'</div>'+
+          '<div class="msub">'+esc(m.hook||'')+'</div></div>'+
+          '<div style="text-align:right"><span class="pill '+pf+'">'+(PLAT[m.platform]||m.platform)+'</span> '+
+          '<span class="pill">'+(m.item_type==='reel'?'ORGANICO':'ADS')+'</span></div></div>'+
+        f24 + f7 +
+        '<div style="margin-top:10px"><input type="text" data-f="note" value="'+esc(m.note||'')+'" placeholder="note (facoltative)" style="width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;padding:8px"></div>'+
+        cmp +
+      '</div>';
+    }).join('');
+    content.innerHTML='<div class="bar"><div class="muted">Compila i numeri dopo <b>24h</b>, poi torna dopo <b>7 giorni</b>. Il blocco 7g si sblocca quando salvi le 24h.</div></div>'+cards;
+    Array.prototype.forEach.call(content.querySelectorAll('.mcard'),function(c){
+      Array.prototype.forEach.call(c.querySelectorAll('.saveblock'),function(b){
+        b.onclick=function(){ saveBlock(c,b.getAttribute('data-win')); };
+      });
+    });
+  }
+  function saveBlock(card,win){
+    var id=card.getAttribute('data-id'), pf=card.getAttribute('data-pf');
+    var block=card.querySelector('.block[data-win="'+win+'"]');
+    var p=win==='7'?'v7_':'v24_';
+    var num=function(v){ return v===''?null:Number(v); };
+    var patch={};
+    Array.prototype.forEach.call(block.querySelectorAll('[data-mf]'),function(el){
+      patch[p+el.getAttribute('data-mf')]=num(el.value);
+    });
+    var noteEl=card.querySelector('[data-f="note"]'); if(noteEl) patch.note=noteEl.value;
+    patch[p+'at']=new Date().toISOString();
+    var btn=block.querySelector('.saveblock'); btn.textContent='\u2026';
+    ensureSb().from('aff_metrics').update(patch).eq('item_id',id).eq('platform',pf).then(function(res){
+      if(res.error){ btn.textContent='Errore'; setTimeout(function(){btn.textContent='Salva '+(win==='7'?'7 giorni':'24h');},1500); return; }
+      btn.textContent='Salvato \u2713';
+      if(win==='24'){ setTimeout(loadMetriche,700); }
+      else setTimeout(function(){btn.textContent='Salva 7 giorni';},1500);
+    });
+  }
+
+  // ---------------- GENERALE ----------------
+  function renderGenerale(){
+    content.innerHTML='<div class="empty">La sezione <b>Generale</b> è il pool notizie condiviso.<br><br>'+
+      '<a class="btn primary" href="'+NEWS_URL+'">Apri il pool notizie</a></div>';
+  }
+
+  function render(){
+    if(view==='ads') loadAds();
+    else if(view==='metriche') loadMetriche();
+    else if(view==='reels') loadReels();
+    else renderGenerale();
+  }
+
+  function boot(){
+    ensureSb();
+    if(!auth){ showLogin(); return; }
+    hideLogin();
+    setAccent(auth.id);
+    document.getElementById('whoami').style.display='flex';
+    document.getElementById('tabs').style.display='flex';
+    document.getElementById('whoami-txt').textContent=NAMES[auth.id]||auth.id;
+    render();
+  }
+  // aspetta il caricamento del client
+  var tries=0;
+  (function w(){ if(ensureSb()){ boot(); } else if(tries++<50){ setTimeout(w,120);} })();
+})();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bulls Content Hub</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#121722; --panel2:#0f141d; --line:#1e2634;
+    --txt:#e8ecf4; --mut:#8b95ab; --gold:#e6b64c; --green:#3ecf8e; --red:#ff6b6b;
+    --t-alberto:#3ecf8e; --t-marco:#5aa9ff; --t-jj:#e6b64c; --t-claudia:#b48cff; --t-samantha:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:18px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .brand{font-weight:800;font-size:20px;letter-spacing:.3px}
+  .brand span{color:var(--accent,var(--gold))}
+  .whoami{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut)}
+  .dot{width:12px;height:12px;border-radius:50%;background:var(--accent,var(--gold))}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 18px}
+  .tab{padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--mut);cursor:pointer;font-weight:600;font-size:13px}
+  .tab.on{background:var(--accent,var(--gold));color:#0b0e14;border-color:transparent}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .muted{color:var(--mut);font-size:13px}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--txt);border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;font-size:14px}
+  .btn.primary{background:var(--accent,var(--gold));color:#0b0e14;border-color:transparent}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  /* Card verticale stile reel 9:16 */
+  .card{position:relative;background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;min-height:420px;border-top:3px solid var(--accent,var(--gold))}
+  .card .meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+  .card .angolo{color:var(--accent,var(--gold));font-weight:700}
+  .card .hook{font-size:18px;font-weight:800;line-height:1.3;margin:2px 0 10px}
+  .card .body{font-size:13.5px;color:#d3d9e6;flex:1;white-space:pre-wrap}
+  .card .cta{margin-top:10px;font-weight:700;font-size:13.5px;color:var(--accent,var(--gold))}
+  .card .fonte{margin-top:8px;font-size:11px;color:var(--mut)}
+  .card .amb{margin-top:6px;font-size:11px;color:var(--mut);font-style:italic}
+  .card .tick{position:absolute;top:12px;right:12px}
+  .check{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--mut);user-select:none}
+  .check input{width:20px;height:20px;accent-color:var(--green);cursor:pointer}
+  .badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;background:#1a2130;color:var(--mut)}
+  .badge.clean{color:var(--green)}
+  .badge.orig{color:var(--gold)}
+  /* Metriche */
   table{width:100%;border-collapse:collapse;font-size:13px}
   th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
   th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
