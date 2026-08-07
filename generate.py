@@ -29,7 +29,6 @@ HTML_PATH  = os.path.join(HERE, "index.html")
 MODEL      = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 FRESH_DAYS = 5          # notizie usate solo se pubblicate negli ultimi N giorni
 KEEP_DAYS  = 7          # item piu' vecchi di N giorni vengono eliminati
-PER_DAY_CAP = int(os.environ.get("PER_DAY_CAP", "20"))  # max news per giorno: si tengono le piu' virali
 TARGET     = int(os.environ.get("ITEMS_PER_RUN", "12"))   # item da generare per run
 PER_QUERY  = 8          # candidati letti da ogni query
 # NB: NON impostare socket.setdefaulttimeout() a livello globale: rompe il
@@ -95,15 +94,74 @@ CHANNELS = [
          q="pensioni inps risparmio investimenti when:5d", hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Random",   area="Lavoro",                lang="it", solo=None,
          q="lavoro stipendi occupazione italia when:5d", hl="it", gl="IT", ceid="IT:it"),
-    # ---- SPAGNOLO (visibile solo ad Alberto) -------------------------------
+    # ---- SPAGNOLO (visibile solo ad Alberto) — stessa copertura dell'Italia --
+    # Nazionale Spagna
     dict(cat="Macro",    area="Espana",                lang="es", solo="alberto",
          q="economia espana bolsa ibex when:5d",       hl="es", gl="ES", ceid="ES:es"),
     dict(cat="Macro",    area="Espana / BCE",          lang="es", solo="alberto",
          q="bce tipos inflacion euro when:5d",         hl="es", gl="ES", ceid="ES:es"),
-    dict(cat="Trading",  area="Cripto (ES)",           lang="es", solo="alberto",
-         q="bitcoin criptomonedas precio when:5d",     hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Politica", area="Espana",                lang="es", solo="alberto",
+         q="gobierno presupuestos impuestos economia espana when:5d", hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Politica", area="Espana / Ahorro",       lang="es", solo="alberto",
+         q="impuestos patrimonio ahorro cuentas espana when:5d", hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Cronaca",  area="Espana / Jovenes",      lang="es", solo="alberto",
+         q="alquileres salarios jovenes precarios espana when:5d", hl="es", gl="ES", ceid="ES:es"),
     dict(cat="Random",   area="Espana",                lang="es", solo="alberto",
          q="hipotecas ahorro precios luz espana when:5d", hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Random",   area="Espana / Pensiones",    lang="es", solo="alberto",
+         q="pensiones ahorro inversion espana when:5d", hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Random",   area="Espana / Trabajo",      lang="es", solo="alberto",
+         q="empleo salarios trabajo espana when:5d",   hl="es", gl="ES", ceid="ES:es"),
+    # Globali in spagnolo
+    dict(cat="Macro",    area="USA / Mercados globales",lang="es", solo="alberto",
+         q="wall street s&p 500 nasdaq when:5d",       hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Macro",    area="USA / Fed",             lang="es", solo="alberto",
+         q="reserva federal tipos inflacion when:5d",  hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Geo",      area="Oriente Medio",         lang="es", solo="alberto",
+         q="oriente medio petroleo tensiones when:5d", hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Geo",      area="China / Asia",          lang="es", solo="alberto",
+         q="china economia exportaciones yuan when:5d",hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Trading",  area="Cripto (ES)",           lang="es", solo="alberto",
+         q="bitcoin criptomonedas precio when:5d",     hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Trading",  area="Materias primas (ES)",  lang="es", solo="alberto",
+         q="oro plata precio record when:5d",          hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Trading",  area="Divisas (ES)",          lang="es", solo="alberto",
+         q="euro dolar cambio divisas when:5d",        hl="es", gl="ES", ceid="ES:es"),
+    # ---- FRANCESE (visibile solo a Nabil) — stessa copertura dell'Italia -----
+    # Nazionale Francia
+    dict(cat="Macro",    area="France / Bourse",       lang="fr", solo="nabil",
+         q="bourse paris cac 40 economie france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Macro",    area="France / BCE",          lang="fr", solo="nabil",
+         q="bce taux inflation euro when:5d",          hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Politica", area="France",                lang="fr", solo="nabil",
+         q="gouvernement budget impots economie france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Politica", area="France / Epargne",      lang="fr", solo="nabil",
+         q="impots epargne livret pouvoir achat france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Cronaca",  area="France / Arnaques",     lang="fr", solo="nabil",
+         q="arnaques en ligne epargne victimes france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Cronaca",  area="France / Jeunes",       lang="fr", solo="nabil",
+         q="loyers salaires jeunes precaires france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Random",   area="France",                lang="fr", solo="nabil",
+         q="cout de la vie factures salaires france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Random",   area="France / Immobilier",   lang="fr", solo="nabil",
+         q="credit immobilier taux logement france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Random",   area="France / Retraite",     lang="fr", solo="nabil",
+         q="retraite epargne investissement france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    # Globali in francese
+    dict(cat="Macro",    area="USA / Marches globaux", lang="fr", solo="nabil",
+         q="wall street s&p 500 nasdaq when:5d",       hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Macro",    area="USA / Fed",             lang="fr", solo="nabil",
+         q="reserve federale taux inflation when:5d",  hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Geo",      area="Moyen-Orient",          lang="fr", solo="nabil",
+         q="moyen orient petrole tensions when:5d",    hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Geo",      area="Chine / Asie",          lang="fr", solo="nabil",
+         q="chine economie exportations yuan when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Trading",  area="Crypto (FR)",           lang="fr", solo="nabil",
+         q="bitcoin cryptomonnaies prix when:5d",      hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Trading",  area="Matieres premieres (FR)",lang="fr", solo="nabil",
+         q="or argent prix record when:5d",            hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Trading",  area="Devises (FR)",          lang="fr", solo="nabil",
+         q="euro dollar taux change forex when:5d",    hl="fr", gl="FR", ceid="FR:fr"),
 ]
 
 # Feed RSS DIRETTI da fonti autorevoli / veloci (testate, siti, blog).
@@ -135,9 +193,20 @@ FEEDS = [
     dict(cat="Geo",      area="Energia / Oil",      lang="it", solo=None, outlet="OilPrice",               url="https://oilprice.com/rss/main"),
     # ---- Spagnolo (visibile solo ad Alberto) ------------------------------
     dict(cat="Macro",    area="Espana / Mercados",  lang="es", solo="alberto", outlet="Expansion Mercados",url="https://e00-expansion.uecdn.es/rss/mercados.xml"),
+    dict(cat="Macro",    area="Espana / Economia",  lang="es", solo="alberto", outlet="Expansion Economia",url="https://e00-expansion.uecdn.es/rss/economia.xml"),
     dict(cat="Macro",    area="Espana / Economia",  lang="es", solo="alberto", outlet="El Pais Economia",  url="https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/economia/portada"),
+    dict(cat="Macro",    area="Espana / Mercados",  lang="es", solo="alberto", outlet="El Economista",     url="https://www.eleconomista.es/rss/rss-portada.php"),
+    dict(cat="Macro",    area="Espana / Mercados",  lang="es", solo="alberto", outlet="Cinco Dias Mercados",url="https://cincodias.elpais.com/seccion/rss/mercados/"),
     dict(cat="Trading",  area="Espana / Cripto",    lang="es", solo="alberto", outlet="BeInCrypto ES",     url="https://es.beincrypto.com/feed/"),
     dict(cat="Trading",  area="Espana / Mercados",  lang="es", solo="alberto", outlet="Investing.com ES",  url="https://es.investing.com/rss/news.rss"),
+    # ---- Francese (visibile solo a Nabil) ---------------------------------
+    dict(cat="Macro",    area="France / Marches",   lang="fr", solo="nabil", outlet="Les Echos Marches",   url="https://services.lesechos.fr/rss/les-echos-finance-marches.xml"),
+    dict(cat="Macro",    area="France / Economie",  lang="fr", solo="nabil", outlet="Le Figaro Economie",  url="https://www.lefigaro.fr/rss/figaro_economie.xml"),
+    dict(cat="Macro",    area="France / Economie",  lang="fr", solo="nabil", outlet="La Tribune",          url="https://www.latribune.fr/rss/rubriques/economie.html"),
+    dict(cat="Macro",    area="France / Economie",  lang="fr", solo="nabil", outlet="Le Monde Economie",   url="https://www.lemonde.fr/economie/rss_full.xml"),
+    dict(cat="Macro",    area="France / Business",  lang="fr", solo="nabil", outlet="BFM Business",        url="https://www.bfmtv.com/rss/economie/"),
+    dict(cat="Trading",  area="France / Crypto",    lang="fr", solo="nabil", outlet="Cointelegraph FR",    url="https://fr.cointelegraph.com/rss"),
+    dict(cat="Trading",  area="France / Marches",   lang="fr", solo="nabil", outlet="Investing.com FR",    url="https://fr.investing.com/rss/news.rss"),
 ]
 
 SYSTEM_PROMPT = """Sei il SOCIAL MEDIA MANAGER del pool "BullsFX": una squadra di talent che pubblica video verticali (TikTok/Instagram/YouTube Shorts) partendo dalle notizie del giorno.
@@ -199,7 +268,9 @@ Rispondi ESCLUSIVAMENTE con un oggetto JSON valido (nessun testo prima o dopo), 
  "fornire": "<cosa deve preparare il talent per girarlo>",
  "regia": "<nota di regia concreta e virale>"
 }
-Scrivi in ITALIANO, salvo quando ti indico lingua=es: in quel caso scrivi titolo/overlay/script/caption/cta/fornire/regia in SPAGNOLO."""
+Scrivi in ITALIANO per default. In base al campo "lingua":
+- lingua=es -> scrivi titolo/overlay/script/hooks/caption/cta/fornire/regia in SPAGNOLO (spagnolo di Spagna, gia' tradotto e naturale, non tradotto parola per parola dall'italiano).
+- lingua=fr -> scrivi titolo/overlay/script/hooks/caption/cta/fornire/regia in FRANCESE (francese di Francia, gia' tradotto e naturale, tono giovane e diretto). Mantieni comunque tutte le regole di conformita' e la scala delle CTA."""
 
 
 # ----------------------------------------------------------------------------
@@ -521,20 +592,6 @@ def main():
             kept.append(i)
     pruned = before - len(kept)
 
-    # cap per giorno: si tengono al massimo PER_DAY_CAP news, quelle a viralita' piu' alta.
-    # una nuova news della giornata resta solo se "scala la classifica" (viral piu' alto
-    # di quella attualmente 20esima), altrimenti viene scartata.
-    from collections import defaultdict
-    by_day = defaultdict(list)
-    for i in kept:
-        by_day[i.get("date", "")].append(i)
-    capped = []
-    for day, lst in by_day.items():
-        lst.sort(key=lambda i: (i.get("viral") if i.get("viral") is not None else -1), reverse=True)
-        capped.extend(lst[:PER_DAY_CAP])
-    capped_out = len(kept) - len(capped)
-    kept = capped
-
     # ordina per data desc e rinumera
     kept.sort(key=lambda i: i.get("date", ""), reverse=True)
     for idx, i in enumerate(kept, 1):
@@ -547,7 +604,7 @@ def main():
 
     write_html(h, m, data)
     oggi = sum(1 for i in kept if i.get("date") == today.isoformat())
-    print(f"[done] added={added} pruned={pruned} cap_scartate={capped_out} total={len(kept)} oggi={oggi} (max {PER_DAY_CAP}/giorno)")
+    print(f"[done] added={added} pruned={pruned} total={len(kept)} oggi={oggi}")
 
 if __name__ == "__main__":
     main()
