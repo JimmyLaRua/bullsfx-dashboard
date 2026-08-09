@@ -2,14 +2,9 @@ name: BullsFX content refresh
 
 on:
   schedule:
-    # Ogni ora (UTC). GitHub puo' ritardare/saltare qualche run sotto carico.
-    - cron: "0 * * * *"
-    # Ridondanza nella fascia pre-mattina CEST (03-06 UTC = 05-08 Milano):
-    # se GitHub salta un run orario, questi :30 garantiscono il feed pieno alle 7.
-    - cron: "30 3 * * *"
-    - cron: "30 4 * * *"
-    - cron: "30 5 * * *"
-    - cron: "30 6 * * *"
+    # 5 run/giorno (UTC) = 06,08,12,16,20 Milano (CEST). I due run del mattino
+    # (04,06 UTC) garantiscono il feed pieno per le 6-8 di Milano.
+    - cron: "0 4,6,10,14,18 * * *"
   workflow_dispatch:   # permette di lanciarlo a mano dal tab "Actions"
 
 permissions:
