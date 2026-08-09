@@ -73,6 +73,20 @@
   .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#0b0e14;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
   @keyframes sp{to{transform:rotate(360deg)}}
   .note{font-size:12px;color:var(--mut);margin-top:6px}
+  /* Analisi */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+  .stat{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:14px 16px;border-left:3px solid var(--accent,var(--gold))}
+  .stat .lbl{font-size:12px;color:var(--mut);margin-bottom:6px}
+  .stat .val{font-size:24px;font-weight:800}
+  .stat .sub{font-size:11px;color:var(--mut);margin-top:2px}
+  .chartbox{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+  .chartbox h4{margin:0 0 12px;font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+  .chartwrap{position:relative;width:100%;height:280px}
+  .postrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+  .postrow:first-of-type{border-top:none}
+  .postrow .cap{flex:1;font-size:13px}
+  .postrow .num{font-weight:800;font-size:14px}
+  .demo-banner{background:#2a2410;border:1px solid #574a1a;color:var(--gold);border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px}
 </style>
 </head>
 <body>
@@ -90,6 +104,7 @@
     <div class="tab" data-view="reels">Reels organici</div>
     <div class="tab on" data-view="ads">Ads</div>
     <div class="tab" data-view="metriche">Metriche</div>
+    <div class="tab" data-view="analisi">Analisi</div>
   </div>
 
   <div id="content"></div>
@@ -121,6 +136,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 (function(){
   var SB_URL='https://iuvkbjmgxbkhrvuervrz.supabase.co';
@@ -401,6 +417,92 @@
     });
   }
 
+  // ---------------- ANALISI ----------------
+  var _charts=[];
+  function destroyCharts(){ _charts.forEach(function(c){ try{c.destroy();}catch(e){} }); _charts=[]; }
+  function fmtInt(n){ return Math.round(n||0).toLocaleString('it-IT'); }
+  function fmtEur(n){ return '\u20ac'+Math.round(n||0).toLocaleString('it-IT'); }
+  function loadAnalisi(){
+    var s=ensureSb();
+    destroyCharts();
+    content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Carico l\u2019analisi\u2026</div>';
+    var since=new Date(Date.now()-30*864e5).toISOString().slice(0,10);
+    Promise.all([
+      s.from('soc_ads_daily').select('*').eq('talent_id',auth.id).gte('day',since).order('day',{ascending:true}),
+      s.from('soc_daily').select('*').eq('talent_id',auth.id).gte('day',since).order('day',{ascending:true}),
+      s.from('soc_posts').select('*').eq('talent_id',auth.id).order('views',{ascending:false}).limit(5),
+      s.from('soc_accounts').select('token_status').eq('talent_id',auth.id)
+    ]).then(function(r){
+      renderAnalisi((r[0].data||[]),(r[1].data||[]),(r[2].data||[]),(r[3].data||[]));
+    }).catch(function(){ content.innerHTML='<div class="empty">Errore nel caricamento dell\u2019analisi.</div>'; });
+  }
+  function renderAnalisi(ads,daily,posts,accts){
+    if(!(ads.length||daily.length||posts.length)){
+      content.innerHTML='<div class="empty">Nessun dato ancora.<br>Appena i profili social sono collegati, qui vedrai spesa, ROAS, crescita follower e i post migliori.</div>'; return;
+    }
+    var isDemo=!accts.some(function(a){return a.token_status==='active';});
+    var spend=0,leads=0,rev=0;
+    ads.forEach(function(a){ spend+=Number(a.spend||0); leads+=Number(a.leads||0); rev+=Number(a.revenue||0); });
+    var roas=spend>0?rev/spend:0, cpl=leads>0?spend/leads:0;
+    var byDay={};
+    daily.forEach(function(d){ byDay[d.day]=(byDay[d.day]||0)+Number(d.followers||0); });
+    var fdays=Object.keys(byDay).sort(), fvals=fdays.map(function(d){return byDay[d];});
+    var fgrow=fvals.length>1?fvals[fvals.length-1]-fvals[0]:0;
+    var adM={};
+    ads.forEach(function(a){ if(!adM[a.day])adM[a.day]={spend:0,leads:0}; adM[a.day].spend+=Number(a.spend||0); adM[a.day].leads+=Number(a.leads||0); });
+    var adays=Object.keys(adM).sort();
+    var aspend=adays.map(function(d){return Math.round(adM[d].spend);});
+    var aleads=adays.map(function(d){return adM[d].leads;});
+
+    var banner=isDemo?'<div class="demo-banner">Stai vedendo <b>dati di esempio</b>. Appena il token Meta \u00e8 attivo, questi grafici si riempiono con i numeri reali.</div>':'';
+    var stats='<div class="stats">'+
+      '<div class="stat"><div class="lbl">Spesa (30gg)</div><div class="val">'+fmtEur(spend)+'</div></div>'+
+      '<div class="stat"><div class="lbl">ROAS medio</div><div class="val">'+(Math.round(roas*10)/10).toLocaleString('it-IT')+'\u00d7</div></div>'+
+      '<div class="stat"><div class="lbl">Lead (30gg)</div><div class="val">'+fmtInt(leads)+'</div><div class="sub">costo/lead '+fmtEur(cpl)+'</div></div>'+
+      '<div class="stat"><div class="lbl">Follower +30gg</div><div class="val">'+(fgrow>=0?'+':'')+fmtInt(fgrow)+'</div></div>'+
+    '</div>';
+    var charts='<div class="chartbox"><h4>Spesa e lead per giorno</h4><div class="chartwrap"><canvas id="cAds"></canvas></div></div>'+
+      '<div class="chartbox"><h4>Crescita follower \u00b7 30 giorni</h4><div class="chartwrap"><canvas id="cFol"></canvas></div></div>';
+    var postHtml='';
+    if(posts.length){
+      postHtml='<div class="chartbox"><h4>Post organici migliori</h4>'+posts.map(function(p){
+        return '<div class="postrow"><span class="pill '+(p.platform==='tiktok'?'tt':'ig')+'">'+(p.platform==='tiktok'?'TikTok':'IG')+'</span>'+
+          '<span class="cap">'+esc(p.caption||p.id)+'</span>'+
+          '<span class="num">'+fmtInt(p.views)+' <span class="msub" style="font-weight:400;color:var(--mut)">views</span></span></div>';
+      }).join('')+'</div>';
+    }
+    content.innerHTML=banner+stats+charts+postHtml;
+
+    var accent=COLORS[auth.id]||'#e6b64c';
+    if(adays.length && window.Chart){
+      _charts.push(new Chart(document.getElementById('cAds'),{
+        data:{labels:adays,datasets:[
+          {type:'bar',label:'Spesa (\u20ac)',data:aspend,backgroundColor:accent,yAxisID:'y'},
+          {type:'line',label:'Lead',data:aleads,borderColor:'#3ecf8e',backgroundColor:'#3ecf8e',pointRadius:0,borderWidth:2,tension:.3,yAxisID:'y1'}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{labels:{color:'#8b95ab'}}},
+          scales:{
+            x:{ticks:{color:'#8b95ab',maxTicksLimit:6},grid:{color:'#1e2634'}},
+            y:{position:'left',ticks:{color:'#8b95ab',callback:function(v){return '\u20ac'+v;}},grid:{color:'#1e2634'}},
+            y1:{position:'right',ticks:{color:'#8b95ab'},grid:{drawOnChartArea:false}}
+          }}
+      }));
+    }
+    if(fdays.length && window.Chart){
+      _charts.push(new Chart(document.getElementById('cFol'),{
+        type:'line',
+        data:{labels:fdays,datasets:[{label:'Follower',data:fvals,borderColor:accent,backgroundColor:accent,pointRadius:0,borderWidth:2,tension:.3,fill:false}]},
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{
+            x:{ticks:{color:'#8b95ab',maxTicksLimit:6},grid:{color:'#1e2634'}},
+            y:{ticks:{color:'#8b95ab',callback:function(v){return (v/1000).toFixed(0)+'k';}},grid:{color:'#1e2634'}}
+          }}
+      }));
+    }
+  }
+
   // ---------------- GENERALE ----------------
   function renderGenerale(){
     content.innerHTML='<div class="empty">La sezione <b>Generale</b> è il pool notizie condiviso.<br><br>'+
@@ -408,9 +510,11 @@
   }
 
   function render(){
+    destroyCharts();
     if(view==='ads') loadAds();
     else if(view==='metriche') loadMetriche();
     else if(view==='reels') loadReels();
+    else if(view==='analisi') loadAnalisi();
     else renderGenerale();
   }
 
