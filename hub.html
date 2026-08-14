@@ -87,6 +87,84 @@
   .postrow .cap{flex:1;font-size:13px}
   .postrow .num{font-weight:800;font-size:14px}
   .demo-banner{background:#2a2410;border:1px solid #574a1a;color:var(--gold);border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px}
+  /* Operazioni */
+  .ops-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end;margin-bottom:16px}
+  .ops-title{font-size:22px;line-height:1.2;margin:0 0 4px}
+  .ops-sync{font:500 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);text-align:right}
+  .ops-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px;background:var(--panel2)}
+  .ops-kpi{padding:12px 14px;border-right:1px solid var(--line)}
+  .ops-kpi:last-child{border-right:0}
+  .ops-kpi strong{display:block;font:700 22px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--txt)}
+  .ops-kpi span{font-size:11px;color:var(--mut)}
+  .ops-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.85fr);gap:16px;align-items:start}
+  .ops-section{background:var(--panel2);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
+  .ops-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line)}
+  .ops-section-head h3{font-size:13px;margin:0}
+  .ops-count{font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut)}
+  .ops-row{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px 14px;border-bottom:1px solid var(--line)}
+  .ops-row:last-child{border-bottom:0}
+  .ops-priority{font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;color:var(--mut)}
+  .ops-priority.p0,.ops-priority.blocked{color:var(--red)}
+  .ops-priority.p1{color:var(--gold)}
+  .ops-main b{display:block;font-size:13px;line-height:1.35;margin-bottom:3px}
+  .ops-main small{display:block;color:var(--mut);font-size:11px;line-height:1.4}
+  .ops-status{font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;color:var(--mut);white-space:nowrap}
+  .ops-status.recording,.ops-status.approved{color:var(--green)}
+  .ops-status.editing,.ops-status.review,.ops-status.proposed{color:var(--gold)}
+  .ops-alert{padding:12px 14px;background:#271719;color:#ff9b9b;border-bottom:1px solid #4a2528;font-size:12px}
+  .ops-empty{padding:18px 14px;color:var(--mut);font-size:12px}
+  .ops-links{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px}
+  .ops-links .btn{padding:8px 10px;font-size:12px;text-decoration:none}
+  @media(max-width:760px){
+    .ops-head{grid-template-columns:1fr}.ops-sync{text-align:left}
+    .ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ops-kpi:nth-child(2){border-right:0}.ops-kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .ops-layout{grid-template-columns:1fr}.ops-row{grid-template-columns:64px minmax(0,1fr)}.ops-status{grid-column:2}
+  }
+  /* Command Center + Content Intelligence */
+  .cc-badge{font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:3px 7px;border-radius:5px;text-transform:uppercase;white-space:nowrap}
+  .cc-badge.urgent,.cc-badge.critical{background:rgba(255,107,107,.15);color:var(--red)}
+  .cc-badge.attention,.cc-badge.high{background:rgba(230,182,76,.15);color:var(--gold)}
+  .cc-badge.normal,.cc-badge.low{background:#1a2130;color:var(--mut)}
+  .cc-badge.ok{background:rgba(62,207,142,.15);color:var(--green)}
+  .cc-tname{font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);text-transform:uppercase}
+  .cc-details{border-top:1px solid var(--line)}
+  .cc-details>summary{cursor:pointer;padding:10px 14px;font-size:12px;color:var(--mut);list-style:none;display:flex;align-items:center;gap:8px}
+  .cc-details>summary::-webkit-details-marker{display:none}
+  .cc-details>summary::before{content:"\u25b8";color:var(--accent,var(--gold))}
+  .cc-details[open]>summary::before{content:"\u25be"}
+  .cc-replay{padding:2px 14px 12px 28px;font:400 11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut)}
+  .cc-replay .step{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-top:1px dashed var(--line)}
+  .cc-replay .step:first-child{border-top:none}
+  .cc-replay .step .r-fail{color:var(--red)}
+  .cc-table{width:100%;border-collapse:collapse;font-size:12px}
+  .cc-table th,.cc-table td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  .cc-table th{color:var(--mut);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.4px}
+  .cc-table td.num,.cc-table th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .cc-table tr:last-child td{border-bottom:none}
+  .cc-tablewrap{overflow-x:auto}
+  .rec{display:inline-block;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+  .rec.good{background:rgba(62,207,142,.15);color:var(--green)}
+  .rec.warn{background:rgba(230,182,76,.15);color:var(--gold)}
+  .rec.bad{background:rgba(255,107,107,.15);color:var(--red)}
+  .rec.muted{background:#1a2130;color:var(--mut)}
+  .intel-sel{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .intel-sel .chip{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--mut);cursor:pointer;font-size:12px;font-weight:600}
+  .intel-sel .chip.on{background:var(--accent,var(--gold));color:#0b0e14;border-color:transparent}
+  .filters{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:14px;padding:10px 14px;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+  .filters .flabel{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--mut);margin-right:2px}
+  .filters .fgroup{display:flex;gap:4px}
+  .filters .fbtn{padding:5px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--mut);cursor:pointer;font-size:11px;font-weight:600}
+  .filters .fbtn.on{background:var(--accent,var(--gold));color:#0b0e14;border-color:transparent}
+  .cc-note{font-size:11px;color:var(--mut);padding:10px 14px}
+  @media(max-width:760px){
+    .cc-table thead{display:none}
+    .cc-table,.cc-table tbody,.cc-table tr,.cc-table td{display:block;width:100%}
+    .cc-table tr{border-bottom:1px solid var(--line);padding:6px 0}
+    .cc-table td{border-bottom:none;padding:3px 12px;text-align:left!important}
+    .cc-table td.num{text-align:left}
+    .cc-table td[data-l]::before{content:attr(data-l) ": ";color:var(--mut);font-size:10px;text-transform:uppercase}
+  }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
@@ -105,6 +183,11 @@
     <div class="tab on" data-view="ads">Ads</div>
     <div class="tab" data-view="metriche">Metriche</div>
     <div class="tab" data-view="analisi">Analisi</div>
+    <div class="tab" data-view="operazioni">Operazioni</div>
+    <div class="tab admin-only" data-view="command" style="display:none">Command Center</div>
+    <div class="tab admin-only" data-view="marketing" style="display:none">Email &amp; Webinar</div>
+    <div class="tab" data-view="intel">Content Intelligence</div>
+    <div class="tab" data-view="calls">Call &amp; Priorità</div>
   </div>
 
   <div id="content"></div>
@@ -142,7 +225,7 @@
   var SB_URL='https://iuvkbjmgxbkhrvuervrz.supabase.co';
   var SB_KEY='sb_publishable_ntOoKJdAdZs0CcR_BClaew_oRsq1uiC';
   var COLORS={alberto:'#3ecf8e',marco:'#5aa9ff',jj:'#e6b64c',claudia:'#b48cff',samantha:'#ff6b6b',nabil:'#22d3ee',luca:'#ff7a1a'};
-  var NAMES={alberto:'Alberto',marco:'Marco',jj:'JJ',claudia:'Claudia',samantha:'Samantha',nabil:'Nabil',luca:'Luca'};
+  var NAMES={alberto:'Alberto',marco:'No Matrix',jj:'JJ',claudia:'Claudia',samantha:'Samantha',nabil:'Nabil',luca:'Luca Puleo'};
   var PLAT={ig:'IG Reels',tiktok:'TikTok'};
   var NEWS_URL='index.html';
 
@@ -157,6 +240,19 @@
   var auth=load(AUTH,null);
   var view='ads';
   var reelsData=null;
+  var TALENT_LIVE_READ_ONLY=true;
+  var legacySnapshotCache=null;
+  var legacySnapshotAt=0;
+
+  function loadLegacySnapshot(force){
+    if(!auth||!auth.opsToken||!ensureSb()) return Promise.reject(new Error('sessione operativa non disponibile'));
+    if(!force&&legacySnapshotCache&&Date.now()-legacySnapshotAt<30000) return Promise.resolve(legacySnapshotCache);
+    return ensureSb().rpc('ops_legacy_talent_snapshot',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error||!res.data) throw (res.error||new Error('snapshot non disponibile'));
+      if(res.data.talent_id!==auth.id) throw new Error('perimetro talent non valido');
+      legacySnapshotCache=res.data; legacySnapshotAt=Date.now(); return legacySnapshotCache;
+    });
+  }
 
   var loginEl=document.getElementById('login');
   var lgCode=document.getElementById('lg-code');
@@ -173,16 +269,22 @@
     if(!code){ lgErr.textContent='Inserisci il tuo codice.'; return; }
     var s=ensureSb(); if(!s){ lgErr.textContent='Connessione non disponibile. Riprova.'; return; }
     lgErr.textContent='Verifica\u2026';
-    s.rpc('aff_login_code',{p_pin:code}).then(function(res){
+    var clientRef=localStorage.getItem('jbgrl_client_ref');
+    if(!clientRef){ clientRef='web_'+Array.from(crypto.getRandomValues(new Uint8Array(18)),function(x){return x.toString(16).padStart(2,'0');}).join(''); localStorage.setItem('jbgrl_client_ref',clientRef); }
+    s.rpc('ops_login_code_v2',{p_pin:code,p_client_ref:clientRef}).then(function(res){
       var row=(res.data&&res.data[0])||null;
-      if(res.error||!row){ lgErr.textContent='Codice errato. Riprova.'; return; }
-      auth={id:row.id,color:row.color}; save(AUTH,auth);
-      hideLogin(); boot();
+      if(res.error||!row){ lgErr.textContent=res.error&&String(res.error.message).includes('locked')?'Troppi tentativi. Riprova più tardi.':'Codice errato. Riprova.'; return; }
+      auth={id:row.talent_id,color:row.color,opsToken:row.session_token,opsExpiresAt:row.expires_at};
+      save(AUTH,auth); hideLogin(); boot();
     }, function(){ lgErr.textContent='Errore di connessione. Riprova.'; });
   }
   document.getElementById('lg-go').onclick=doLogin;
   lgCode.onkeydown=function(e){ if(e.key==='Enter') doLogin(); };
-  document.getElementById('logout').onclick=function(){ del(AUTH); auth=null; location.reload(); };
+  document.getElementById('logout').onclick=function(){
+    var token=auth&&auth.opsToken;
+    if(token&&ensureSb()){ ensureSb().rpc('ops_logout',{p_session_token:token}); }
+    del(AUTH); auth=null; location.reload();
+  };
 
   // ---------------- PLATFORM PICKER ----------------
   var pickEl=document.getElementById('pick');
@@ -207,24 +309,59 @@
   });
 
   function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function spinner(msg){ return '<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> '+esc(msg)+'</div>'; }
+
+  /*INTEL_START*/
+  // Pure, side-effect-free logic (identity resolution, admin gating, leaderboard, angle recommendation).
+  // Exposed on window.__intel so the Node test suite can exercise the exact shipped code.
+  var INTEL=(function(){
+    var DISPLAY={alberto:'Alberto',marco:'No Matrix',claudia:'Claudia',samantha:'Samantha',nabil:'Nabil',luca:'Luca Puleo',jj:'JJ'};
+    var ALIASES={'alberto':'alberto','claudia':'claudia','samantha':'samantha','nabil':'nabil','jj':'jj',
+      'marco':'marco','no matrix':'marco','nomatrix':'marco','nomatrix system':'marco',
+      'luca':'luca','luca puleo':'luca'};
+    // Operational affiliates only. jj is the administrator and is intentionally excluded.
+    var AFFILIATES=['alberto','marco','claudia','samantha','nabil','luca'];
+    var MIN_PUBLICATIONS=3, MIN_VIEWS=20000;
+    function norm(s){ return (s==null?'':String(s)).trim().toLowerCase(); }
+    function resolveTalent(name){ var k=norm(name); if(ALIASES[k]) return ALIASES[k]; return (AFFILIATES.indexOf(k)>=0||k==='jj')?k:k; }
+    function displayName(id){ return DISPLAY[resolveTalent(id)]||id; }
+    function isAdmin(id){ return resolveTalent(id)==='jj'; }
+    function isAffiliate(id){ return AFFILIATES.indexOf(resolveTalent(id))>=0; }
+    function leaderboard(rows){
+      return (rows||[]).map(function(r){ return {id:resolveTalent(r.talent_id!=null?r.talent_id:r.id),ftd:Number(r.ftd||0),views:Number(r.views||0)}; })
+        .filter(function(r){ return r.id!=='jj' && AFFILIATES.indexOf(r.id)>=0; })
+        .sort(function(a,b){ return (b.ftd-a.ftd) || (b.views-a.views); });
+    }
+    // Never a "winner" on asset volume alone: a push requires publications + views + engagement + FTD evidence.
+    function angleRecommendation(a){
+      a=a||{};
+      var pubs=Number(a.publications||0), views=Number(a.views||0), ftd=Number(a.ftd||0), ei=Number(a.engagement_index||0);
+      if(pubs<MIN_PUBLICATIONS || views<MIN_VIEWS){
+        return {label:'dati insufficienti',code:'insufficient',tone:'muted',
+          reason:pubs+' pubbl. \u00b7 '+views.toLocaleString('it-IT')+' view (soglia '+MIN_PUBLICATIONS+' pubbl. / '+MIN_VIEWS.toLocaleString('it-IT')+' view)'};
+      }
+      if(ei>=55 && ftd>0) return {label:'spingi',code:'push',tone:'good',reason:'EI '+ei+' \u00b7 '+ftd+' FTD su '+pubs+' pubbl.'};
+      if(ei>=35) return {label:'varia',code:'vary',tone:'warn',reason:'EI '+ei+' \u00b7 segnale medio, testa nuove varianti'};
+      return {label:'sospendi',code:'stop',tone:'bad',reason:'EI '+ei+' \u00b7 '+ftd+' FTD, sotto soglia'};
+    }
+    return {DISPLAY:DISPLAY,ALIASES:ALIASES,AFFILIATES:AFFILIATES,MIN_PUBLICATIONS:MIN_PUBLICATIONS,MIN_VIEWS:MIN_VIEWS,
+      resolveTalent:resolveTalent,displayName:displayName,isAdmin:isAdmin,isAffiliate:isAffiliate,
+      leaderboard:leaderboard,angleRecommendation:angleRecommendation};
+  })();
+  if(typeof window!=='undefined'){ window.__intel=INTEL; }
+  /*INTEL_END*/
 
   // ---------------- ADS ----------------
   function loadAds(){
-    var s=ensureSb();
     content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Carico le ads\u2026</div>';
-    s.from('aff_ads').select('*').eq('talent_id',auth.id).eq('status','pending')
-     .order('batch',{ascending:true}).order('id',{ascending:true})
-     .then(function(res){
-       if(res.error){ content.innerHTML='<div class="empty">Errore nel caricamento. Riprova.</div>'; return; }
-       renderAds(res.data||[]);
-     });
+    loadLegacySnapshot().then(function(data){ renderAds(data.ads||[]); })
+      .catch(function(){ content.innerHTML='<div class="empty">Sessione scaduta o modulo non disponibile. Esci e accedi di nuovo.</div>'; });
   }
   function renderAds(ads){
-    var head='<div class="bar"><div><b>'+ads.length+'</b> ads pronte <span class="muted">— spunta quelle fatte: finiscono in Metriche</span></div>'+
-      '<button class="btn primary" id="gen20">+ Genera altre 20</button></div>';
+    var head='<div class="bar"><div><b>'+ads.length+'</b> ads pronte <span class="muted">— consultazione sicura; assegnazione e generazione passano dal team operativo</span></div></div>';
     if(!ads.length){
-      content.innerHTML=head+'<div class="empty">Nessuna ad in coda.<br>Premi <b>Genera altre 20</b> per crearne di nuove.</div>';
-      wireGen(); return;
+      content.innerHTML=head+'<div class="empty">Nessuna ad in coda.</div>';
+      return;
     }
     var cards=ads.map(function(a){
       var cl = a.compliance==='pulito' ? 'clean' : 'orig';
@@ -236,48 +373,9 @@
         (a.cta?'<div class="cta">'+esc(a.cta)+'</div>':'')+
         (a.fonte_a_schermo?'<div class="fonte">Fonte a schermo: '+esc(a.fonte_a_schermo)+'</div>':'')+
         (a.ambiente?'<div class="amb">'+esc(a.ambiente)+' \u00b7 '+esc(a.lingua).toUpperCase()+' \u00b7 batch '+a.batch+'</div>':'')+
-        '<div class="tick"><label class="check"><input type="checkbox" data-done="'+esc(a.id)+'"> fatta</label></div>'+
       '</div>';
     }).join('');
     content.innerHTML=head+'<div class="grid">'+cards+'</div>';
-    wireGen();
-    Array.prototype.forEach.call(content.querySelectorAll('input[data-done]'),function(cb){
-      cb.onchange=function(){ if(cb.checked) markDone(ads, cb.getAttribute('data-done'), cb); };
-    });
-  }
-  function markDone(ads, id, cb){
-    var a=ads.filter(function(x){return x.id===id;})[0]; if(!a) return;
-    cb.disabled=true;
-    askPlatform(function(pfs){
-      if(!pfs){ cb.disabled=false; cb.checked=false; return; }
-      var card=content.querySelector('.card[data-id="'+CSS.escape(id)+'"]');
-      if(card){ card.style.opacity=.4; }
-      var s=ensureSb();
-      var rows=pfs.map(function(pf){ return {item_id:a.id,platform:pf,talent_id:a.talent_id,item_type:'ads',title:a.angolo,hook:a.hook,lingua:a.lingua}; });
-      s.from('aff_metrics').upsert(rows,{onConflict:'item_id,platform'}).then(function(r1){
-        if(r1.error){ cb.disabled=false; if(card)card.style.opacity=1; cb.checked=false; alert('Errore, riprova.'); return; }
-        s.from('aff_ads').delete().eq('id',a.id).then(function(){
-          if(card){ card.style.transition='opacity .3s'; card.style.opacity=0; setTimeout(function(){ card.remove(); },300); }
-        });
-      });
-    });
-  }
-  function wireGen(){
-    var g=document.getElementById('gen20'); if(!g) return;
-    g.onclick=function(){
-      if(!confirm('Generare 20 nuove ads per '+NAMES[auth.id]+'? Restano nella tua voce e compliance.')) return;
-      g.disabled=true; g.innerHTML='<span class="spin"></span> Genero\u2026';
-      var s=ensureSb();
-      s.functions.invoke('generate-ads',{body:{talent_id:auth.id}}).then(function(res){
-        g.disabled=false; g.textContent='+ Genera altre 20';
-        if(res.error || (res.data&&res.data.error)){
-          alert('Generazione non riuscita.\n'+((res.data&&res.data.error)||res.error&&res.error.message||'')+
-                '\n\nControlla che la chiave ANTHROPIC_API_KEY sia impostata nei secrets di Supabase.');
-          return;
-        }
-        loadAds();
-      }, function(e){ g.disabled=false; g.textContent='+ Genera altre 20'; alert('Errore di rete.'); });
-    };
   }
 
   // ---------------- REELS ORGANICI ----------------
@@ -287,8 +385,8 @@
     var pj = reelsData ? Promise.resolve(reelsData)
       : fetch('reels_organici.json').then(function(r){return r.json();}).then(function(j){ reelsData=(j.reels||[]); return reelsData; });
     pj.then(function(){
-      s.from('aff_metrics').select('item_id').eq('talent_id',auth.id).eq('item_type','reel').then(function(res){
-        var done={}; (res.data||[]).forEach(function(x){ done[x.item_id]=1; });
+      loadLegacySnapshot().then(function(data){
+        var done={}; (data.metrics||[]).filter(function(x){return x.item_type==='reel';}).forEach(function(x){ done[x.item_id]=1; });
         renderReels(done);
       });
     }).catch(function(){ content.innerHTML='<div class="empty">reels_organici.json non trovato.</div>'; });
@@ -304,28 +402,10 @@
         (r.script_parlato?'<div class="body">'+esc(r.script_parlato)+'</div>':'<div class="body">'+esc(r.caption||'')+'</div>')+
         (r.cta?'<div class="cta">'+esc(r.cta)+'</div>':'')+
         (r.regia?'<div class="amb">'+esc(r.regia)+'</div>':'')+
-        '<div class="tick"><label class="check"><input type="checkbox" data-rdone="'+esc(r.id)+'"'+(isDone?' checked disabled':'')+'> '+(isDone?'in metriche':'fatto')+'</label></div>'+
+        '<div class="tick"><span class="muted">'+(isDone?'in metriche':'da pubblicare')+'</span></div>'+
       '</div>';
     }).join('');
-    content.innerHTML='<div class="bar"><div class="muted"><b>'+mine.length+'</b> reel organici nella tua voce \u00b7 spunta <b>fatto</b> quando pubblichi: finisce in Metriche</div></div><div class="grid">'+cards+'</div>';
-    Array.prototype.forEach.call(content.querySelectorAll('input[data-rdone]'),function(cb){
-      cb.onchange=function(){ if(cb.checked) reelDone(mine, cb.getAttribute('data-rdone'), cb); };
-    });
-  }
-  function reelDone(mine, id, cb){
-    var r=mine.filter(function(x){return x.id===id;})[0]; if(!r) return;
-    cb.disabled=true;
-    askPlatform(function(pfs){
-      if(!pfs){ cb.disabled=false; cb.checked=false; return; }
-      var card=content.querySelector('.card[data-rid="'+CSS.escape(id)+'"]');
-      var s=ensureSb();
-      var rows=pfs.map(function(pf){ return {item_id:r.id,platform:pf,talent_id:auth.id,item_type:'reel',title:r.format,hook:(r.testo_schermo||r.caption||'')}; });
-      s.from('aff_metrics').upsert(rows,{onConflict:'item_id,platform'}).then(function(res){
-        if(res.error){ cb.disabled=false; cb.checked=false; alert('Errore, riprova.'); return; }
-        if(card){ card.style.opacity=.45; }
-        var lab=cb.parentNode; if(lab){ lab.childNodes[lab.childNodes.length-1].nodeValue=' in metriche'; }
-      });
-    });
+    content.innerHTML='<div class="bar"><div class="muted"><b>'+mine.length+'</b> reel organici nella tua voce \u00b7 stato aggiornato dal team operativo</div></div><div class="grid">'+cards+'</div>';
   }
 
   // ---------------- METRICHE ----------------
@@ -339,24 +419,20 @@
     return Math.round((sv + 2*sh + 3*fo + 4*ct)/v*1000*10)/10;
   }
   function loadMetriche(){
-    var s=ensureSb();
     content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Carico le metriche\u2026</div>';
-    s.from('aff_metrics').select('*').eq('talent_id',auth.id).order('done_at',{ascending:false})
-     .then(function(res){
-       if(res.error){ content.innerHTML='<div class="empty">Errore nel caricamento.</div>'; return; }
-       renderMetriche(res.data||[]);
-     });
+    loadLegacySnapshot().then(function(data){ renderMetriche(data.metrics||[]); })
+      .catch(function(){ content.innerHTML='<div class="empty">Sessione scaduta o modulo non disponibile.</div>'; });
   }
-  function fieldBlock(title,win,m,locked){
+  function fieldBlock(title,win,m,locked,readOnly){
     var p=win==='7'?'v7_':'v24_';
     function f(key,label,step){
       var val=m[p+key];
-      return '<div class="field"><label>'+label+'</label><input type="number" step="'+(step||'1')+'" data-mf="'+key+'" value="'+(val==null?'':val)+'" placeholder="0"'+(locked?' disabled':'')+'></div>';
+      return '<div class="field"><label>'+label+'</label><input type="number" step="'+(step||'1')+'" data-mf="'+key+'" value="'+(val==null?'':val)+'" placeholder="0"'+(locked||readOnly?' disabled':'')+'></div>';
     }
     var savedAt = win==='7'? m.v7_at : m.v24_at;
     var stamp = savedAt ? ' \u00b7 salvato \u2713' : '';
     return '<div class="block'+(locked?' locked':'')+'" data-win="'+win+'">'+
-      '<h4>'+title+stamp+(locked?' \u2014 completa prima le 24h':'')+'</h4>'+
+      '<h4>'+title+stamp+(readOnly?' \u00b7 sola lettura':(locked?' \u2014 completa prima le 24h':''))+'</h4>'+
       '<div class="fields">'+
         f('views','Views')+
         f('retention','Retention %','0.1')+
@@ -365,7 +441,7 @@
         f('follows','Nuovi follow')+
         f('cta','Click CTA / bio')+
       '</div>'+
-      (locked?'':'<button class="btn primary saveblock" data-win="'+win+'" style="margin-top:10px;padding:8px 14px;font-size:13px">Salva '+(win==='7'?'7 giorni':'24h')+'</button>')+
+      (locked||readOnly?'':'<button class="btn primary saveblock" data-win="'+win+'" style="margin-top:10px;padding:8px 14px;font-size:13px">Salva '+(win==='7'?'7 giorni':'24h')+'</button>')+
     '</div>';
   }
   function renderMetriche(rows){
@@ -373,8 +449,8 @@
     var cards=rows.map(function(m){
       var pf = m.platform==='ig'?'ig':'tt';
       var locked = !m.v24_at;
-      var f24 = fieldBlock('24h \u2014 primo snapshot','24',m,false);
-      var f7 = fieldBlock('7 giorni \u2014 snapshot finale','7',m,locked);
+      var f24 = fieldBlock('24h \u2014 primo snapshot','24',m,false,TALENT_LIVE_READ_ONLY);
+      var f7 = fieldBlock('7 giorni \u2014 snapshot finale','7',m,locked,TALENT_LIVE_READ_ONLY);
       var i24=engIndex(m,'24'), i7=engIndex(m,'7');
       var real = (i7!=null?i7:i24);
       var cmp='<div class="msub" style="margin-top:10px">Viral: '+
@@ -386,35 +462,11 @@
           '<div style="text-align:right"><span class="pill '+pf+'">'+(PLAT[m.platform]||m.platform)+'</span> '+
           '<span class="pill">'+(m.item_type==='reel'?'ORGANICO':'ADS')+'</span></div></div>'+
         f24 + f7 +
-        '<div style="margin-top:10px"><input type="text" data-f="note" value="'+esc(m.note||'')+'" placeholder="note (facoltative)" style="width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;padding:8px"></div>'+
+        '<div style="margin-top:10px"><input type="text" data-f="note" value="'+esc(m.note||'')+'" placeholder="note (facoltative)" disabled style="width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;padding:8px"></div>'+
         cmp +
       '</div>';
     }).join('');
-    content.innerHTML='<div class="bar"><div class="muted">Compila i numeri dopo <b>24h</b>, poi torna dopo <b>7 giorni</b>. Il blocco 7g si sblocca quando salvi le 24h.</div></div>'+cards;
-    Array.prototype.forEach.call(content.querySelectorAll('.mcard'),function(c){
-      Array.prototype.forEach.call(c.querySelectorAll('.saveblock'),function(b){
-        b.onclick=function(){ saveBlock(c,b.getAttribute('data-win')); };
-      });
-    });
-  }
-  function saveBlock(card,win){
-    var id=card.getAttribute('data-id'), pf=card.getAttribute('data-pf');
-    var block=card.querySelector('.block[data-win="'+win+'"]');
-    var p=win==='7'?'v7_':'v24_';
-    var num=function(v){ return v===''?null:Number(v); };
-    var patch={};
-    Array.prototype.forEach.call(block.querySelectorAll('[data-mf]'),function(el){
-      patch[p+el.getAttribute('data-mf')]=num(el.value);
-    });
-    var noteEl=card.querySelector('[data-f="note"]'); if(noteEl) patch.note=noteEl.value;
-    patch[p+'at']=new Date().toISOString();
-    var btn=block.querySelector('.saveblock'); btn.textContent='\u2026';
-    ensureSb().from('aff_metrics').update(patch).eq('item_id',id).eq('platform',pf).then(function(res){
-      if(res.error){ btn.textContent='Errore'; setTimeout(function(){btn.textContent='Salva '+(win==='7'?'7 giorni':'24h');},1500); return; }
-      btn.textContent='Salvato \u2713';
-      if(win==='24'){ setTimeout(loadMetriche,700); }
-      else setTimeout(function(){btn.textContent='Salva 7 giorni';},1500);
-    });
+    content.innerHTML='<div class="bar"><div class="muted">Metriche in sola lettura durante il pilot. Gli aggiornamenti arrivano dai flussi operativi verificati.</div></div>'+cards;
   }
 
   // ---------------- ANALISI ----------------
@@ -423,18 +475,11 @@
   function fmtInt(n){ return Math.round(n||0).toLocaleString('it-IT'); }
   function fmtEur(n){ return '\u20ac'+Math.round(n||0).toLocaleString('it-IT'); }
   function loadAnalisi(){
-    var s=ensureSb();
     destroyCharts();
     content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Carico l\u2019analisi\u2026</div>';
-    var since=new Date(Date.now()-30*864e5).toISOString().slice(0,10);
-    Promise.all([
-      s.from('soc_ads_daily').select('*').eq('talent_id',auth.id).gte('day',since).order('day',{ascending:true}),
-      s.from('soc_daily').select('*').eq('talent_id',auth.id).gte('day',since).order('day',{ascending:true}),
-      s.from('soc_posts').select('*').eq('talent_id',auth.id).order('views',{ascending:false}).limit(5),
-      s.from('soc_accounts').select('token_status').eq('talent_id',auth.id)
-    ]).then(function(r){
-      renderAnalisi((r[0].data||[]),(r[1].data||[]),(r[2].data||[]),(r[3].data||[]));
-    }).catch(function(){ content.innerHTML='<div class="empty">Errore nel caricamento dell\u2019analisi.</div>'; });
+    loadLegacySnapshot().then(function(data){
+      renderAnalisi(data.social_ads_daily||[],data.social_daily||[],data.social_posts||[],data.social_accounts||[]);
+    }).catch(function(){ content.innerHTML='<div class="empty">Sessione scaduta o modulo non disponibile.</div>'; });
   }
   function renderAnalisi(ads,daily,posts,accts){
     if(!(ads.length||daily.length||posts.length)){
@@ -503,6 +548,481 @@
     }
   }
 
+  // ---------------- OPERAZIONI ----------------
+  function opsFixtureEnabled(){
+    return /(?:^|[?&])ops_fixture=1(?:&|$)/.test(location.search) && (location.hostname==='localhost' || location.hostname==='127.0.0.1');
+  }
+  function opsDate(v){
+    if(!v) return 'senza scadenza';
+    try{return new Intl.DateTimeFormat('it-IT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(v));}
+    catch(e){return v;}
+  }
+  function opsStatus(s){ return esc((s||'da fare').replace(/_/g,' ')); }
+  function opsSafeSlackUrl(v){
+    try{var u=new URL(v); return u.protocol==='https:' && /(^|\.)slack\.com$/i.test(u.hostname) ? u.href : '';}
+    catch(e){return '';}
+  }
+  function opsSafeDriveUrl(v){
+    try{var u=new URL(v); return u.protocol==='https:' && /(^|\.)(drive|docs)\.google\.com$/i.test(u.hostname) ? u.href : '';}
+    catch(e){return '';}
+  }
+  function loadOperazioni(){
+    destroyCharts();
+    content.innerHTML='<div class="empty"><span class="spin" style="border-top-color:#8b95ab"></span> Preparo la tua sala operativa...</div>';
+    if(opsFixtureEnabled()){
+      fetch('fixtures/operations.sample.json').then(function(r){if(!r.ok)throw new Error('fixture');return r.json();})
+        .then(renderOperazioni).catch(function(){renderOpsError('Fixture operativa non disponibile.');});
+      return;
+    }
+    if(!auth.opsToken){
+      content.innerHTML='<div class="empty"><b>Sessione operativa da attivare</b><br>Esci e accedi di nuovo con il tuo codice personale. Ads e metriche continuano a funzionare normalmente.</div>';
+      return;
+    }
+    ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error||!res.data){
+        if(/expired|invalid/i.test((res.error&&res.error.message)||'')){ delete auth.opsToken; save(AUTH,auth); }
+        renderOpsError('Non riesco a caricare le operazioni. Riprova tra poco.'); return;
+      }
+      renderOperazioni(res.data);
+    },function(){renderOpsError('Connessione operativa non disponibile.');});
+  }
+  function renderOpsError(message){
+    content.innerHTML='<div class="empty">'+esc(message)+'<br><button class="btn" id="ops-retry" style="margin-top:12px">Riprova</button></div>';
+    var b=document.getElementById('ops-retry'); if(b)b.onclick=loadOperazioni;
+  }
+  function renderOperazioni(data){
+    if(!data || data.talent_id!==auth.id){ renderOpsError('Risposta operativa non valida.'); return; }
+    var tasks=data.tasks||[], decisions=data.decisions||[], items=data.content||[], hooks=data.hooks||[], assets=data.assets||[], quarantine=Number(data.quarantine_count||0);
+    var blockers=tasks.filter(function(t){return t.status==='blocked'||(t.brief&&t.brief.blocker);});
+    var due=tasks.filter(function(t){return t.status!=='blocked';});
+    function taskRows(rows){
+      if(!rows.length)return '<div class="ops-empty">Nessun elemento in coda.</div>';
+      return rows.map(function(t){
+        var p=Number(t.priority); var blocker=t.status==='blocked'||(t.brief&&t.brief.blocker);
+        var detail=blocker?(t.brief&&t.brief.blocker):(t.brief&&t.brief.next_action);
+        return '<div class="ops-row"><span class="ops-priority '+(blocker?'blocked':'p'+p)+'">'+(blocker?'blocco':'P'+p)+'</span>'+
+          '<div class="ops-main"><b>'+esc(t.title)+'</b><small>'+esc(detail||t.task_type||'Task operativo')+' | '+esc(opsDate(t.due_at))+'</small></div>'+
+          '<span class="ops-status '+esc(t.status)+'">'+opsStatus(t.status)+'</span></div>';
+      }).join('');
+    }
+    function contentRows(rows){
+      if(!rows.length)return '<div class="ops-empty">Nessun contenuto attivo.</div>';
+      return rows.map(function(c){
+        return '<div class="ops-row"><span class="ops-priority">'+esc((c.content_type||'altro').slice(0,8))+'</span>'+
+          '<div class="ops-main"><b>'+esc(c.title)+'</b><small>'+esc(c.content_code||'codice in assegnazione')+(c.angle?' | '+esc(c.angle):'')+'</small></div>'+
+          '<span class="ops-status '+esc(c.lifecycle_status)+'">'+opsStatus(c.lifecycle_status)+'</span></div>';
+      }).join('');
+    }
+    function decisionRows(rows){
+      if(!rows.length)return '<div class="ops-empty">Nessuna decisione richiesta.</div>';
+      return rows.map(function(d){
+        return '<div class="ops-row"><span class="ops-priority '+(d.risk_level==='high'||d.risk_level==='critical'?'blocked':'p1')+'">'+esc(d.risk_level||'review')+'</span>'+
+          '<div class="ops-main"><b>'+esc(d.title)+'</b><small>'+esc(d.rationale||'Richiede conferma umana')+'</small></div>'+
+          '<span class="ops-status '+esc(d.status)+'">'+(d.approval_required?'approvazione':'verifica')+'</span></div>';
+      }).join('');
+    }
+    function hookRows(rows){
+      if(!rows.length)return '<div class="ops-empty">I pattern appariranno quando superano la soglia minima di evidenza.</div>';
+      return rows.map(function(h){
+        return '<div class="ops-row"><span class="ops-priority">'+esc(h.platform||'multi')+'</span><div class="ops-main"><b>'+esc(h.hook_text)+'</b><small>'+Number(h.publications||0)+' pubblicazioni | '+fmtInt(h.views)+' view | '+Number(h.ftd||0)+' FTD</small></div><span class="ops-status approved">EI '+Number(h.engagement_index||0).toLocaleString('it-IT')+'</span></div>';
+      }).join('');
+    }
+    function assetRows(rows){
+      if(!rows.length)return '<div class="ops-empty">Nessun asset collegato.</div>';
+      return rows.map(function(a){
+        var url=opsSafeDriveUrl(a.url); var title=url?'<a target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">'+esc(a.file_name)+'</a>':esc(a.file_name);
+        return '<div class="ops-row"><span class="ops-priority">'+esc(a.asset_type||'file')+'</span><div class="ops-main"><b>'+title+'</b><small>'+esc(a.content_code||a.content_title||'contenuto')+' | versione '+Number(a.version||1)+'</small></div><span class="ops-status '+esc(a.status)+'">'+opsStatus(a.status)+'</span></div>';
+      }).join('');
+    }
+    var links=(data.slack_links||[]).map(function(l){var url=opsSafeSlackUrl(l.url);return url?'<a class="btn" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">'+esc(l.label||l.purpose||'Apri Slack')+'</a>':'';}).join('');
+    var alert=quarantine?'<div class="ops-alert"><b>'+quarantine+' anomal'+(quarantine===1?'ia':'ie')+' dati</b> in quarantena. I numeri coinvolti non vengono usati dagli agenti finché non sono verificati.</div>':'';
+    content.innerHTML='<div class="ops-head"><div><h2 class="ops-title">Sala operativa di '+esc(NAMES[auth.id]||auth.id)+'</h2><div class="muted">Priorità, blocchi, contenuti e decisioni in un solo posto.</div></div><div class="ops-sync">Aggiornato '+esc(opsDate(data.generated_at))+'</div></div>'+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+due.length+'</strong><span>azioni aperte</span></div><div class="ops-kpi"><strong>'+blockers.length+'</strong><span>blocchi</span></div><div class="ops-kpi"><strong>'+items.length+'</strong><span>contenuti in corso</span></div><div class="ops-kpi"><strong>'+decisions.length+'</strong><span>decisioni richieste</span></div></div>'+
+      alert+'<div class="ops-layout"><div><section class="ops-section"><div class="ops-section-head"><h3>Prossime azioni</h3><span class="ops-count">'+due.length+'</span></div>'+taskRows(due)+'</section>'+
+      '<section class="ops-section"><div class="ops-section-head"><h3>Produzione contenuti</h3><span class="ops-count">'+items.length+'</span></div>'+contentRows(items)+'</section>'+
+      '<section class="ops-section"><div class="ops-section-head"><h3>Hook Intelligence</h3><span class="ops-count">'+hooks.length+'</span></div>'+hookRows(hooks)+'</section></div>'+
+      '<aside><section class="ops-section"><div class="ops-section-head"><h3>Blocchi</h3><span class="ops-count">'+blockers.length+'</span></div>'+taskRows(blockers)+'</section>'+
+      '<section class="ops-section"><div class="ops-section-head"><h3>Decisioni</h3><span class="ops-count">'+decisions.length+'</span></div>'+decisionRows(decisions)+'</section>'+
+      '<section class="ops-section"><div class="ops-section-head"><h3>Asset Drive</h3><span class="ops-count">'+assets.length+'</span></div>'+assetRows(assets)+'</section>'+
+      (links?'<section class="ops-section"><div class="ops-section-head"><h3>Stanze Slack</h3></div><div class="ops-links">'+links+'</div></section>':'')+'</aside></div>';
+  }
+
+  // ---------------- COMMAND CENTER (admin) ----------------
+  function ccSecs(s){
+    s=Number(s); if(!isFinite(s)) return '\u2014';
+    if(s<=0) return 'scaduto';
+    if(s<3600) return Math.round(s/60)+'m';
+    var h=Math.floor(s/3600), m=Math.round((s%3600)/60); return h+'h '+m+'m';
+  }
+  function ccEur(n){ return '\u20ac'+(Math.round((Number(n)||0)*100)/100).toLocaleString('it-IT'); }
+  function ccName(id){ return '<span class="cc-tname">'+esc(INTEL.displayName(id))+'</span>'; }
+  function loadCommandCenter(){
+    destroyCharts();
+    if(!INTEL.isAdmin(auth.id)){ content.innerHTML='<div class="empty">Sezione riservata all\u2019amministratore.</div>'; return; }
+    content.innerHTML=spinner('Preparo il Command Center\u2026');
+    if(opsFixtureEnabled()){
+      fetch('fixtures/command-center.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+        .then(function(j){ renderCommandCenter(j.command_center||j); })
+        .catch(function(){ renderCCError('Fixture command center non disponibile.',loadCommandCenter); });
+      return;
+    }
+    if(!auth.opsToken){ content.innerHTML='<div class="empty"><b>Sessione operativa da attivare</b><br>Esci e accedi di nuovo con il tuo codice.</div>'; return; }
+    ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error||!res.data){ renderCCError('Non riesco a caricare il Command Center. Riprova tra poco.',loadCommandCenter); return; }
+      var cc=res.data.command_center;
+      if(!cc){ renderCCPending(); return; }
+      ensureSb().rpc('ops_operational_health_snapshot',{p_session_token:auth.opsToken}).then(function(healthRes){
+        cc.operational_health=healthRes&&!healthRes.error?healthRes.data:null;
+        renderCommandCenter(cc);
+      },function(){ renderCommandCenter(cc); });
+    },function(){ renderCCError('Connessione operativa non disponibile.',loadCommandCenter); });
+  }
+  function renderCCError(message,retry){
+    content.innerHTML='<div class="empty">'+esc(message)+'<br><button class="btn" id="cc-retry" style="margin-top:12px">Riprova</button></div>';
+    var b=document.getElementById('cc-retry'); if(b)b.onclick=retry||loadCommandCenter;
+  }
+  function renderCCPending(){
+    content.innerHTML='<div class="empty"><b>Command Center in attivazione</b><br>'+
+      'La sorgente operativa non espone ancora i dati di supervisione (approvazioni, eccezioni, salute agenti).<br>'+
+      'Appena il backend li pubblica nello snapshot, questa sezione si popola da sola.<br>'+
+      '<button class="btn" id="cc-retry" style="margin-top:12px">Riprova</button></div>';
+    var b=document.getElementById('cc-retry'); if(b)b.onclick=loadCommandCenter;
+  }
+  function renderCommandCenter(cc){
+    cc=cc||{};
+    var approvals=cc.approvals||[], exceptions=cc.exceptions||[], health=cc.agent_health||[],
+        overdue=cc.overdue_tasks||[], blockers=cc.blockers||[], dls=cc.dead_letters||[],
+        receipts=cc.receipts||[], costs=cc.agent_costs||{}, operational=cc.operational_health||{},
+        sources=operational.sources||[], destinations=operational.destinations||[], waRecent=operational.whatsapp_recent||[],
+        outbox=operational.outbox||{};
+    var p0=exceptions.filter(function(e){return Number(e.priority)===0;}).length;
+    function apprRows(){
+      if(!approvals.length) return '<div class="ops-empty">Nessuna approvazione in attesa.</div>';
+      return approvals.map(function(a){
+        var u=a.urgency||a.risk_level||'normal';
+        return '<div class="ops-row"><span class="cc-badge '+esc(u)+'">'+esc(u)+'</span>'+
+          '<div class="ops-main"><b>'+esc(a.title)+'</b><small>'+ccName(a.talent_id)+' \u00b7 '+esc(a.rationale||'Richiede conferma umana')+'</small></div>'+
+          '<span class="ops-status">'+ccSecs(a.seconds_remaining)+'</span></div>';
+      }).join('');
+    }
+    function excRows(){
+      if(!exceptions.length) return '<div class="ops-empty">Nessuna eccezione P0/P1.</div>';
+      return exceptions.map(function(e){
+        var p=Number(e.priority); var d=e.details||{};
+        var meta=[]; if(d.status)meta.push(esc(d.status)); if(d.attempt_count!=null)meta.push('tent. '+d.attempt_count); if(d.last_error)meta.push(esc(d.last_error)); if(d.owner_agent)meta.push(esc(d.owner_agent));
+        return '<div class="ops-row"><span class="ops-priority '+(p===0?'p0':'p1')+'">P'+p+'</span>'+
+          '<div class="ops-main"><b>'+esc(e.summary)+'</b><small>'+ccName(e.talent_id)+' \u00b7 '+esc(e.exception_type)+' \u00b7 '+meta.join(' \u00b7 ')+'</small></div>'+
+          '<span class="ops-status">'+esc(opsDate(e.created_at))+'</span></div>';
+      }).join('');
+    }
+    function healthTable(){
+      if(!health.length) return '<div class="ops-empty">Nessun agente attivo.</div>';
+      return '<div class="cc-tablewrap"><table class="cc-table"><thead><tr><th>Agente</th><th class="num">Aperti</th><th class="num">Falliti</th><th class="num">Overdue</th><th class="num">Media</th><th>Ultima attivit\u00e0</th></tr></thead><tbody>'+
+        health.map(function(h){
+          var bad=Number(h.failed_jobs)>0||Number(h.overdue_jobs)>0;
+          return '<tr><td data-l="Agente"><b>'+esc(h.owner_agent)+'</b></td>'+
+            '<td class="num" data-l="Aperti">'+Number(h.open_jobs||0)+'</td>'+
+            '<td class="num" data-l="Falliti"'+(bad?' style="color:var(--red)"':'')+'>'+Number(h.failed_jobs||0)+'</td>'+
+            '<td class="num" data-l="Overdue"'+(Number(h.overdue_jobs)>0?' style="color:var(--gold)"':'')+'>'+Number(h.overdue_jobs||0)+'</td>'+
+            '<td class="num" data-l="Media">'+Number(h.avg_completion_seconds||0)+'s</td>'+
+            '<td data-l="Ultima">'+esc(opsDate(h.last_activity_at))+'</td></tr>';
+        }).join('')+'</tbody></table></div>';
+    }
+    function taskRowsCC(rows,blk){
+      if(!rows.length) return '<div class="ops-empty">'+(blk?'Nessun blocco.':'Nessun task in ritardo.')+'</div>';
+      return rows.map(function(t){
+        var detail=blk?((t.brief&&t.brief.blocker)||'Bloccato'):(t.task_type||'Task');
+        return '<div class="ops-row"><span class="ops-priority '+(blk?'blocked':'p'+Number(t.priority))+'">'+(blk?'blocco':'P'+Number(t.priority))+'</span>'+
+          '<div class="ops-main"><b>'+esc(t.title)+'</b><small>'+ccName(t.talent_id)+' \u00b7 '+esc(detail)+' \u00b7 '+esc(opsDate(t.due_at))+'</small></div>'+
+          '<span class="ops-status '+esc(t.status)+'">'+opsStatus(t.status)+'</span></div>';
+      }).join('');
+    }
+    function dlRows(){
+      if(!dls.length) return '<div class="ops-empty">Nessun messaggio in dead letter.</div>';
+      return dls.map(function(d){
+        var steps=(d.replay||[]).map(function(s){
+          var fail=/fail|dead|error|429|5\d\d/i.test(String(s.result||''));
+          return '<div class="step"><span>#'+esc(String(s.attempt))+' \u00b7 '+esc(opsDate(s.at))+'</span><span'+(fail?' class="r-fail"':'')+'>'+esc(s.result)+'</span></div>';
+        }).join('');
+        return '<details class="cc-details"><summary><span class="cc-badge critical">dead</span> '+ccName(d.talent_id)+' \u00b7 '+esc(d.connector)+' '+esc(d.operation)+' \u00b7 '+Number(d.attempt_count||0)+' tent. \u00b7 '+esc(d.last_error||'')+'</summary>'+
+          '<div class="cc-replay">'+(steps||'<div class="step"><span>Nessun replay registrato</span></div>')+'</div></details>';
+      }).join('');
+    }
+    function receiptRows(){
+      if(!receipts.length) return '<div class="ops-empty">Nessuna ricevuta recente.</div>';
+      return receipts.map(function(r){
+        var okc=r.outcome==='approved'?'ok':(r.outcome==='rejected'?'critical':'normal');
+        return '<div class="ops-row"><span class="cc-badge '+okc+'">'+esc(r.outcome)+'</span>'+
+          '<div class="ops-main"><b>'+esc(r.action)+'</b><small>'+ccName(r.talent_id)+' \u00b7 da '+esc(INTEL.displayName(r.actor))+(r.notes?' \u00b7 '+esc(r.notes):'')+'</small></div>'+
+          '<span class="ops-status">'+esc(opsDate(r.at))+'</span></div>';
+      }).join('');
+    }
+    function costsBlock(){
+      var by=costs.by_agent||[];
+      var kpi='<div class="ops-kpis"><div class="ops-kpi"><strong>'+ccEur(costs.total_eur)+'</strong><span>costo '+(esc(costs.window||'24h'))+'</span></div>'+
+        '<div class="ops-kpi"><strong>'+Number((costs.total_input_tokens||0)+(costs.total_output_tokens||0)).toLocaleString('it-IT')+'</strong><span>token totali</span></div>'+
+        '<div class="ops-kpi"><strong>'+Number(costs.sla_target_seconds||0)+'s</strong><span>target SLA</span></div>'+
+        '<div class="ops-kpi"><strong'+(Number(costs.sla_breaches)>0?' style="color:var(--red)"':'')+'>'+Number(costs.sla_breaches||0)+'</strong><span>violazioni SLA</span></div></div>';
+      var table=by.length?'<div class="cc-tablewrap"><table class="cc-table"><thead><tr><th>Agente</th><th class="num">Costo</th><th class="num">Lat. media</th><th class="num">p95</th><th class="num">Run</th><th>SLA</th></tr></thead><tbody>'+
+        by.map(function(a){
+          return '<tr><td data-l="Agente"><b>'+esc(a.owner_agent)+'</b></td>'+
+            '<td class="num" data-l="Costo">'+ccEur(a.cost_eur)+'</td>'+
+            '<td class="num" data-l="Lat. media">'+Number(a.avg_latency_seconds||0)+'s</td>'+
+            '<td class="num" data-l="p95">'+Number(a.p95_latency_seconds||0)+'s</td>'+
+            '<td class="num" data-l="Run">'+Number(a.runs||0)+'</td>'+
+            '<td data-l="SLA"><span class="cc-badge '+(a.sla_ok?'ok':'critical')+'">'+(a.sla_ok?'ok':'breach')+'</span></td></tr>';
+        }).join('')+'</tbody></table></div>':'<div class="ops-empty">Nessun dato di costo.</div>';
+      return kpi+table;
+    }
+    function integrationsBlock(){
+      if(!sources.length&&!destinations.length) return '<div class="ops-empty">Stato integrazioni non ancora disponibile.</div>';
+      var sourceRows=sources.map(function(s){
+        var tone=s.freshness==='fresh'?'ok':(s.freshness==='stale'?'normal':'critical');
+        return '<div class="ops-row"><span class="cc-badge '+tone+'">'+esc(s.freshness||s.status)+'</span><div class="ops-main"><b>'+esc(s.display_name||s.source_type)+'</b><small>'+ccName(s.talent_id)+' · '+esc(s.source_type)+(s.blocker?' · '+esc(s.blocker):'')+'</small></div><span class="ops-status">'+esc(opsDate(s.last_seen_at))+'</span></div>';
+      }).join('');
+      var destinationRows=destinations.filter(function(d){return d.channel_type==='whatsapp';}).map(function(d){
+        var good=d.status==='active'&&d.verified;
+        return '<div class="ops-row"><span class="cc-badge '+(good?'ok':'critical')+'">'+(good?'verified':'blocked')+'</span><div class="ops-main"><b>'+esc(d.display_name)+'</b><small>'+esc(d.route_key||d.purpose||'destinazione')+' · admin '+esc(INTEL.displayName(d.accountable_admin))+'</small></div><span class="ops-status">'+esc(d.status)+'</span></div>';
+      }).join('');
+      return sourceRows+destinationRows;
+    }
+    function whatsappBlock(){
+      var counters='<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(outbox.awaiting_approval||0)+'</strong><span>da approvare</span></div><div class="ops-kpi"><strong>'+Number(outbox.approved||0)+'</strong><span>approvati</span></div><div class="ops-kpi"><strong>'+Number(outbox.queued||0)+'</strong><span>in consegna</span></div><div class="ops-kpi"><strong'+(Number(outbox.failed)>0?' style="color:var(--red)"':'')+'>'+Number(outbox.failed||0)+'</strong><span>falliti</span></div></div>';
+      if(!waRecent.length)return counters+'<div class="ops-empty">Nessuna consegna WhatsApp registrata.</div>';
+      return counters+waRecent.map(function(w){
+        var tone=w.status==='delivered'?'ok':(/failed|dead_letter/.test(w.status)?'critical':'normal');
+        return '<div class="ops-row"><span class="cc-badge '+tone+'">'+esc(w.status)+'</span><div class="ops-main"><b>'+esc(w.group_name||w.route_key)+'</b><small>'+ccName(w.talent_id)+' · tentativi '+Number(w.attempt_count||0)+(w.error_code?' · '+esc(w.error_code):'')+'</small></div><span class="ops-status">'+esc(opsDate(w.delivered_at||w.created_at))+'</span></div>';
+      }).join('');
+    }
+    var html='<div class="ops-head"><div><h2 class="ops-title">Command Center</h2><div class="muted">Supervisione operativa \u2014 sola lettura. Le azioni restano nel backend approvato.</div></div><div class="ops-sync">Aggiornato '+esc(opsDate(cc.generated_at||(cc.approvals&&'')))+'</div></div>'+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+approvals.length+'</strong><span>approvazioni in attesa</span></div>'+
+      '<div class="ops-kpi"><strong'+(p0>0?' style="color:var(--red)"':'')+'>'+p0+'</strong><span>eccezioni P0</span></div>'+
+      '<div class="ops-kpi"><strong'+(dls.length>0?' style="color:var(--red)"':'')+'>'+dls.length+'</strong><span>dead letter</span></div>'+
+      '<div class="ops-kpi"><strong'+(Number(costs.sla_breaches)>0?' style="color:var(--gold)"':'')+'>'+Number(costs.sla_breaches||0)+'</strong><span>violazioni SLA</span></div></div>'+
+      '<div class="ops-layout"><div>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Approval Inbox</h3><span class="ops-count">'+approvals.length+'</span></div>'+apprRows()+'<div class="cc-note">Approva o rifiuta dal backend operativo: qui vedi solo lo stato.</div></section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Eccezioni P0 / P1</h3><span class="ops-count">'+exceptions.length+'</span></div>'+excRows()+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Salute agenti</h3><span class="ops-count">'+health.length+'</span></div>'+healthTable()+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Integrazioni e fonti</h3><span class="ops-count">'+(sources.length+destinations.length)+'</span></div>'+integrationsBlock()+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Consegne WhatsApp</h3><span class="ops-count">'+waRecent.length+'</span></div>'+whatsappBlock()+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Dead letter &amp; replay</h3><span class="ops-count">'+dls.length+'</span></div>'+dlRows()+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Costi, latenza &amp; SLA agenti</h3></div><div style="padding:12px 14px">'+costsBlock()+'</div></section>'+
+      '</div><aside>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Task in ritardo</h3><span class="ops-count">'+overdue.length+'</span></div>'+taskRowsCC(overdue,false)+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Blocchi</h3><span class="ops-count">'+blockers.length+'</span></div>'+taskRowsCC(blockers,true)+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Action receipts</h3><span class="ops-count">'+receipts.length+'</span></div>'+receiptRows()+'</section>'+
+      '</aside></div>';
+    content.innerHTML=html;
+  }
+
+  // ---------------- CONTENT INTELLIGENCE ----------------
+  var INTEL_FILTERS_KEY='bullshub_intel_filters_v1', INTEL_SEL_KEY='bullshub_intel_sel_v1';
+  var intelFilters=load(INTEL_FILTERS_KEY,{ctype:'all',platform:'all'});
+  var _intelList=null;
+  function attachOrganicTracking(list,payload){
+    payload=payload||{};
+    var accounts=payload.accounts||[], performance=payload.performance||[], recommendations=payload.recommendations||[], quarantine=payload.quarantine||[];
+    return (list||[]).map(function(aff){
+      var id=INTEL.resolveTalent(aff.talent_id);
+      aff.organic_accounts=accounts.filter(function(x){return INTEL.resolveTalent(x.talent_id)===id;});
+      aff.organic_performance=performance.filter(function(x){return INTEL.resolveTalent(x.talent_id)===id;});
+      aff.organic_recommendations=recommendations.filter(function(x){return INTEL.resolveTalent(x.talent_id)===id;});
+      aff.organic_quarantine=quarantine.filter(function(x){return INTEL.resolveTalent(x.talent_id)===id;});
+      return aff;
+    });
+  }
+  function loadIntelligence(){
+    destroyCharts();
+    content.innerHTML=spinner('Carico la Content Intelligence\u2026');
+    function proceed(list){
+      if(!INTEL.isAdmin(auth.id)){
+        var mine=(list||[]).filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(auth.id);});
+        _intelList=mine;
+      } else { _intelList=list||[]; }
+      renderIntelligence();
+    }
+    if(opsFixtureEnabled()){
+      fetch('fixtures/content-intelligence.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+        .then(function(j){ proceed((j.content_intelligence&&j.content_intelligence.affiliates)||[]); })
+        .catch(function(){ renderCCError('Fixture intelligence non disponibile.',loadIntelligence); });
+      return;
+    }
+    if(!auth.opsToken){ content.innerHTML='<div class="empty"><b>Sessione operativa da attivare</b><br>Esci e accedi di nuovo con il tuo codice.</div>'; return; }
+    ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error||!res.data){ renderCCError('Non riesco a caricare la Content Intelligence.',loadIntelligence); return; }
+      var ci=res.data.content_intelligence;
+      if(ci&&ci.affiliates){
+        ensureSb().rpc('ops_organic_tracking_snapshot',{p_session_token:auth.opsToken}).then(function(org){
+          proceed(org.error?ci.affiliates:attachOrganicTracking(ci.affiliates,org.data));
+        },function(){proceed(ci.affiliates);});
+        return;
+      }
+      // Graceful fallback: derive a minimal single-affiliate view from the talent snapshot itself.
+      proceed([affiliateFromSnapshot(res.data)]);
+    },function(){ renderCCError('Connessione operativa non disponibile.',loadIntelligence); });
+  }
+  function affiliateFromSnapshot(data){
+    var id=INTEL.resolveTalent(data.talent_id);
+    var content_items=data.content||[], hooks=data.hooks||[], assets=data.assets||[];
+    var mixMap={};
+    content_items.forEach(function(c){
+      var key=(c.content_type||'unknown')+'|'+(c.angle||'unclassified');
+      if(!mixMap[key]) mixMap[key]={angle:c.angle||'unclassified',content_type:c.content_type||'unknown',asset_count:0,hook_count:0,mapped_count:0,publications:0,views:0,ftd:0,engagement_index:0};
+      mixMap[key].asset_count++;
+    });
+    var unmapped=assets.filter(function(a){return !a.content_code;}).map(function(a){return {file_name:a.file_name,url:a.url,modified_at:a.created_at};});
+    return {
+      talent_id:id, display_name:INTEL.displayName(id),
+      inventory:{total_assets:assets.length,ads:content_items.filter(function(c){return c.content_type==='ad';}).length,
+        organico:content_items.filter(function(c){return c.content_type==='organic';}).length,hook_count:hooks.length,unmapped_count:unmapped.length},
+      angle_mix:Object.keys(mixMap).map(function(k){return mixMap[k];}),
+      hooks:hooks, unmapped_assets:unmapped,
+      in_production:content_items.map(function(c){return {content_code:c.content_code,title:c.title,lifecycle_status:c.lifecycle_status,angle:c.angle,format:c.format};}),
+      published:[]
+    };
+  }
+  function renderIntelligence(){
+    var list=_intelList||[];
+    if(!list.length){ content.innerHTML='<div class="empty">Nessun dato di content intelligence disponibile.</div>'; return; }
+    var admin=INTEL.isAdmin(auth.id);
+    var sel=admin?(load(INTEL_SEL_KEY,null)):INTEL.resolveTalent(auth.id);
+    var aff=list.filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(sel);})[0]||list[0];
+    var selBar='';
+    if(admin){
+      selBar='<div class="intel-sel">'+list.map(function(x){
+        var on=INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(aff.talent_id);
+        return '<span class="chip'+(on?' on':'')+'" data-aff="'+esc(INTEL.resolveTalent(x.talent_id))+'">'+esc(x.display_name||INTEL.displayName(x.talent_id))+'</span>';
+      }).join('')+'</div>';
+    }
+    content.innerHTML=selBar+affiliateIntelHtml(aff);
+    if(admin){
+      Array.prototype.forEach.call(content.querySelectorAll('.chip[data-aff]'),function(c){
+        c.onclick=function(){ save(INTEL_SEL_KEY,c.getAttribute('data-aff')); renderIntelligence(); };
+      });
+    }
+    Array.prototype.forEach.call(content.querySelectorAll('.fbtn[data-fk]'),function(b){
+      b.onclick=function(){ intelFilters[b.getAttribute('data-fk')]=b.getAttribute('data-fv'); save(INTEL_FILTERS_KEY,intelFilters); renderIntelligence(); };
+    });
+  }
+  function affiliateIntelHtml(aff){
+    var inv=aff.inventory||{};
+    var drive=opsSafeDriveUrl(aff.drive_url);
+    var driveLink=drive?'<a class="btn" target="_blank" rel="noopener noreferrer" href="'+esc(drive)+'" style="padding:6px 10px;font-size:12px">Cartella Drive (sola lettura)</a>':'';
+    var ctype=intelFilters.ctype||'all', plat=intelFilters.platform||'all';
+    function typeMatch(t){ if(ctype==='all')return true; if(ctype==='ads')return t==='ad'; if(ctype==='organico')return t==='organic'; return true; }
+    // Angle Mix
+    var mix=(aff.angle_mix||[]).filter(function(m){return typeMatch(m.content_type);});
+    var mixRows=mix.length?mix.map(function(m){
+      var rec=INTEL.angleRecommendation(m);
+      return '<tr><td data-l="Angolo"><b>'+esc(m.angle)+'</b></td>'+
+        '<td data-l="Tipo">'+(m.content_type==='ad'?'Ads':(m.content_type==='organic'?'Organico':esc(m.content_type)))+'</td>'+
+        '<td class="num" data-l="Asset">'+Number(m.asset_count||0)+'</td>'+
+        '<td class="num" data-l="Hook">'+Number(m.hook_count||0)+'</td>'+
+        '<td class="num" data-l="Pubbl.">'+Number(m.publications||0)+'</td>'+
+        '<td class="num" data-l="View">'+Number(m.views||0).toLocaleString('it-IT')+'</td>'+
+        '<td class="num" data-l="FTD">'+Number(m.ftd||0)+'</td>'+
+        '<td class="num" data-l="EI">'+Number(m.engagement_index||0)+'</td>'+
+        '<td data-l="Indicazione"><span class="rec '+rec.tone+'" title="'+esc(rec.reason)+'">'+esc(rec.label)+'</span></td></tr>';
+    }).join(''):'<tr><td colspan="9" style="color:var(--mut)">Nessun angolo per questo filtro.</td></tr>';
+    var mixTable='<div class="cc-tablewrap"><table class="cc-table"><thead><tr><th>Angolo</th><th>Tipo</th><th class="num">Asset</th><th class="num">Hook</th><th class="num">Pubbl.</th><th class="num">View</th><th class="num">FTD</th><th class="num">EI</th><th>Indicazione</th></tr></thead><tbody>'+mixRows+'</tbody></table></div>';
+    // Hooks
+    var hooks=(aff.hooks||[]).filter(function(h){return plat==='all'||h.platform===plat;});
+    var hookRows=hooks.length?hooks.map(function(h){
+      return '<div class="ops-row"><span class="ops-priority">'+esc(h.platform||'multi')+'</span>'+
+        '<div class="ops-main"><b>'+esc(h.hook_text)+'</b><small>'+Number(h.publications||0)+' pubbl. \u00b7 '+Number(h.views||0).toLocaleString('it-IT')+' view \u00b7 '+Number(h.ftd||0)+' FTD</small></div>'+
+        '<span class="ops-status approved">EI '+Number(h.engagement_index||0)+'</span></div>';
+    }).join(''):'<div class="ops-empty">Nessun hook con evidenza sufficiente per questo filtro.</div>';
+    // Unmapped assets (senza content_code)
+    var un=(aff.unmapped_assets||[]);
+    var unRows=un.length?un.map(function(a){
+      var url=opsSafeDriveUrl(a.url); var name=url?'<a target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">'+esc(a.file_name)+'</a>':esc(a.file_name);
+      return '<div class="ops-row"><span class="ops-priority blocked">no code</span><div class="ops-main"><b>'+name+'</b><small>da mappare \u00b7 '+esc(opsDate(a.modified_at))+'</small></div></div>';
+    }).join(''):'<div class="ops-empty">Tutti gli asset hanno un content_code.</div>';
+    // In production
+    var prod=(aff.in_production||[]).filter(function(c){return typeMatch(c.content_type||(String(c.content_code||'').indexOf('-ADS-')>=0?'ad':'organic'));});
+    var prodRows=(aff.in_production||[]).length?(aff.in_production||[]).map(function(c){
+      return '<div class="ops-row"><span class="ops-priority">'+esc((c.format||'file').slice(0,10))+'</span>'+
+        '<div class="ops-main"><b>'+esc(c.title)+'</b><small>'+esc(c.content_code||'codice in assegnazione')+(c.angle?' \u00b7 '+esc(c.angle):'')+'</small></div>'+
+        '<span class="ops-status '+esc(c.lifecycle_status)+'">'+opsStatus(c.lifecycle_status)+'</span></div>';
+    }).join(''):'<div class="ops-empty">Nessun contenuto in produzione.</div>';
+    // Published + metrics
+    var pub=(aff.published||[]).filter(function(p){return plat==='all'||p.platform===plat;});
+    var pubRows=pub.length?pub.map(function(p){
+      return '<div class="ops-row"><span class="ops-priority">'+esc(p.platform||'')+'</span>'+
+        '<div class="ops-main"><b>'+esc(p.title)+'</b><small>'+esc(p.content_code||'')+' \u00b7 '+esc(opsDate(p.published_at))+'</small></div>'+
+        '<span class="ops-status">'+Number(p.views||0).toLocaleString('it-IT')+' view \u00b7 '+Number(p.engagement||0)+'% \u00b7 '+Number(p.ftd||0)+' FTD</span></div>';
+    }).join(''):'<div class="ops-empty">Nessuna pubblicazione registrata.</div>';
+
+    // Official read-only organic sources + deterministic recommendations.
+    var organicAccounts=aff.organic_accounts||[], organicPerf=(aff.organic_performance||[]).filter(function(p){return plat==='all'||p.platform===plat;}), organicRecs=(aff.organic_recommendations||[]).filter(function(r){return plat==='all'||r.platform===plat;}), organicQuarantine=aff.organic_quarantine||[];
+    var organicAccountRows=organicAccounts.length?organicAccounts.map(function(a){
+      var fresh=a.status==='active'&&a.last_seen_at;var tone=fresh?'ok':(a.status==='active'?'normal':'critical');
+      return '<div class="ops-row"><span class="cc-badge '+tone+'">'+esc(a.status||'pending')+'</span><div class="ops-main"><b>'+esc(a.platform)+'</b><small>OAuth ufficiale · '+esc(a.access_mode||'read_only')+' · scope '+esc((a.granted_scopes||[]).join(', '))+'</small></div><span class="ops-status">'+esc(opsDate(a.last_seen_at))+'</span></div>';
+    }).join(''):'<div class="ops-empty">Account organici non ancora autorizzati.</div>';
+    var organicPerfRows=organicPerf.length?organicPerf.slice(0,25).map(function(p){
+      return '<tr><td data-l="Piattaforma">'+esc(p.platform)+'</td><td data-l="Contenuto"><b>'+esc(p.title||p.content_code)+'</b><br><small>'+esc(p.content_code||'')+'</small></td><td class="num" data-l="View">'+Number(p.views||0).toLocaleString('it-IT')+'</td><td class="num" data-l="EI">'+Number(p.engagement_index||0)+'</td><td class="num" data-l="Click">'+Number(p.tracked_clicks||0)+'</td><td class="num" data-l="Lead">'+Number(p.leads||0)+'</td><td class="num" data-l="FTD">'+Number(p.ftd||0)+'</td></tr>';
+    }).join(''):'<tr><td colspan="7" style="color:var(--mut)">Nessuna metrica organica ufficiale ancora acquisita.</td></tr>';
+    var organicPerfTable='<div class="cc-tablewrap"><table class="cc-table"><thead><tr><th>Piattaforma</th><th>Contenuto</th><th class="num">View</th><th class="num">EI</th><th class="num">Click</th><th class="num">Lead</th><th class="num">FTD</th></tr></thead><tbody>'+organicPerfRows+'</tbody></table></div>';
+    var organicRecRows=organicRecs.length?organicRecs.map(function(r){
+      var label={create_variations:'Spingi e crea varianti',test_new_hook_or_format:'Varia hook o formato',pause_and_review:'Ferma e rivedi',collect_more_data:'Raccogli più dati'}[r.recommendation]||r.recommendation;
+      var tone=r.recommendation==='create_variations'?'ok':(r.recommendation==='pause_and_review'?'critical':'normal');
+      return '<div class="ops-row"><span class="cc-badge '+tone+'">'+esc(r.platform)+'</span><div class="ops-main"><b>'+esc(r.angle)+'</b><small>'+Number(r.publications||0)+' pubbl. · '+Number(r.views||0).toLocaleString('it-IT')+' view · '+Number(r.ftd||0)+' FTD</small></div><span class="ops-status">'+esc(label)+'</span></div>';
+    }).join(''):'<div class="ops-empty">Direttive sospese finché il campione non è sufficiente.</div>';
+
+    function fbtns(fk,opts){ return '<div class="fgroup">'+opts.map(function(o){var on=(intelFilters[fk]||'all')===o[0];return '<button class="fbtn'+(on?' on':'')+'" data-fk="'+fk+'" data-fv="'+o[0]+'">'+esc(o[1])+'</button>';}).join('')+'</div>'; }
+    var filterBar='<div class="filters"><span class="flabel">Tipo</span>'+fbtns('ctype',[['all','Tutti'],['ads','Ads'],['organico','Organico']])+
+      '<span class="flabel">Piattaforma</span>'+fbtns('platform',[['all','Tutte'],['ig','IG'],['tiktok','TikTok']])+'</div>';
+
+    return '<div class="ops-head"><div><h2 class="ops-title">Content Intelligence \u00b7 '+esc(aff.display_name||INTEL.displayName(aff.talent_id))+'</h2><div class="muted">Inventario, angoli, hook e performance del perimetro.</div></div><div class="ops-sync">'+driveLink+'</div></div>'+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(inv.total_assets||0)+'</strong><span>asset totali</span></div>'+
+      '<div class="ops-kpi"><strong>'+Number(inv.ads||0)+'</strong><span>ads</span></div>'+
+      '<div class="ops-kpi"><strong>'+Number(inv.organico||0)+'</strong><span>organico</span></div>'+
+      '<div class="ops-kpi"><strong'+(Number(inv.unmapped_count)>0?' style="color:var(--gold)"':'')+'>'+Number(inv.unmapped_count||0)+'</strong><span>senza content_code</span></div></div>'+
+      filterBar+
+      '<div class="ops-layout"><div>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Angle Mix &amp; copertura</h3><span class="ops-count">'+mix.length+'</span></div><div style="padding:6px 4px">'+mixTable+'</div><div class="cc-note">L\u2019indicazione usa pubblicazioni, view, engagement e FTD \u2014 mai il solo numero di asset.</div></section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Hook Intelligence</h3><span class="ops-count">'+hooks.length+'</span></div>'+hookRows+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Contenuti pubblicati &amp; metriche</h3><span class="ops-count">'+pub.length+'</span></div>'+pubRows+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Organico ufficiale · sola lettura</h3><span class="ops-count">'+organicPerf.length+'</span></div>'+organicAccountRows+'<div style="padding:6px 4px">'+organicPerfTable+'</div><div class="cc-note">Token fuori dalla dashboard. Post non mappati: quarantena, mai attribuzione automatica.</div></section>'+
+      '</div><aside>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Direttive organico</h3><span class="ops-count">'+organicRecs.length+'</span></div>'+organicRecRows+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Post da mappare</h3><span class="ops-count">'+organicQuarantine.length+'</span></div>'+(organicQuarantine.length?organicQuarantine.map(function(q){return '<div class="ops-row"><span class="ops-priority blocked">'+esc(q.platform)+'</span><div class="ops-main"><b>'+esc(q.entity_ref||'post')+'</b><small>'+esc(q.rule_code)+' · '+esc(opsDate(q.created_at))+'</small></div></div>';}).join(''):'<div class="ops-empty">Nessun post organico in quarantena.</div>')+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Asset senza content_code</h3><span class="ops-count">'+un.length+'</span></div>'+unRows+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>In produzione</h3><span class="ops-count">'+(aff.in_production||[]).length+'</span></div>'+prodRows+'</section>'+
+      '</aside></div>';
+  }
+
+  // ---------------- GENERALE ----------------
+  function loadCallExecution(){
+    destroyCharts();content.innerHTML=spinner('Carico call, priorità e funnel…');
+    if(opsFixtureEnabled()){renderCallExecution({meetings:[],top_actions:[],funnel:[],opportunities:[]});return;}
+    if(!auth.opsToken){content.innerHTML='<div class="empty">Sessione operativa da attivare.</div>';return;}
+    ensureSb().rpc('ops_call_execution_snapshot',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error||!res.data){renderCCError('Call Engine non disponibile.',loadCallExecution);return;}renderCallExecution(res.data);
+    });
+  }
+
+  function loadMarketing(){
+    destroyCharts();content.innerHTML=spinner('Carico email e webinar…');
+    if(!auth||auth.id!=='jj'||!auth.opsToken||!ensureSb()){content.innerHTML='<div class="ops-empty">Area riservata agli admin.</div>';return;}
+    ensureSb().rpc('ops_email_webinar_dashboard',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error){content.innerHTML='<div class="ops-empty">Modulo non ancora collegato.</div>';return;}
+      var s=res.data||{}, campaigns=s.campaigns||[], webinars=s.webinars||[], contacts=s.contacts||{};
+      var campaignRows=rows(campaigns,function(x){return '<div class="ops-row"><span class="cc-badge '+(x.status==='sent'?'ok':'normal')+'">'+esc(x.status)+'</span><div class="ops-main"><b>'+esc(x.name)+'</b><small>'+esc(x.campaign_type)+' · '+Number(x.unique_clickers||0)+' click · '+Number(x.replies||0)+' risposte</small></div><span class="ops-status approved">'+Number(x.conversions||0)+' conv.</span></div>';},'Nessuna campagna misurata.');
+      var webinarRows=rows(webinars,function(x){return '<div class="ops-row"><span class="cc-badge normal">WEBINAR</span><div class="ops-main"><b>'+esc(x.webinar_id)+' · '+esc(INTEL.displayName(x.talent_id))+'</b><small>'+Number(x.registered||0)+' registrati · '+Number(x.attended||0)+' presenti · '+Number(x.no_show||0)+' assenti</small></div><span class="ops-status approved">'+Number(x.conversions||0)+' conv.</span></div>';},'Nessun webinar misurato.');
+      content.innerHTML='<div class="ops-head"><div><h2 class="ops-title">Email &amp; Webinar</h2><div class="muted">ActiveCampaign e WebinarJam · dati aggregati solo admin.</div></div></div><div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(contacts.subscribed||0)+'</strong><span>iscritti</span></div><div class="ops-kpi"><strong>'+Number(contacts.suppressed||0)+'</strong><span>soppressi</span></div><div class="ops-kpi"><strong>'+campaigns.length+'</strong><span>campagne</span></div><div class="ops-kpi"><strong>'+webinars.length+'</strong><span>webinar</span></div></div><div class="ops-layout"><section class="ops-section"><div class="ops-section-head"><h3>Campagne</h3></div>'+campaignRows+'</section><aside><section class="ops-section"><div class="ops-section-head"><h3>Webinar</h3></div>'+webinarRows+'</section></aside></div>';
+    });
+  }
+  function renderCallExecution(d){
+    var meetings=d.meetings||[],actions=d.top_actions||[],funnel=d.funnel||[],opps=d.opportunities||[];
+    function rows(xs,fn,empty){return xs.length?xs.map(fn).join(''):'<div class="ops-empty">'+empty+'</div>';}
+    var actionRows=rows(actions,function(a){return '<div class="ops-row"><span class="ops-priority p'+Number(a.priority||2)+'">P'+Number(a.priority||2)+'</span><div class="ops-main"><b>'+esc(a.title)+'</b><small>'+esc(INTEL.displayName(a.talent_id))+' · '+esc(a.owner_ref||'owner da confermare')+' · DoD: '+esc(a.definition_of_done||'da confermare')+'</small></div><span class="ops-status approved">FTD '+Number(a.ftd_priority_score||0).toFixed(1)+'</span></div>';},'Nessuna azione estratta dalle call.');
+    var meetRows=rows(meetings,function(m){return '<div class="ops-row"><span class="cc-badge '+(Number(m.ambiguous_items)>0?'attention':'ok')+'">'+esc(m.status)+'</span><div class="ops-main"><b>'+esc(INTEL.displayName(m.talent_id||'jj'))+' · '+esc(m.meeting_type)+'</b><small>'+Number(m.action_items||0)+' action item · '+Number(m.materialized_items||0)+' confermati · '+Number(m.ambiguous_items||0)+' ambigui</small></div><span class="ops-status">'+esc(opsDate(m.scheduled_start))+'</span></div>';},'Nessuna call processata.');
+    var funnelRows=rows(funnel.slice(0,18),function(f){return '<div class="ops-row"><span class="ops-priority">'+esc(f.market||'all')+'</span><div class="ops-main"><b>'+esc(INTEL.displayName(f.talent_id))+' · '+esc(String(f.bottleneck||'').replace(/_/g,' '))+'</b><small>'+Number(f.joins||0)+' join → '+Number(f.deposits||0)+' depositi → '+Number(f.ftd||0)+' FTD</small></div><span class="ops-status">'+esc(String(f.metric_day||''))+'</span></div>';},'Dati funnel non ancora importati.');
+    var oppRows=rows(opps,function(o){return '<div class="ops-row"><span class="ops-priority p'+Number(o.priority||2)+'">P'+Number(o.priority||2)+'</span><div class="ops-main"><b>'+esc(o.title)+'</b><small>'+esc(INTEL.displayName(o.talent_id||'jj'))+' · confidenza '+Math.round(Number(o.confidence||0)*100)+'%</small></div></div>';},'Nessuna opportunità aperta.');
+    content.innerHTML='<div class="ops-head"><div><h2 class="ops-title">Call-to-Execution</h2><div class="muted">Dalle call alle cinque azioni con maggiore impatto FTD.</div></div></div><div class="ops-kpis"><div class="ops-kpi"><strong>'+meetings.length+'</strong><span>call processate</span></div><div class="ops-kpi"><strong>'+actions.length+'</strong><span>azioni prioritarie</span></div><div class="ops-kpi"><strong>'+opps.length+'</strong><span>opportunità</span></div><div class="ops-kpi"><strong>'+funnel.filter(function(x){return x.bottleneck&&x.bottleneck!=="healthy_or_insufficient";}).length+'</strong><span>colli di bottiglia</span></div></div><div class="ops-layout"><div><section class="ops-section"><div class="ops-section-head"><h3>Top azioni FTD</h3></div>'+actionRows+'</section><section class="ops-section"><div class="ops-section-head"><h3>Funnel Autopsy</h3></div>'+funnelRows+'</section></div><aside><section class="ops-section"><div class="ops-section-head"><h3>Call recenti</h3></div>'+meetRows+'</section><section class="ops-section"><div class="ops-section-head"><h3>Opportunity Detector</h3></div>'+oppRows+'</section></aside></div>';
+  }
+
   // ---------------- GENERALE ----------------
   function renderGenerale(){
     content.innerHTML='<div class="empty">La sezione <b>Generale</b> è il pool notizie condiviso.<br><br>'+
@@ -515,17 +1035,33 @@
     else if(view==='metriche') loadMetriche();
     else if(view==='reels') loadReels();
     else if(view==='analisi') loadAnalisi();
+    else if(view==='operazioni') loadOperazioni();
+    else if(view==='command') loadCommandCenter();
+    else if(view==='marketing') loadMarketing();
+    else if(view==='intel') loadIntelligence();
+    else if(view==='calls') loadCallExecution();
     else renderGenerale();
   }
 
   function boot(){
     ensureSb();
+    if(!auth && opsFixtureEnabled()){
+      var q; try{ q=new URLSearchParams(location.search); }catch(e){ q=null; }
+      var asId=INTEL.resolveTalent((q&&q.get('as'))||'claudia');
+      auth={id:asId,color:COLORS[asId]||'#e6b64c'};
+      view=(q&&q.get('view'))||(INTEL.isAdmin(asId)?'command':'operazioni');
+    }
     if(!auth){ showLogin(); return; }
     hideLogin();
     setAccent(auth.id);
+    var admin=INTEL.isAdmin(auth.id);
     document.getElementById('whoami').style.display='flex';
     document.getElementById('tabs').style.display='flex';
-    document.getElementById('whoami-txt').textContent=NAMES[auth.id]||auth.id;
+    document.getElementById('whoami-txt').textContent=(NAMES[auth.id]||auth.id)+(admin?' \u00b7 admin':'');
+    // Admin-only tabs (Command Center) visible only to the administrator (jj).
+    Array.prototype.forEach.call(document.querySelectorAll('.tab.admin-only'),function(x){ x.style.display=admin?'':'none'; });
+    if(!admin && (view==='command'||view==='marketing')){ view='intel'; }
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){x.classList.toggle('on',x.getAttribute('data-view')===view);});
     render();
   }
   // aspetta il caricamento del client
