@@ -1,0 +1,21 @@
+[build]
+  command = "rm -rf .netlify-publish && mkdir -p .netlify-publish && cp index.html hub.html reels_organici.json .netlify-publish/"
+  publish = ".netlify-publish"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/hub.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
