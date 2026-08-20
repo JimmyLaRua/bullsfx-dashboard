@@ -20,7 +20,8 @@
   .whoami{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut)}
   .dot{width:12px;height:12px;border-radius:50%;background:var(--accent,var(--gold))}
   .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 18px}
-  .tab{padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--mut);cursor:pointer;font-weight:600;font-size:13px}
+  .tab{min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--mut);cursor:pointer;font-weight:600;font-size:13px;display:inline-flex;align-items:center}
+  .tab:focus-visible,.intel-sel .chip:focus-visible,.plan-phase>summary:focus-visible{outline:2px solid var(--accent,var(--gold));outline-offset:2px}
   .tab.on{background:var(--accent,var(--gold));color:#0b0e14;border-color:transparent}
   .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
   .muted{color:var(--mut);font-size:13px}
@@ -115,10 +116,25 @@
   .ops-empty{padding:18px 14px;color:var(--mut);font-size:12px}
   .ops-links{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px}
   .ops-links .btn{padding:8px 10px;font-size:12px;text-decoration:none}
+  .plan-progress{height:10px;border-radius:999px;background:#151b26;overflow:hidden;border:1px solid var(--line);margin:10px 0 4px}
+  .plan-progress>span{display:block;height:100%;border-radius:inherit;background:var(--accent,var(--gold));transition:width .25s ease}
+  .plan-phase{border-bottom:1px solid var(--line)}
+  .plan-phase:last-child{border-bottom:0}
+  .plan-phase>summary{min-height:44px;display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 14px;cursor:pointer;list-style:none}
+  .plan-phase>summary::-webkit-details-marker{display:none}
+  .plan-phase-no{font:800 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut)}
+  .plan-phase-title{font-size:13px;font-weight:700}
+  .plan-phase-meta{font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);white-space:nowrap}
+  .plan-section-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px 14px}
+  .plan-section-card{padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+  .plan-section-card b{display:block;font-size:12px;margin-bottom:6px}
+  .plan-section-card strong{font:700 22px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+  .plan-section-card small{display:block;color:var(--mut);font-size:10px;margin-top:5px}
   @media(max-width:760px){
     .ops-head{grid-template-columns:1fr}.ops-sync{text-align:left}
     .ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ops-kpi:nth-child(2){border-right:0}.ops-kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}
     .ops-layout{grid-template-columns:1fr}.ops-row{grid-template-columns:64px minmax(0,1fr)}.ops-status{grid-column:2}
+    .plan-section-grid{grid-template-columns:1fr}
   }
   /* Command Center + Content Intelligence */
   .cc-badge{font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:3px 7px;border-radius:5px;text-transform:uppercase;white-space:nowrap}
@@ -165,32 +181,124 @@
     .cc-table td[data-l]::before{content:attr(data-l) ": ";color:var(--mut);font-size:10px;text-transform:uppercase}
   }
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+  /* Talent Studio shell — progressive disclosure over the existing secure data gateways. */
+  :root{
+    --bg:#020617;--panel:#0f172a;--panel2:#0b1220;--line:#273449;
+    --txt:#f8fafc;--mut:#94a3b8;--green:#22c55e;--red:#ef4444;
+  }
+  html{scroll-behavior:smooth}
+  body{min-height:100vh;background:
+    radial-gradient(circle at 8% -10%,color-mix(in srgb,var(--accent,var(--gold)) 12%,transparent),transparent 33rem),
+    var(--bg)}
+  button,input{font:inherit}
+  .skip-link{position:fixed;left:12px;top:12px;z-index:100;transform:translateY(-160%);background:var(--txt);color:var(--bg);padding:10px 14px;border-radius:8px;font-weight:800}
+  .skip-link:focus{transform:translateY(0)}
+  .wrap{max-width:1360px;padding:22px 24px 40px}
+  header{min-height:58px;padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--line) 72%,transparent)}
+  .brand{font-size:18px;letter-spacing:-.02em}.brand small{display:block;margin-top:2px;color:var(--mut);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .tabs{gap:4px;padding:5px;background:rgba(15,23,42,.82);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(14px)}
+  .tab{border:0;border-radius:9px;background:transparent;transition:background-color .18s ease,color .18s ease,transform .18s ease}
+  .tab:hover{background:#172033;color:var(--txt)}
+  .tab:active{transform:scale(.98)}
+  .tab.on{box-shadow:0 8px 28px color-mix(in srgb,var(--accent,var(--gold)) 22%,transparent)}
+  #content{min-height:520px}
+  .studio-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end;padding:22px 0 18px}
+  .studio-eyebrow{color:var(--accent,var(--gold));font:800 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase}
+  .studio-title{margin:7px 0 5px;font-size:clamp(25px,4vw,38px);line-height:1.08;letter-spacing:-.035em}
+  .studio-lead{margin:0;max-width:690px;color:var(--mut);font-size:14px}
+  .studio-fresh{display:flex;align-items:center;gap:7px;color:var(--mut);font:600 10px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+  .studio-fresh::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(34,197,94,.1)}
+  .studio-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;margin-bottom:18px}
+  .studio-card{grid-column:span 4;background:linear-gradient(145deg,rgba(15,23,42,.96),rgba(8,15,28,.98));border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+  .studio-card.wide{grid-column:span 8}.studio-card.full{grid-column:1/-1}
+  .studio-card h2,.studio-card h3{margin:0}.studio-card h2{font-size:17px}.studio-card h3{font-size:13px}
+  .studio-card-head{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:13px}
+  .studio-kicker{color:var(--mut);font-size:11px;margin-top:3px}
+  .studio-list{display:flex;flex-direction:column}
+  .studio-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .studio-item:first-child{border-top:0;padding-top:0}.studio-item:last-child{padding-bottom:0}
+  .studio-item b{display:block;font-size:13px;line-height:1.35}.studio-item small{display:block;color:var(--mut);font-size:11px;line-height:1.45;margin-top:3px}
+  .studio-action{align-self:start;border:1px solid var(--line);border-radius:8px;background:#111c30;color:var(--txt);padding:7px 9px;font-size:11px;font-weight:750;text-decoration:none;white-space:nowrap;cursor:pointer}
+  .studio-action:hover{border-color:var(--accent,var(--gold));color:var(--accent,var(--gold))}
+  .studio-signal{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--mut);font:700 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase}
+  .studio-signal.good{color:var(--green);border-color:rgba(34,197,94,.3)}.studio-signal.warn{color:var(--gold);border-color:rgba(230,182,76,.3)}.studio-signal.bad{color:var(--red);border-color:rgba(239,68,68,.3)}
+  .studio-empty{border:1px dashed var(--line);border-radius:10px;padding:18px;color:var(--mut);font-size:12px;line-height:1.5}
+  .studio-segment{display:inline-flex;gap:3px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);margin-bottom:14px}
+  .studio-segment button{min-height:38px;border:0;border-radius:7px;background:transparent;color:var(--mut);padding:7px 12px;font-size:11px;font-weight:750;cursor:pointer}
+  .studio-segment button.on{background:#1e293b;color:var(--txt)}
+  .studio-production{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .studio-production-card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:15px;min-width:0}
+  .studio-production-card .hook{margin:9px 0 7px;font-size:16px;font-weight:800;line-height:1.35}
+  .studio-production-card .copy{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;color:#cbd5e1;font-size:12px;line-height:1.55;white-space:pre-wrap}
+  .studio-production-card .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}
+  .studio-decision-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
+  .studio-decision{border:1px solid var(--line);border-top:3px solid var(--mut);border-radius:12px;background:var(--panel);padding:14px}
+  .studio-decision.repeat{border-top-color:var(--green)}.studio-decision.change{border-top-color:var(--gold)}.studio-decision.stop{border-top-color:var(--red)}
+  .studio-decision h3{margin:0 0 10px;font-size:13px}.studio-decision .ops-row{padding-left:0;padding-right:0}
+  .news-gateway{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;padding:clamp(22px,5vw,46px);background:linear-gradient(135deg,#0f172a 0%,#101b30 58%,color-mix(in srgb,var(--accent,var(--gold)) 18%,#0b1220) 100%)}
+  .news-gateway::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-90px;top:-130px;background:color-mix(in srgb,var(--accent,var(--gold)) 18%,transparent);filter:blur(20px);pointer-events:none}
+  .news-gateway h1{position:relative;margin:8px 0 10px;max-width:760px;font-size:clamp(29px,5vw,48px);line-height:1.02;letter-spacing:-.045em}
+  .news-gateway p{position:relative;max-width:660px;color:#cbd5e1;margin:0 0 22px}.news-gateway .btn{position:relative;text-decoration:none;display:inline-flex}
+  /* Admin Control Tower — dense, exception-first and honest about source coverage. */
+  .tower-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end;margin:4px 0 16px}
+  .tower-title{margin:0;font-size:clamp(25px,3.4vw,36px);line-height:1.05;letter-spacing:-.035em}.tower-head p{margin:7px 0 0;color:var(--mut);max-width:760px}
+  .tower-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--line);border-radius:13px;background:var(--panel2);overflow:hidden;margin-bottom:14px}
+  .tower-kpi{min-width:0;padding:13px 14px;border-right:1px solid var(--line)}.tower-kpi:last-child{border-right:0}
+  .tower-kpi b{display:block;font:750 22px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}.tower-kpi small{display:block;color:var(--mut);font-size:10px;margin-top:5px}
+  .tower-table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}.tower-table th,.tower-table td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+  .tower-table th{color:var(--mut);font-size:9px;letter-spacing:.06em;text-transform:uppercase}.tower-table th:first-child,.tower-table td:first-child{text-align:left;position:sticky;left:0;background:var(--panel2);z-index:1}
+  .tower-row{cursor:pointer}.tower-row:hover td{background:#111c30}.tower-row.on td{background:color-mix(in srgb,var(--accent,var(--gold)) 9%,var(--panel2))}.tower-row.on td:first-child{box-shadow:inset 3px 0 0 var(--accent,var(--gold))}
+  .tower-person{display:flex;align-items:center;gap:9px}.tower-avatar{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:#172033;border:1px solid var(--line);font-weight:850;color:var(--accent,var(--gold))}.tower-person b{font-size:12px}.tower-person small{display:block;color:var(--mut);font-size:9px}
+  .tower-status{display:inline-flex;align-items:center;gap:5px;font:700 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;color:var(--mut)}.tower-status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}.tower-status.live,.tower-status.approved{color:var(--green)}.tower-status.stale,.tower-status.no_events{color:var(--gold)}.tower-status.not_connected,.tower-status.not_configured,.tower-status.blocked{color:var(--red)}
+  .tower-detail{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);gap:14px;margin-top:14px}.tower-source-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;padding:12px}.tower-source{border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--panel)}.tower-source b{display:block;font-size:11px}.tower-source small{display:block;color:var(--mut);font-size:9px;margin-top:5px;line-height:1.35}
+  .tower-meter{height:7px;background:#172033;border-radius:999px;overflow:hidden;margin:8px 0 5px}.tower-meter span{display:block;height:100%;background:var(--accent,var(--gold));border-radius:inherit;max-width:100%}
+  .tower-missing{color:var(--mut);font-style:italic}.tower-alert{color:var(--red);font-weight:800}.tower-warn{color:var(--gold);font-weight:800}
+  @media(max-width:1080px){.tower-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.tower-kpi:nth-child(3){border-right:0}.tower-kpi:nth-child(-n+3){border-bottom:1px solid var(--line)}.tower-source-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:760px){.tower-head{grid-template-columns:1fr}.tower-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.tower-kpi:nth-child(3){border-right:1px solid var(--line)}.tower-kpi:nth-child(2n){border-right:0}.tower-kpi{border-bottom:1px solid var(--line)}.tower-kpi:nth-last-child(-n+2){border-bottom:0}.tower-detail{grid-template-columns:1fr}.tower-source-grid{grid-template-columns:1fr}}
+  @media(max-width:900px){.studio-card,.studio-card.wide{grid-column:span 6}.studio-production{grid-template-columns:1fr}}
+  @media(max-width:680px){
+    body.talent-mode{padding-bottom:82px}.wrap{padding:14px 14px 26px}header{margin-bottom:10px}.brand small{display:none}
+    body.talent-mode .tabs{position:fixed;z-index:45;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));margin:0;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;padding:5px;box-shadow:0 18px 60px #000}
+    body.talent-mode .tab.talent-only{min-height:52px;padding:6px 2px;justify-content:center;text-align:center;font-size:9.5px;line-height:1.15;border-radius:8px}
+    .studio-hero{grid-template-columns:1fr;padding-top:12px}.studio-fresh{white-space:normal}.studio-grid{grid-template-columns:1fr}.studio-card,.studio-card.wide,.studio-card.full{grid-column:1}.studio-decision-grid{grid-template-columns:1fr}
+    .studio-item{grid-template-columns:1fr}.studio-action{justify-self:start}.ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#content">Vai al contenuto</a>
 <div class="wrap">
   <header>
-    <div class="brand">Bulls <span>Content Hub</span></div>
+    <div class="brand">JBGRL <span>Talent Studio</span><small>Creative &amp; performance workspace</small></div>
     <div class="whoami" id="whoami" style="display:none">
       <span class="dot"></span><span id="whoami-txt"></span>
       <button class="btn" id="logout" style="padding:6px 12px;font-size:12px">Esci</button>
     </div>
   </header>
 
-  <div class="tabs" id="tabs" style="display:none">
-    <div class="tab" data-view="generale">Generale (news)</div>
-    <div class="tab" data-view="reels">Reels organici</div>
-    <div class="tab on" data-view="ads">Ads</div>
-    <div class="tab" data-view="metriche">Metriche</div>
-    <div class="tab" data-view="analisi">Analisi</div>
-    <div class="tab" data-view="operazioni">Operazioni</div>
-    <div class="tab admin-only" data-view="command" style="display:none">Command Center</div>
-    <div class="tab admin-only" data-view="marketing" style="display:none">Email &amp; Webinar</div>
-    <div class="tab" data-view="intel">Content Intelligence</div>
-    <div class="tab" data-view="calls">Call &amp; Priorità</div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Sezioni dashboard" style="display:none">
+    <button type="button" class="tab talent-only on" data-view="news" style="display:none">News</button>
+    <button type="button" class="tab talent-only" data-view="foryou" style="display:none">Per te</button>
+    <button type="button" class="tab talent-only" data-view="talentads" style="display:none">Ads</button>
+    <button type="button" class="tab talent-only" data-view="production" style="display:none">Produzione</button>
+    <button type="button" class="tab talent-only" data-view="results" style="display:none">Risultati</button>
+    <button type="button" class="tab talent-only" data-view="agenda" style="display:none">Agenda</button>
+    <button type="button" class="tab admin-only" data-view="adminhome" style="display:none">Control Tower</button>
+    <button type="button" class="tab admin-only" data-view="generale" style="display:none">Newsroom</button>
+    <button type="button" class="tab admin-only" data-view="reels" style="display:none">Reels organici</button>
+    <button type="button" class="tab admin-only" data-view="ads" style="display:none">Ads</button>
+    <button type="button" class="tab admin-only" data-view="metriche" style="display:none">Metriche</button>
+    <button type="button" class="tab admin-only" data-view="analisi" style="display:none">Analisi</button>
+    <button type="button" class="tab admin-only" data-view="piano" style="display:none">Talent Control</button>
+    <button type="button" class="tab admin-only" data-view="operazioni" style="display:none">Operazioni</button>
+    <button type="button" class="tab admin-only" data-view="command" style="display:none">Command Center</button>
+    <button type="button" class="tab admin-only" data-view="marketing" style="display:none">Marketing readiness</button>
+    <button type="button" class="tab admin-only" data-view="intel" style="display:none">Content Intelligence</button>
+    <button type="button" class="tab admin-only" data-view="calls" style="display:none">Call &amp; Priorità</button>
   </div>
 
-  <div id="content"></div>
+  <main id="content" tabindex="-1"></main>
 </div>
 
 <!-- LOGIN -->
@@ -237,9 +345,24 @@
   function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
   function del(k){ try{localStorage.removeItem(k);}catch(e){} }
 
+  function sessionUsable(a){
+    if(!a||!a.id||!a.opsToken) return false;
+    if(!a.opsExpiresAt) return true;
+    var expiry=Date.parse(a.opsExpiresAt);
+    return !isFinite(expiry)||expiry>Date.now()+30000;
+  }
+
   var auth=load(AUTH,null);
-  var view='ads';
+  // Hub e newsroom vivono sullo stesso dominio: riusa la sessione valida invece
+  // di costringere il talent a un secondo login. Una sessione scaduta non deve
+  // mai lasciare le sezioni in uno stato apparentemente vuoto.
+  if(!sessionUsable(auth)) auth=load('bullsfx_auth_v2',null);
+  if(!sessionUsable(auth)){ auth=null; del(AUTH); }
+  else save(AUTH,auth);
+  var view='news';
   var reelsData=null;
+  var productionFilter='all';
+  var talentProductionCache=null;
   var TALENT_LIVE_READ_ONLY=true;
   var legacySnapshotCache=null;
   var legacySnapshotAt=0;
@@ -248,7 +371,12 @@
     if(!auth||!auth.opsToken||!ensureSb()) return Promise.reject(new Error('sessione operativa non disponibile'));
     if(!force&&legacySnapshotCache&&Date.now()-legacySnapshotAt<30000) return Promise.resolve(legacySnapshotCache);
     return ensureSb().rpc('ops_legacy_talent_snapshot',{p_session_token:auth.opsToken}).then(function(res){
-      if(res.error||!res.data) throw (res.error||new Error('snapshot non disponibile'));
+      if(res.error||!res.data){
+        if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){
+          del(AUTH); auth=null; showLogin(); lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';
+        }
+        throw (res.error||new Error('snapshot non disponibile'));
+      }
       if(res.data.talent_id!==auth.id) throw new Error('perimetro talent non valido');
       legacySnapshotCache=res.data; legacySnapshotAt=Date.now(); return legacySnapshotCache;
     });
@@ -302,10 +430,13 @@
 
   // tabs
   Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(t){
+    t.setAttribute('role','tab');t.setAttribute('tabindex','0');
     t.onclick=function(){
-      Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){x.classList.remove('on');});
+      Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){x.classList.remove('on');x.setAttribute('aria-selected','false');});
       t.classList.add('on'); view=t.getAttribute('data-view'); render();
+      t.setAttribute('aria-selected','true');
     };
+    t.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t.click();}};
   });
 
   function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -385,9 +516,13 @@
     var pj = reelsData ? Promise.resolve(reelsData)
       : fetch('reels_organici.json').then(function(r){return r.json();}).then(function(j){ reelsData=(j.reels||[]); return reelsData; });
     pj.then(function(){
-      loadLegacySnapshot().then(function(data){
+      return loadLegacySnapshot().then(function(data){
         var done={}; (data.metrics||[]).filter(function(x){return x.item_type==='reel';}).forEach(function(x){ done[x.item_id]=1; });
         renderReels(done);
+      }).catch(function(){
+        // Gli script organici sono un asset locale revisionato: la mancata
+        // disponibilita dello snapshot metriche non deve nasconderli.
+        if(auth) renderReels({});
       });
     }).catch(function(){ content.innerHTML='<div class="empty">reels_organici.json non trovato.</div>'; });
   }
@@ -647,6 +782,146 @@
       (links?'<section class="ops-section"><div class="ops-section-head"><h3>Stanze Slack</h3></div><div class="ops-links">'+links+'</div></section>':'')+'</aside></div>';
   }
 
+  // ---------------- PIANO TALENT ----------------
+  var _launchPlans=[];
+  var _launchIntel={};
+  var PLAN_SEL_KEY='jbgrl_launch_plan_selected';
+  function loadPiano(){
+    if(!INTEL.isAdmin(auth.id)){content.innerHTML='<div class="empty">Sezione riservata agli amministratori.</div>';return;}
+    destroyCharts();content.innerHTML=spinner('Carico il controllo talent...');
+    if(opsFixtureEnabled()){
+      Promise.all([
+        fetch('fixtures/talent-plan.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();}),
+        fetch('fixtures/content-intelligence.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+      ]).then(function(rows){renderPiano(rows[0],((rows[1].content_intelligence||{}).affiliates)||[]);})
+        .catch(function(){content.innerHTML='<div class="ops-empty">Fixture Talent Control non disponibile.</div>';});
+      return;
+    }
+    if(!auth.opsToken){content.innerHTML='<div class="ops-empty">Sessione operativa da attivare.</div>';return;}
+    Promise.all([
+      ensureSb().rpc('ops_talent_launch_snapshot',{p_session_token:auth.opsToken,p_requested_talent_id:null}),
+      ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}),
+      ensureSb().rpc('ops_organic_tracking_snapshot',{p_session_token:auth.opsToken})
+    ]).then(function(rows){
+      var planRes=rows[0],intelRes=rows[1],orgRes=rows[2];
+      if(planRes.error||!planRes.data){content.innerHTML='<div class="ops-empty">Talent Control non disponibile.</div>';return;}
+      var affiliates=(((intelRes.data||{}).content_intelligence||{}).affiliates)||[];
+      if(!orgRes.error&&orgRes.data)affiliates=attachOrganicTracking(affiliates,orgRes.data);
+      renderPiano(planRes.data,affiliates);
+    },function(){content.innerHTML='<div class="ops-empty">Connessione operativa non disponibile.</div>';});
+  }
+  function talentIntelTotals(aff){
+    aff=aff||{};var mix=aff.angle_mix||[],ads={views:0,ftd:0,publications:0},org={views:0,ftd:0,publications:0};
+    mix.forEach(function(x){var dest=x.content_type==='ad'?ads:(x.content_type==='organic'?org:null);if(!dest)return;dest.views+=Number(x.views||0);dest.ftd+=Number(x.ftd||0);dest.publications+=Number(x.publications||0);});
+    var hooks=(aff.hooks||[]).slice().sort(function(a,b){return Number(b.engagement_index||0)-Number(a.engagement_index||0);});
+    return {ads:ads,organic:org,ftd:ads.ftd+org.ftd,best_hook:hooks[0]||null,inventory:aff.inventory||{},organic_accounts:aff.organic_accounts||[]};
+  }
+  function renderPiano(data,intelligence){
+    _launchPlans=(data&&data.talents)||[];
+    _launchIntel={};(intelligence||[]).forEach(function(x){_launchIntel[INTEL.resolveTalent(x.talent_id)]=x;});
+    if(!_launchPlans.length){content.innerHTML='<div class="ops-empty">Nessun piano di lancio inizializzato.</div>';return;}
+    var admin=INTEL.isAdmin(auth.id),selected=load(PLAN_SEL_KEY,null);
+    var plan=_launchPlans.filter(function(p){return INTEL.resolveTalent(p.talent_id)===INTEL.resolveTalent(selected);})[0]||_launchPlans[0];
+    var selector='';
+    if(admin){
+      selector='<div class="intel-sel">'+_launchPlans.map(function(p){var on=p.talent_id===plan.talent_id,t=talentIntelTotals(_launchIntel[INTEL.resolveTalent(p.talent_id)]);return '<button type="button" class="chip'+(on?' on':'')+'" data-plan-talent="'+esc(p.talent_id)+'">'+esc(p.display_name)+' · '+t.ftd+' FTD</button>';}).join('')+'</div>';
+    }
+    content.innerHTML=selector+talentPlanHtml(plan,data.generated_at,_launchIntel[INTEL.resolveTalent(plan.talent_id)]);
+    if(admin){Array.prototype.forEach.call(content.querySelectorAll('[data-plan-talent]'),function(c){c.onclick=function(){save(PLAN_SEL_KEY,c.getAttribute('data-plan-talent'));renderPiano(data,intelligence);};});}
+  }
+  function talentPlanHtml(plan,generatedAt,intelligence){
+    var s=plan.summary||{},pct=Math.max(0,Math.min(100,Number(s.progress_pct||0))),items=plan.items||[],phases=plan.phases||[],teamTasks=plan.ops_tasks||[];
+    var perf=talentIntelTotals(intelligence),best=perf.best_hook;
+    var driveUrl=opsSafeDriveUrl(plan.drive_url);
+    var driveLink=driveUrl?'<a class="btn" target="_blank" rel="noopener noreferrer" href="'+esc(driveUrl)+'" style="padding:7px 10px;font-size:12px">Apri Drive</a>':'';
+    var sectionMap={ADS:{asset_count:0,mapped_count:0,quarantine_count:0},DOCUMENTI:{asset_count:0,mapped_count:0,quarantine_count:0},MATERIALE_PER_PARTIRE:{asset_count:0,mapped_count:0,quarantine_count:0}};
+    (plan.drive_sections||[]).forEach(function(x){if(sectionMap[x.section])sectionMap[x.section]=x;});
+    function sectionCard(key,label,caption){var x=sectionMap[key]||{};return '<div class="plan-section-card"><b>'+label+'</b><strong>'+Number(x.asset_count||0)+'</strong><small>'+caption+' · '+Number(x.mapped_count||0)+' mappati'+(Number(x.quarantine_count||0)?' · '+Number(x.quarantine_count)+' quarantena':'')+'</small></div>';}
+    function statusClass(v){return v==='blocked'?'blocked':(v==='ready'||v==='approved'?'approved':(v==='in_progress'?'review':''));}
+    function phaseItems(no){var rows=items.filter(function(i){return Number(i.phase_no)===Number(no);});if(!rows.length)return '<div class="ops-empty">Nessun deliverable in questa fase.</div>';return rows.map(function(i){
+      var detail='Owner: '+(i.owner_ref||i.owner_role||'da assegnare')+' · Evidenze '+Number(i.verified_evidence_count||0)+'/'+Number(i.evidence_count||0);
+      if(i.blocker)detail='Blocco: '+i.blocker+' · '+detail;
+      return '<div class="ops-row"><span class="ops-priority '+statusClass(i.status)+'">'+esc(i.drive_section==='MATERIALE_PER_PARTIRE'?'START':i.drive_section)+'</span><div class="ops-main"><b>'+esc(i.title)+'</b><small>'+esc(detail)+'</small><small>DoD: '+esc(i.definition_of_done)+'</small></div><span class="ops-status '+statusClass(i.status)+'">'+opsStatus(i.status)+'</span></div>';
+    }).join('');}
+    function teamTaskRows(){if(!teamTasks.length)return '<div class="ops-empty">Nessun task operativo aperto.</div>';return teamTasks.map(function(t){
+      var brief=t.brief||{},detail=brief.definition_of_done||brief.next_action||t.task_type||'Task operativo';
+      return '<div class="ops-row"><span class="ops-priority p'+Number(t.priority||2)+'">P'+Number(t.priority||2)+'</span><div class="ops-main"><b>'+esc(t.title)+'</b><small>'+esc(t.owner_ref||'da assegnare')+' · '+esc(detail)+(t.due_at?' · '+esc(opsDate(t.due_at)):'')+'</small></div><span class="ops-status '+esc(t.status)+'">'+opsStatus(t.status)+'</span></div>';
+    }).join('');}
+    var phaseRows=phases.map(function(p){var open=Number(p.phase_no)===Number(plan.current_phase)?' open':'';return '<details class="plan-phase"'+open+'><summary><span class="plan-phase-no">'+String(p.phase_no).padStart(2,'0')+'</span><span class="plan-phase-title">'+esc(p.phase_name)+'</span><span class="plan-phase-meta">'+Number(p.completed||0)+'/'+Number(p.total||0)+' · '+opsStatus(p.status)+'</span></summary>'+phaseItems(p.phase_no)+'</details>';}).join('');
+    var approval=plan.go_live_approved_at?'<span class="cc-badge ok">GO-LIVE APPROVATO</span>':'<span class="cc-badge attention">GO-LIVE DA APPROVARE</span>';
+    var metricStatus=(intelligence&&Object.keys(intelligence).length)?'metriche collegate':'metriche in attesa';
+    var hookText=best?esc(best.hook_text)+' · EI '+Number(best.engagement_index||0):'Nessun hook con campione sufficiente';
+    var performance='<section class="ops-section"><div class="ops-section-head"><h3>Performance talent</h3><span class="ops-count">'+metricStatus+'</span></div><div class="ops-kpis">'+
+      '<div class="ops-kpi"><strong>'+perf.ftd+'</strong><span>FTD attribuiti</span></div><div class="ops-kpi"><strong>'+Number(perf.ads.views||0).toLocaleString('it-IT')+'</strong><span>view Ads · '+perf.ads.publications+' pubbl.</span></div>'+
+      '<div class="ops-kpi"><strong>'+Number(perf.organic.views||0).toLocaleString('it-IT')+'</strong><span>view organico · '+perf.organic.publications+' pubbl.</span></div><div class="ops-kpi"><strong>'+Number((perf.inventory||{}).total_assets||0)+'</strong><span>asset Drive · '+Number((perf.inventory||{}).unmapped_count||0)+' da mappare</span></div></div>'+
+      '<div class="ops-row"><span class="ops-priority approved">HOOK</span><div class="ops-main"><b>Segnale migliore</b><small>'+hookText+'</small></div></div></section>';
+    return '<div class="ops-head"><div><h2 class="ops-title">Talent Control · '+esc(plan.display_name)+'</h2><div class="muted">Metriche, piano, responsabilità, Drive, task e blocchi in un solo perimetro interno.</div></div><div class="ops-sync">'+approval+'<br>Aggiornato '+esc(opsDate(generatedAt))+'</div></div>'+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+pct+'%</strong><span>completamento</span></div><div class="ops-kpi"><strong>'+Number(s.completed_required||0)+'/'+Number(s.required_total||0)+'</strong><span>deliverable obbligatori</span></div><div class="ops-kpi"><strong>'+Number(s.blocked||0)+'</strong><span>blocchi</span></div><div class="ops-kpi"><strong>'+String(plan.current_phase).padStart(2,'0')+'</strong><span>fase corrente · '+esc(plan.status)+'</span></div></div>'+
+      '<div class="plan-progress" role="progressbar" aria-label="Completamento '+pct+'%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><span style="width:'+pct+'%"></span></div><div class="cc-note">Portfolio owner: '+esc(plan.portfolio_owner||'da assegnare')+' · Le evidenze Drive non approvano automaticamente un deliverable. '+driveLink+'</div>'+performance+
+      '<div class="ops-layout"><div><section class="ops-section"><div class="ops-section-head"><h3>Task operativi JBGRL</h3><span class="ops-count">'+teamTasks.length+' aperti</span></div>'+teamTaskRows()+'</section><section class="ops-section"><div class="ops-section-head"><h3>Scaletta JBGRL</h3><span class="ops-count">16 fasi</span></div>'+phaseRows+'</section></div><aside>'+
+      '<section class="ops-section"><div class="ops-section-head"><h3>Drive virtuale</h3><span class="ops-count">sola lettura</span></div><div class="plan-section-grid">'+sectionCard('ADS','ADS','Creativita e produzione')+sectionCard('DOCUMENTI','DOCUMENTI','Admin e compliance')+sectionCard('MATERIALE_PER_PARTIRE','MATERIALE PER PARTIRE','Setup e asset iniziali')+'</div><div class="cc-note">La classificazione è virtuale: nessun file viene spostato, rinominato o eliminato.</div></section>'+
+      '<section class="ops-section"><div class="ops-section-head"><h3>Gate finale</h3></div><div class="ops-row"><span class="ops-priority">JJ</span><div class="ops-main"><b>Approvazione umana obbligatoria</b><small>Il sistema può preparare task, evidenze e reminder, ma non autorizza automaticamente il go-live.</small></div>'+approval+'</div></section></aside></div>';
+  }
+
+  // ---------------- ADMIN CONTROL TOWER ----------------
+  var TOWER_SEL_KEY='jbgrl_admin_tower_selected';
+  var _towerData=null;
+  function towerText(v){return esc(String(v==null?'':v));}
+  function towerNum(v){return Number(v||0).toLocaleString('it-IT');}
+  function towerMoney(v){return '€'+Number(v||0).toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:2});}
+  function towerStatus(v){v=String(v||'not_connected');return '<span class="tower-status '+towerText(v)+'">'+towerText(v.replace(/_/g,' '))+'</span>';}
+  function towerHasData(status){return status==='live'||status==='stale'||status==='approved'||status==='closed';}
+  function towerMetric(v,status,kind){if(!towerHasData(status))return '<span class="tower-missing">—</span>';if(kind==='money')return towerMoney(v);if(kind==='ratio')return v==null?'—':Number(v).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2})+'x';return towerNum(v);}
+  function loadAdminHome(){
+    destroyCharts();
+    if(!INTEL.isAdmin(auth.id)){content.innerHTML='<div class="empty">Sezione riservata agli amministratori.</div>';return;}
+    content.innerHTML=spinner('Riconcilio affiliati, metriche, task, Drive e chat…');
+    if(opsFixtureEnabled()){
+      Promise.all([
+        fetch('fixtures/admin-control-tower.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();}),
+        fetch('fixtures/admin-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+      ]).then(function(rows){rows[0].creative_brain=rows[1];renderAdminHome(rows[0]);})
+        .catch(function(){content.innerHTML='<div class="empty">Fixture Control Tower non disponibile.</div>';});
+      return;
+    }
+    if(!auth.opsToken){content.innerHTML='<div class="empty"><b>Sessione admin scaduta.</b><br>Esci e accedi di nuovo.</div>';return;}
+    Promise.all([
+      ensureSb().rpc('ops_admin_talent_control_tower',{p_session_token:auth.opsToken}),
+      ensureSb().rpc('ops_admin_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
+    ]).then(function(rows){
+      var res=rows[0],creative=rows[1];
+      if(res.error||!res.data){content.innerHTML='<div class="empty"><b>Control Tower non ancora collegata.</b><br>'+towerText(res.error&&res.error.message||'Applica il gateway admin e verifica i connettori.')+'<br><button class="btn" id="tower-retry" style="margin-top:12px">Riprova</button></div>';var b=document.getElementById('tower-retry');if(b)b.onclick=loadAdminHome;return;}
+      res.data.creative_brain=creative&&!creative.error&&creative.data?creative.data:{talents:[],status:'not_connected'};
+      renderAdminHome(res.data);
+    },function(){content.innerHTML='<div class="empty">Connessione Control Tower non disponibile.</div>';});
+  }
+  function renderAdminHome(data){
+    _towerData=data||{};var totals=_towerData.totals||{},talents=_towerData.talents||[];
+    var creativeRows=((_towerData.creative_brain||{}).talents)||[],creativeMap={};
+    creativeRows.forEach(function(x){creativeMap[INTEL.resolveTalent(x.talent_id)]=x;});
+    talents.forEach(function(x){x.creative=creativeMap[INTEL.resolveTalent(x.talent_id)]||{};});
+    if(!talents.length){content.innerHTML='<div class="empty">Nessun talent operativo nello snapshot.</div>';return;}
+    var selected=load(TOWER_SEL_KEY,null),row=talents.filter(function(x){return x.talent_id===selected;})[0]||talents[0];
+    function sourceAttention(x){var keys=['funnel','organic','ads','drive','chat'];return keys.filter(function(k){return !towerHasData((x[k]||{}).status);}).length;}
+    var head='<div class="tower-head"><div><div class="studio-eyebrow">Admin only · portfolio operativo</div><h1 class="tower-title">Control Tower affiliati</h1><p>Metriche reali, budget, ritardi, Drive e SLA chat. Un trattino indica tracking assente: non viene mai trasformato in uno zero finto.</p></div><div class="ops-sync">Aggiornato '+towerText(opsDate(_towerData.generated_at))+'<br>6 talent · dati personali esclusi</div></div>';
+    var kpis='<div class="tower-kpis"><div class="tower-kpi"><b>'+towerNum(totals.ftd_30d)+'</b><small>FTD · 30 giorni</small></div><div class="tower-kpi"><b>'+towerMoney(totals.ad_spend)+'</b><small>spesa ads misurata</small></div><div class="tower-kpi"><b>'+towerNum(totals.open_tasks)+'</b><small>task aperti</small></div><div class="tower-kpi"><b class="'+(Number(totals.overdue_tasks)>0?'tower-alert':'')+'">'+towerNum(totals.overdue_tasks)+'</b><small>task in ritardo</small></div><div class="tower-kpi"><b class="'+(Number(totals.unanswered_chats)>0?'tower-warn':'')+'">'+towerNum(totals.unanswered_chats)+'</b><small>chat senza risposta</small></div><div class="tower-kpi"><b>'+towerNum(totals.drive_assets)+'</b><small>asset Drive catalogati</small></div></div>';
+    var table='<section class="ops-section"><div class="ops-section-head"><h3>Portfolio per talent</h3><span class="ops-count">clicca una riga per il dettaglio</span></div><div class="cc-tablewrap"><table class="tower-table"><thead><tr><th>Talent / owner</th><th>FTD 30g</th><th>Organico view</th><th>Spesa Ads</th><th>ROAS</th><th>Budget</th><th>Task</th><th>Drive</th><th>Chat</th><th>Brain</th><th>Fonti</th></tr></thead><tbody>'+talents.map(function(x){var f=x.funnel||{},o=x.organic||{},a=x.ads||{},b=x.budget||{},t=x.tasks||{},d=x.drive||{},c=x.chat||{},cr=x.creative||{},own=x.ownership||{},att=sourceAttention(x),q=Number(cr.weekly_ads||0)+Number(cr.weekly_reels||0);return '<tr class="tower-row'+(x.talent_id===row.talent_id?' on':'')+'" data-tower-talent="'+towerText(x.talent_id)+'" tabindex="0"><td><div class="tower-person"><span class="tower-avatar">'+towerText((x.display_name||x.talent_id).slice(0,2).toUpperCase())+'</span><span><b>'+towerText(x.display_name)+'</b><small>'+towerText(own.owner_name||own.owner_id||'owner da assegnare')+'</small></span></div></td><td>'+towerMetric(f.ftd_30d,f.status)+'</td><td>'+towerMetric(o.views,o.status)+'</td><td>'+towerMetric(a.spend,a.status,'money')+'</td><td>'+towerMetric(a.roas,a.status,'ratio')+'</td><td>'+towerMetric(b.approved_budget,b.status,'money')+'</td><td><span class="'+(Number(t.overdue)>0?'tower-alert':'')+'">'+towerNum(t.overdue)+'</span> / '+towerNum(t.open)+'</td><td>'+towerMetric(d.assets,d.status)+' <span class="muted">('+towerNum(d.unmapped)+')</span></td><td><span class="'+(Number(c.unanswered)>0?'tower-warn':'')+'">'+towerMetric(c.unanswered,c.status)+'</span> / '+towerMetric(c.received_24h,c.status)+'</td><td>'+(q?'<span style="color:var(--green)">'+q+'/8</span>':'<span class="tower-missing">—</span>')+'</td><td>'+(att?'<span class="tower-warn">'+att+' mancanti</span>':'<span style="color:var(--green)">complete</span>')+'</td></tr>';}).join('')+'</tbody></table></div></section>';
+    content.innerHTML=head+kpis+table+towerTalentDetail(row);
+    Array.prototype.forEach.call(content.querySelectorAll('[data-tower-talent]'),function(el){var pick=function(){save(TOWER_SEL_KEY,el.getAttribute('data-tower-talent'));renderAdminHome(_towerData);};el.onclick=pick;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}};});
+  }
+  function towerTalentDetail(x){
+    var f=x.funnel||{},o=x.organic||{},a=x.ads||{},b=x.budget||{},t=x.tasks||{},d=x.drive||{},c=x.chat||{},on=x.onboarding||{},cr=x.creative||{};
+    function source(label,obj,last,detail){return '<div class="tower-source"><b>'+label+'</b>'+towerStatus(obj.status)+'<small>'+towerText(detail)+'</small><small>Ultimo dato: '+towerText(last?opsDate(last):'mai')+'</small></div>';}
+    var sourceGrid='<div class="tower-source-grid">'+source('Funnel / FTD',f,f.last_metric_day,'Join '+towerNum(f.joins_30d)+' · conversazioni '+towerNum(f.conversations_30d))+source('Organico',o,o.last_observed_at,'Reach '+towerNum(o.reach)+' · click tracciati '+towerNum(o.tracked_clicks))+source('Ads',a,a.last_observed_at,'Impression '+towerNum(a.impressions)+' · CPL/FTD '+(a.cost_per_ftd==null?'—':towerMoney(a.cost_per_ftd)))+source('Drive',d,d.last_seen_at,towerNum(d.assets)+' asset · '+towerNum(d.unmapped)+' da mappare')+source('Chat',c,c.last_inbound_at,towerNum(c.received_24h)+' ricevute 24h · '+towerNum(c.unanswered)+' senza risposta')+source('Budget',b,b.period_end,b.status==='not_configured'?'Nessun budget approvato registrato':towerMoney(b.spent)+' spesi su '+towerMoney(b.approved_budget))+'</div>';
+    var pct=Math.max(0,Math.min(100,Number(b.utilization_pct||0))),progress=b.status==='not_configured'?'<div class="studio-empty">Budget non configurato. La spesa Ads resta visibile, ma non viene confrontata con un target inventato.</div>':'<div class="tower-meter"><span style="width:'+pct+'%"></span></div><small class="muted">'+pct+'% utilizzato · '+towerMoney(b.remaining)+' residui</small>';
+    var overdue=(t.top_overdue||[]).map(function(q){return '<div class="ops-row"><span class="ops-priority p'+Number(q.priority||2)+'">P'+Number(q.priority||2)+'</span><div class="ops-main"><b>'+towerText(q.title)+'</b><small>'+towerText(q.owner_ref||'da assegnare')+' · '+towerText(opsDate(q.due_at))+'</small></div><span class="ops-status '+towerText(q.status)+'">'+towerText(q.status)+'</span></div>';}).join('')||'<div class="ops-empty">Nessun task in ritardo.</div>';
+    var roots=(d.roots||[]).map(function(r){var url=opsSafeDriveUrl(r.url);return '<div class="studio-item"><div><b>'+towerText(r.display_name)+'</b><small>'+towerText(r.status)+' · '+towerText(r.access_mode||'read_only')+' · '+towerText(r.last_seen_at?opsDate(r.last_seen_at):'mai sincronizzato')+'</small></div>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+towerText(url)+'">Apri</a>':'')+'</div>';}).join('')||'<div class="ops-empty">Nessuna root Drive registrata.</div>';
+    var oldest=c.oldest_unanswered_at?opsDate(c.oldest_unanswered_at):'nessuna';
+    var creativeReady=Number(cr.weekly_ads||0)===3&&Number(cr.weekly_reels||0)===5;
+    var creative='<section class="ops-section"><div class="ops-section-head"><h3>Creative Brain settimanale</h3><span class="ops-count">'+(creativeReady?'3 Ads + 5 Reel':'coda da generare')+'</span></div><div class="ops-kpis" style="margin:0;border:0;border-radius:0"><div class="ops-kpi"><strong>'+towerNum(cr.evaluated)+'</strong><span>libreria valutata</span></div><div class="ops-kpi"><strong>'+towerNum(cr.eligible)+'</strong><span>candidati eleggibili</span></div><div class="ops-kpi"><strong>'+towerNum(cr.weekly_ads)+'</strong><span>Ads questa settimana</span></div><div class="ops-kpi"><strong>'+towerNum(cr.weekly_reels)+'</strong><span>Reel questa settimana</span></div></div><div class="cc-note">'+towerNum(cr.translation_required)+' richiedono riscrittura nella lingua/voce del talent · '+towerNum(cr.drafts_in_review)+' bozze in review · '+towerNum(cr.drafts_approved)+' approvate. Libreria grezza non esposta.</div></section>';
+    return '<div class="tower-detail"><div><section class="ops-section"><div class="ops-section-head"><h3>'+towerText(x.display_name)+' · copertura dati</h3><span class="ops-count">nessuna PII</span></div>'+sourceGrid+'</section>'+creative+'<section class="ops-section"><div class="ops-section-head"><h3>Task e ritardi</h3><span class="ops-count">'+towerNum(t.open)+' aperti · '+towerNum(t.blocked)+' bloccati</span></div>'+overdue+'</section></div><aside><section class="ops-section"><div class="ops-section-head"><h3>Budget &amp; Ads</h3>'+towerStatus(b.status)+'</div><div style="padding:12px 14px">'+progress+'</div></section><section class="ops-section"><div class="ops-section-head"><h3>Chat &amp; SLA</h3>'+towerStatus(c.status)+'</div><div class="ops-kpis" style="margin:0;border:0;border-radius:0"><div class="ops-kpi"><strong>'+towerMetric(c.received_24h,c.status)+'</strong><span>arrivate 24h</span></div><div class="ops-kpi"><strong>'+towerMetric(c.unanswered,c.status)+'</strong><span>senza risposta</span></div><div class="ops-kpi"><strong>'+(c.avg_response_minutes==null?'—':towerNum(c.avg_response_minutes)+'m')+'</strong><span>risposta media</span></div><div class="ops-kpi"><strong>'+(c.p95_response_minutes==null?'—':towerNum(c.p95_response_minutes)+'m')+'</strong><span>p95 risposta</span></div></div><div class="cc-note">Messaggio più vecchio senza risposta: '+towerText(oldest)+'. Contenuti chat non conservati.</div></section><section class="ops-section"><div class="ops-section-head"><h3>Drive affiliato</h3><span class="ops-count">'+towerNum(d.assets)+' asset</span></div><div style="padding:0 14px">'+roots+'</div></section><section class="ops-section"><div class="ops-section-head"><h3>Onboarding</h3>'+towerStatus(on.status)+'</div><div style="padding:12px 14px"><b>Fase '+towerText(on.phase||'—')+' · '+towerNum(on.progress_pct)+'%</b><div class="tower-meter"><span style="width:'+Math.max(0,Math.min(100,Number(on.progress_pct||0)))+'%"></span></div><small class="muted">'+towerNum(on.completed)+' / '+towerNum(on.items)+' deliverable · '+towerNum(on.blocked)+' bloccati</small></div></section></aside></div>';
+  }
+
   // ---------------- COMMAND CENTER (admin) ----------------
   function ccSecs(s){
     s=Number(s); if(!isFinite(s)) return '\u2014';
@@ -818,7 +1093,7 @@
   // ---------------- CONTENT INTELLIGENCE ----------------
   var INTEL_FILTERS_KEY='bullshub_intel_filters_v1', INTEL_SEL_KEY='bullshub_intel_sel_v1';
   var intelFilters=load(INTEL_FILTERS_KEY,{ctype:'all',platform:'all'});
-  var _intelList=null;
+  var _intelList=null, _creativeBrain={};
   function attachOrganicTracking(list,payload){
     payload=payload||{};
     var accounts=payload.accounts||[], performance=payload.performance||[], recommendations=payload.recommendations||[], quarantine=payload.quarantine||[];
@@ -834,22 +1109,33 @@
   function loadIntelligence(){
     destroyCharts();
     content.innerHTML=spinner('Carico la Content Intelligence\u2026');
-    function proceed(list){
+    function finish(list,creative){
+      _creativeBrain=creative||{};
       if(!INTEL.isAdmin(auth.id)){
         var mine=(list||[]).filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(auth.id);});
         _intelList=mine;
       } else { _intelList=list||[]; }
       renderIntelligence();
     }
+    function proceed(list){
+      if(INTEL.isAdmin(auth.id)){finish(list,{});return;}
+      ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
+        .then(function(r){finish(list,creativeRpcPayload(r));},function(e){finish(list,{_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')});});
+    }
     if(opsFixtureEnabled()){
-      fetch('fixtures/content-intelligence.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
-        .then(function(j){ proceed((j.content_intelligence&&j.content_intelligence.affiliates)||[]); })
+      Promise.all([
+        fetch('fixtures/content-intelligence.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();}),
+        fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+      ]).then(function(rows){ finish((rows[0].content_intelligence&&rows[0].content_intelligence.affiliates)||[],rows[1]||{}); })
         .catch(function(){ renderCCError('Fixture intelligence non disponibile.',loadIntelligence); });
       return;
     }
     if(!auth.opsToken){ content.innerHTML='<div class="empty"><b>Sessione operativa da attivare</b><br>Esci e accedi di nuovo con il tuo codice.</div>'; return; }
     ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
-      if(res.error||!res.data){ renderCCError('Non riesco a caricare la Content Intelligence.',loadIntelligence); return; }
+      if(res.error||!res.data){
+        if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){del(AUTH);auth=null;showLogin();lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';return;}
+        renderCCError('Non riesco a caricare la Content Intelligence.',loadIntelligence); return;
+      }
       var ci=res.data.content_intelligence;
       if(ci&&ci.affiliates){
         ensureSb().rpc('ops_organic_tracking_snapshot',{p_session_token:auth.opsToken}).then(function(org){
@@ -887,6 +1173,7 @@
     var admin=INTEL.isAdmin(auth.id);
     var sel=admin?(load(INTEL_SEL_KEY,null)):INTEL.resolveTalent(auth.id);
     var aff=list.filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(sel);})[0]||list[0];
+    if(!admin){ renderTalentForYou(aff,_creativeBrain); return; }
     var selBar='';
     if(admin){
       selBar='<div class="intel-sel">'+list.map(function(x){
@@ -992,6 +1279,208 @@
       '</aside></div>';
   }
 
+  // ---------------- TALENT STUDIO ----------------
+  function studioHero(eyebrow,title,lead,freshness){
+    return '<div class="studio-hero"><div><div class="studio-eyebrow">'+esc(eyebrow)+'</div><h1 class="studio-title">'+esc(title)+'</h1><p class="studio-lead">'+esc(lead)+'</p></div>'+
+      '<div class="studio-fresh">'+esc(freshness||'Dati verificati dal perimetro talent')+'</div></div>';
+  }
+  function setStudioView(next){
+    view=next;
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){var on=x.getAttribute('data-view')===view;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
+    render();
+    try{document.getElementById('content').focus({preventScroll:true});}catch(e){}
+  }
+  function bindStudioLinks(){
+    Array.prototype.forEach.call(content.querySelectorAll('[data-studio-view]'),function(b){b.onclick=function(){setStudioView(b.getAttribute('data-studio-view'));};});
+  }
+  function studioEmpty(text){return '<div class="studio-empty">'+esc(text)+'</div>';}
+  function creativeRpcPayload(r){
+    if(r&&r.error)return {_load_error:String(r.error.message||r.error)};
+    if(!r||!r.data)return {_load_error:'Snapshot Creative Brain non disponibile'};
+    return r.data;
+  }
+  function creativeErrorBanner(value){
+    return value&&value._load_error?'<div class="ops-alert"><b>Creative Brain non collegato.</b> '+esc(String(value._load_error))+' · Le fonti legacy restano visibili, ma la coda personale non viene simulata.</div>':'';
+  }
+  function studioRecLabel(v){return {create_variations:'Ripeti e crea varianti',test_new_hook_or_format:'Cambia hook o formato',pause_and_review:'Ferma e rivedi',collect_more_data:'Raccogli più dati'}[v]||String(v||'In valutazione').replace(/_/g,' ');}
+
+  function renderTalentForYou(aff,creative){
+    aff=aff||{};creative=creative||{};
+    var inv=aff.inventory||{}, hooks=(aff.hooks||[]).slice().sort(function(a,b){return Number(b.engagement_index||0)-Number(a.engagement_index||0);}).slice(0,5);
+    var recs=(aff.organic_recommendations||[]).slice(0,6);
+    var queue=((creative.weekly_queue||{}).items)||[],creativeReels=queue.filter(function(x){return x.kind==='reel';});
+    var seo=(creativeReels.length?creativeReels:(aff.seo_opportunities||aff.content_opportunities||[])).slice(0,6);
+    var matrix=creative.ads_matrix||{},profile=creative.profile||{};
+    var seoRows=seo.length?seo.map(function(o){
+      var topic=o.title||o.topic||o.keyword_cluster||o.keyword||o.question||'Opportunità editoriale';
+      var gap=o.rationale||o.competitor_gap||o.gap||o.reason||'Gap verificato dal team creativo';
+      var format=o.format||o.recommended_format||'Reel';
+      var trend=o.source_kind||o.trend_label||o.trend||'opportunità';
+      var score=o.source_score==null?'':' · score '+Math.round(Number(o.source_score));
+      var status=o.production_status?' · '+String(o.production_status).replace(/_/g,' '):'';
+      return '<div class="studio-item"><div><span class="studio-signal good">'+esc(String(trend))+'</span><b style="margin-top:8px">'+esc(String(topic))+'</b><small>'+esc(String(gap))+' · formato '+esc(String(format))+esc(score+status)+'</small></div><button type="button" class="studio-action" data-studio-view="production">Vedi produzione</button></div>';
+    }).join(''):studioEmpty('OpenSEO è pronto come fonte di proposta. Le opportunità appariranno qui soltanto dopo verifica di lingua, pubblico, competitor gap e pertinenza per il tuo profilo.');
+    var recRows=recs.length?recs.map(function(r){
+      var tone=r.recommendation==='create_variations'?'good':(r.recommendation==='pause_and_review'?'bad':'warn');
+      return '<div class="studio-item"><div><span class="studio-signal '+tone+'">'+esc(String(r.platform||'organico'))+'</span><b style="margin-top:8px">'+esc(String(r.angle||'Angolo da verificare'))+'</b><small>'+Number(r.publications||0)+' pubblicazioni · '+Number(r.views||0).toLocaleString('it-IT')+' view · '+Number(r.ftd||0)+' FTD</small></div><span class="studio-action" aria-label="Direttiva">'+esc(studioRecLabel(r.recommendation))+'</span></div>';
+    }).join(''):studioEmpty('Le direttive organiche appariranno quando esiste un campione sufficiente. Nessun contenuto viene dichiarato vincente soltanto perché esiste nel Drive.');
+    var hookRows=hooks.length?hooks.map(function(h){
+      return '<div class="studio-item"><div><span class="studio-signal">'+esc(String(h.platform||'multi'))+'</span><b style="margin-top:8px">'+esc(String(h.hook_text||''))+'</b><small>'+Number(h.publications||0)+' pubblicazioni · EI '+Number(h.engagement_index||0)+' · '+Number(h.ftd||0)+' FTD</small></div></div>';
+    }).join(''):studioEmpty('I migliori hook entreranno qui solo dopo aver superato le soglie minime di pubblicazioni, view e risultati.');
+    content.innerHTML=creativeErrorBanner(creative)+studioHero('Per te','La tua prossima mossa','Trend, opportunità e indicazioni già filtrati sul tuo pubblico e sulla tua voce.','Perimetro '+(aff.display_name||INTEL.displayName(auth.id)))+
+      '<div class="studio-grid">'+
+        '<section class="studio-card wide"><div class="studio-card-head"><div><h2>Opportunità del tuo pubblico</h2><div class="studio-kicker">OpenSEO · keyword e competitor tradotti in idee utilizzabili</div></div><span class="studio-signal">proposte</span></div><div class="studio-list">'+seoRows+'</div></section>'+
+        '<aside class="studio-card"><div class="studio-card-head"><div><h2>Il tuo spazio</h2><div class="studio-kicker">'+esc(profile.voice_summary||'Inventario privato e isolato')+'</div></div></div><div class="ops-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0"><div class="ops-kpi"><strong>'+Number(matrix.evaluated||inv.ads||0)+'</strong><span>ads valutate</span></div><div class="ops-kpi"><strong>'+Number(matrix.eligible||0)+'</strong><span>compatibili ora</span></div><div class="ops-kpi"><strong>'+Number(creativeReels.length||inv.organico||0)+'</strong><span>reel in coda</span></div><div class="ops-kpi"><strong>'+Number(matrix.sufficient_evidence||0)+'</strong><span>con dati reali</span></div></div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:13px"><button type="button" class="studio-action" data-studio-view="talentads">Apri Ads</button><button type="button" class="studio-action" data-studio-view="production">Tutta la produzione</button></div></aside>'+
+        '<section class="studio-card wide"><div class="studio-card-head"><div><h2>Indicazioni organiche</h2><div class="studio-kicker">Ripeti, cambia o raccogli più dati</div></div></div><div class="studio-list">'+recRows+'</div></section>'+
+        '<section class="studio-card"><div class="studio-card-head"><div><h2>Hook da studiare</h2><div class="studio-kicker">Solo pattern con evidenza</div></div></div><div class="studio-list">'+hookRows+'</div></section>'+
+      '</div>';
+    bindStudioLinks();
+  }
+
+  function loadTalentAds(){
+    destroyCharts();content.innerHTML=spinner('Preparo il tuo banco Ads…');
+    if(opsFixtureEnabled()){
+      fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+        .then(function(j){renderTalentAds({}, {}, j||{});})
+        .catch(function(){content.innerHTML='<div class="empty">Fixture Ads non disponibile.</div>';});
+      return;
+    }
+    var brainPromise=ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken})
+      .then(function(r){return r&&!r.error&&r.data?r.data:{};}).catch(function(){return {};});
+    var creativePromise=ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
+      .then(creativeRpcPayload).catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
+    Promise.all([loadLegacySnapshot(),brainPromise,creativePromise]).then(function(rows){renderTalentAds(rows[0],rows[1],rows[2]);})
+      .catch(function(){content.innerHTML='<div class="empty">Ads non disponibili. Esci e accedi di nuovo.</div>';});
+  }
+  function renderTalentAds(data,brain,creative){
+    data=data||{};brain=brain||{};creative=creative||{};
+    var scripts=data.ads||[],metrics=data.metrics||[],daily=data.social_ads_daily||[],measured={},spend=0,leads=0,revenue=0;
+    var assignments=Array.isArray(brain.assignments)?brain.assignments:[],brainSummary=brain.summary||{};
+    var matrix=creative.ads_matrix||{},queue=((creative.weekly_queue||{}).items)||[],weeklyAds=queue.filter(function(x){return x.kind==='ad';});
+    metrics.forEach(function(m){var type=String(m.item_type||'').toLowerCase();if(!type||type==='ad'||type==='ads')measured[String(m.item_id||'')]=m;});
+    daily.forEach(function(d){spend+=Number(d.spend||0);leads+=Number(d.leads||0);revenue+=Number(d.revenue||0);});
+    var linked=scripts.filter(function(a){return !!opsSafeDriveUrl(a.drive_url||a.asset_url||'');}).length;
+    var measuredCount=scripts.filter(function(a){return !!measured[String(a.id||'')];}).length;
+    var roas=spend>0?revenue/spend:0,cpl=leads>0?spend/leads:0;
+    var legacyById={};scripts.forEach(function(a){legacyById[String(a.id||'')]=a;});
+    var weeklyCards=weeklyAds.map(function(a){
+      var lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||'TEST';
+      var draft=a.draft||{},status=String(a.production_status||'proposed').replace(/_/g,' ');
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal good">score '+Math.round(Number(a.source_score||0))+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||'codice in preparazione'))+' · '+esc(status)+'</div><div class="hook">'+esc(String(draft.hook||a.title||'Concept Ads'))+'</div><div class="copy">'+esc(String(draft.body||a.rationale||'Riscrittura personale in preparazione'))+'</div>'+(draft.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(draft.cta))+'</div>':'')+'<div class="foot"><small class="muted">Fonte '+esc(String(a.source_kind||'ads_library'))+' · '+esc(String(a.format||''))+'</small><span class="studio-signal">'+esc(String(a.fingerprint?'impronta pronta':'impronta al draft'))+'</span></div><div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata'))+'</div></article>';
+    }).join('');
+    var assignmentCards=assignments.length?assignments.map(function(a){
+      var legacy=legacyById[String(a.legacy_ad_id||'')]||{},metric=measured[String(a.legacy_ad_id||'')];
+      var url=opsSafeDriveUrl(a.reference_url||legacy.drive_url||legacy.asset_url||'');
+      var lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||String(a.experiment_lane||'TEST').toUpperCase();
+      var duplicate=a.duplicate_decision==='block'?'duplicato bloccato':(a.duplicate_decision==='human_review'?'review duplicato':'impronta unica');
+      var duplicateTone=a.duplicate_decision==='block'?'bad':(a.duplicate_decision==='human_review'?'warn':'good');
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal '+duplicateTone+'">'+esc(duplicate)+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||a.library_id||'codice in preparazione'))+'</div><div class="hook">'+esc(String(a.title||a.hook||'Concept Ads'))+'</div><div class="studio-kicker" style="margin-top:6px">Hook</div><div class="copy">'+esc(String(a.hook||'Hook in preparazione'))+'</div><div class="studio-kicker" style="margin-top:9px">Script</div><div class="copy">'+esc(String(a.body||'Script in preparazione'))+'</div>'+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.recording_direction?'<div class="studio-kicker" style="margin-top:6px">Regia · '+esc(String(a.recording_direction))+'</div>':'')+'<div class="foot"><small class="muted">'+esc([a.angle,a.format,a.language].filter(Boolean).join(' · ')||'DNA creativo verificato')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div><div class="studio-kicker" style="margin-top:9px">'+(metric?'Metriche collegate':'Misurazione pronta · binding piattaforma da collegare')+'</div></article>';
+    }).join(''):scripts.length?scripts.map(function(a){
+      var id=String(a.id||''),metric=measured[id],url=opsSafeDriveUrl(a.drive_url||a.asset_url||'');
+      var meta=[a.angolo,a.lingua,a.batch].filter(Boolean).join(' · ');
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal warn">ADS</span><span class="studio-signal '+(metric?'good':'')+'">'+(metric?'misurata':'da testare')+'</span></div><div class="hook">'+esc(String(a.hook||'Hook in preparazione'))+'</div><div class="copy">'+esc(String(a.body||'Script in preparazione'))+'</div>'+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.fonte_a_schermo?'<div class="studio-kicker" style="margin-top:6px">Fonte · '+esc(String(a.fonte_a_schermo))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(meta||'Angolo da definire')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div></article>';
+    }).join(''):'';
+    var cards=weeklyCards+assignmentCards;
+    if(!cards)cards=studioEmpty('La matrice è pronta ma la coda settimanale non è stata ancora generata. Nessun dato di altri talent viene mostrato.');
+    content.innerHTML=creativeErrorBanner(creative)+studioHero('Ads','Hook, script e test','Il tuo banco Ads privato: cosa registrare, quale angolo testare e dove trovare gli asset.','Sola lettura · nessuna pubblicazione automatica')+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(matrix.evaluated||0)+'</strong><span>libreria valutata</span></div><div class="ops-kpi"><strong>'+Number(weeklyAds.length)+'</strong><span>selezionate questa settimana</span></div><div class="ops-kpi"><strong>'+Number(brainSummary.fingerprinted||0)+'</strong><span>derivati improntati</span></div><div class="ops-kpi"><strong>'+(Math.round(roas*10)/10).toLocaleString('it-IT')+'×</strong><span>ROAS · CPL '+fmtEur(cpl)+'</span></div></div>'+
+      '<div class="bar"><div class="muted"><b>'+Number(matrix.eligible||0)+'</b> compatibili ora · '+Number(matrix.translation_required||0)+' richiedono traduzione/adattamento · spesa tracciata '+fmtEur(spend)+' · '+fmtInt(leads)+' lead</div><button type="button" class="studio-action" data-studio-view="results">Apri risultati</button></div><div class="studio-production">'+cards+'</div>';
+    bindStudioLinks();
+  }
+
+  function loadTalentProduction(){
+    destroyCharts();content.innerHTML=spinner('Preparo la tua produzione…');
+    if(opsFixtureEnabled()){
+      Promise.all([
+        fetch('reels_organici.json').then(function(r){if(!r.ok)throw 0;return r.json();}),
+        fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+      ]).then(function(rows){talentProductionCache={legacy:{},reels:rows[0].reels||[],brain:{},creative:rows[1]||{}};renderTalentProduction();})
+        .catch(function(){content.innerHTML='<div class="empty">Fixture produzione non disponibile.</div>';});
+      return;
+    }
+    var reelsPromise=reelsData?Promise.resolve(reelsData):fetch('reels_organici.json').then(function(r){if(!r.ok)throw new Error('reels');return r.json();}).then(function(j){reelsData=j.reels||[];return reelsData;});
+    var brainPromise=ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken})
+      .then(function(r){return r&&!r.error&&r.data?r.data:{};}).catch(function(){return {};});
+    var creativePromise=ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
+      .then(creativeRpcPayload).catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
+    Promise.all([loadLegacySnapshot(),reelsPromise,brainPromise,creativePromise]).then(function(rows){talentProductionCache={legacy:rows[0],reels:rows[1],brain:rows[2],creative:rows[3]};renderTalentProduction();})
+      .catch(function(){content.innerHTML='<div class="empty">Produzione non disponibile. Esci e accedi di nuovo.</div>';});
+  }
+  function renderTalentProduction(){
+    var pack=talentProductionCache||{legacy:{},reels:[],brain:{},creative:{}},legacy=pack.legacy||{},done={};
+    (legacy.metrics||[]).forEach(function(m){done[String(m.item_id)]=m;});
+    var brainAds=Array.isArray((pack.brain||{}).assignments)?pack.brain.assignments:[];
+    var creativeItems=((((pack.creative||{}).weekly_queue||{}).items)||[]);
+    var creativeAds=creativeItems.filter(function(x){return x.kind==='ad';}).map(function(x){var d=x.draft||{};return {kind:'ads',id:String(x.id||''),title:x.title||'Concept Ads',copy:d.body||x.rationale||'',angle:x.angle||x.experiment_lane||'Ads',format:x.format||'',url:'',code:x.content_code||'',score:x.source_score,reason:x.rationale,status:x.production_status,source:x.source_kind};});
+    var ads=creativeAds.length?creativeAds:(brainAds.length?brainAds.map(function(a){return {kind:'ads',id:String(a.legacy_ad_id||a.assignment_id||''),title:a.title||a.hook||'Concept Ads',copy:a.body||'',angle:a.angle||a.experiment_lane||'Ads',format:a.format||a.language||'',url:a.reference_url||'',code:a.content_code||''};}):(legacy.ads||[]).map(function(a){return {kind:'ads',id:String(a.id||''),title:a.hook||'Script Ads',copy:a.body||'',angle:a.angolo||'Ads',format:a.ambiente||a.lingua||'',url:a.drive_url||a.asset_url||'',code:a.content_code||''};}));
+    var creativeReels=creativeItems.filter(function(x){return x.kind==='reel';}).map(function(x){var d=x.draft||{};return {kind:'organic',id:String(x.id||''),title:x.title||'Reel organico',copy:d.body||x.rationale||'',angle:x.angle||x.source_kind||'Organico',format:x.format||'',url:(x.evidence||{}).source_url||'',code:x.content_code||'',score:x.source_score,reason:x.rationale,status:x.production_status,source:x.source_kind};});
+    var organics=creativeReels.length?creativeReels:(pack.reels||[]).filter(function(r){return INTEL.resolveTalent(r.talent)===INTEL.resolveTalent(auth.id);}).map(function(r){return {kind:'organic',id:String(r.id||''),title:r.testo_schermo||r.hook||'Reel organico',copy:r.script_parlato||r.caption||'',angle:r.format||'Organico',format:r.regia||'',url:r.drive_url||r.asset_url||''};});
+    var all=productionFilter==='ads'?ads:(productionFilter==='organic'?organics:ads.concat(organics));
+    var shown=all.slice(0,24);
+    var cards=shown.length?shown.map(function(x){
+      var metric=done[x.id],url=opsSafeDriveUrl(x.url);
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal '+(x.kind==='ads'?'warn':'good')+'">'+(x.kind==='ads'?'ADS':'ORGANICO')+'</span><span class="studio-signal">'+esc(String(x.status|| (metric?'misurato':'da produrre')).replace(/_/g,' '))+'</span></div>'+(x.code?'<div class="studio-kicker" style="margin-top:10px">'+esc(String(x.code))+(x.score==null?'':' · score '+Math.round(Number(x.score)))+'</div>':'')+'<div class="hook">'+esc(String(x.title))+'</div><div class="copy">'+esc(String(x.copy||'Brief in preparazione'))+'</div>'+(x.reason?'<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(x.reason))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(String(x.source||x.angle))+(x.format?' · '+esc(String(x.format)):'')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri fonte</a>':'')+'</div></article>';
+    }).join(''):studioEmpty('Nessun contenuto in questa vista.');
+    content.innerHTML=creativeErrorBanner(pack.creative)+studioHero('Produzione','Dal brief alla pubblicazione','Ads e contenuti organici nello stesso flusso, con script, stato e asset collegati.','Sola lettura durante il pilot')+
+      '<div class="studio-segment" role="group" aria-label="Filtra produzione"><button type="button" data-production-filter="all" class="'+(productionFilter==='all'?'on':'')+'">Tutti</button><button type="button" data-production-filter="ads" class="'+(productionFilter==='ads'?'on':'')+'">Ads</button><button type="button" data-production-filter="organic" class="'+(productionFilter==='organic'?'on':'')+'">Organico</button></div>'+
+      '<div class="bar"><div class="muted"><b>'+all.length+'</b> contenuti · ne mostro '+shown.length+' per mantenere la vista leggibile</div></div><div class="studio-production">'+cards+'</div>';
+    Array.prototype.forEach.call(content.querySelectorAll('[data-production-filter]'),function(b){b.onclick=function(){productionFilter=b.getAttribute('data-production-filter');renderTalentProduction();};});
+  }
+
+  function loadTalentResults(){
+    destroyCharts();content.innerHTML=spinner('Leggo i tuoi risultati…');
+    Promise.all([
+      loadLegacySnapshot(),
+      ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}),
+      ensureSb().rpc('ops_organic_tracking_snapshot',{p_session_token:auth.opsToken})
+    ]).then(function(rows){
+      var ops=rows[1].error?{}:(rows[1].data||{}),list=(((ops.content_intelligence||{}).affiliates)||[]),org=rows[2];
+      if(!org.error&&org.data)list=attachOrganicTracking(list,org.data);
+      var aff=list.filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(auth.id);})[0]||affiliateFromSnapshot(ops);
+      renderTalentResults(rows[0],aff,ops.generated_at);
+    }).catch(function(){content.innerHTML='<div class="empty">Risultati non disponibili. Riprova tra poco.</div>';});
+  }
+  function renderTalentResults(data,aff,generatedAt){
+    data=data||{};aff=aff||{};
+    var ads=data.social_ads_daily||[],daily=data.social_daily||[],posts=data.social_posts||[],spend=0,leads=0,rev=0;
+    ads.forEach(function(a){spend+=Number(a.spend||0);leads+=Number(a.leads||0);rev+=Number(a.revenue||0);});
+    var roas=spend>0?rev/spend:0,cpl=leads>0?spend/leads:0,byDay={};
+    daily.forEach(function(d){byDay[d.day]=(byDay[d.day]||0)+Number(d.followers||0);});
+    var days=Object.keys(byDay).sort(),growth=days.length>1?byDay[days[days.length-1]]-byDay[days[0]]:0;
+    var recs=aff.organic_recommendations||[];
+    function recBlock(code,cls,title,empty){var xs=recs.filter(function(r){return code.indexOf(r.recommendation)>=0;}).slice(0,5);return '<section class="studio-decision '+cls+'"><h3>'+title+'</h3>'+(xs.length?xs.map(function(r){return '<div class="ops-row"><div class="ops-main"><b>'+esc(String(r.angle||'Angolo'))+'</b><small>'+esc(studioRecLabel(r.recommendation))+' · '+Number(r.views||0).toLocaleString('it-IT')+' view</small></div></div>';}).join(''):studioEmpty(empty))+'</section>';}
+    var topPosts=posts.slice().sort(function(a,b){return Number(b.views||0)-Number(a.views||0);}).slice(0,8);
+    var postRows=topPosts.length?topPosts.map(function(p){return '<div class="studio-item"><div><span class="studio-signal">'+esc(String(p.platform||'social'))+'</span><b style="margin-top:8px">'+esc(String(p.caption||p.id||'Contenuto'))+'</b></div><strong>'+Number(p.views||0).toLocaleString('it-IT')+' view</strong></div>';}).join(''):studioEmpty('I contenuti migliori appariranno quando saranno collegate le fonti social ufficiali.');
+    content.innerHTML=studioHero('Risultati','Numeri che portano a una decisione','Confronti, contenuti migliori e indicazioni operative del tuo solo perimetro.',generatedAt?'Aggiornato '+opsDate(generatedAt):'Ultimo snapshot verificato')+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+fmtEur(spend)+'</strong><span>spesa 30 giorni</span></div><div class="ops-kpi"><strong>'+(Math.round(roas*10)/10).toLocaleString('it-IT')+'×</strong><span>ROAS</span></div><div class="ops-kpi"><strong>'+fmtInt(leads)+'</strong><span>lead · CPL '+fmtEur(cpl)+'</span></div><div class="ops-kpi"><strong>'+(growth>=0?'+':'')+fmtInt(growth)+'</strong><span>follower 30 giorni</span></div></div>'+
+      '<div class="studio-decision-grid">'+recBlock(['create_variations'],'repeat','Ripeti','Nessun pattern ha ancora evidenza sufficiente per essere ripetuto.')+recBlock(['test_new_hook_or_format','collect_more_data'],'change','Cambia o testa','Nessuna variazione richiesta al momento.')+recBlock(['pause_and_review'],'stop','Ferma','Nessun contenuto da fermare con i dati disponibili.')+'</div>'+
+      '<section class="studio-card full"><div class="studio-card-head"><div><h2>Contenuti migliori</h2><div class="studio-kicker">Ogni risultato resta collegato alla sua evidenza</div></div><button type="button" class="studio-action" data-studio-view="production">Apri produzione</button></div><div class="studio-list">'+postRows+'</div></section>';
+    bindStudioLinks();
+  }
+
+  function loadTalentAgenda(){
+    destroyCharts();content.innerHTML=spinner('Preparo agenda e priorità…');
+    if(opsFixtureEnabled()){
+      fetch('fixtures/operations.sample.json').then(function(r){return r.json();}).then(function(d){renderTalentAgenda(d,{meetings:[]});});return;
+    }
+    Promise.all([
+      ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}),
+      ensureSb().rpc('ops_call_execution_snapshot',{p_session_token:auth.opsToken})
+    ]).then(function(rows){if(rows[0].error||!rows[0].data)throw new Error('agenda');renderTalentAgenda(rows[0].data,rows[1].error?{}:(rows[1].data||{}));})
+      .catch(function(){content.innerHTML='<div class="empty">Agenda non disponibile. Riprova tra poco.</div>';});
+  }
+  function renderTalentAgenda(data,calls){
+    if(!data||data.talent_id!==auth.id){content.innerHTML='<div class="empty">Perimetro agenda non valido.</div>';return;}
+    var tasks=data.tasks||[],decisions=data.decisions||[],open=tasks.filter(function(t){return t.status!=='done'&&t.status!=='completed'&&t.status!=='blocked';}),blocked=tasks.filter(function(t){return t.status==='blocked'||(t.brief&&t.brief.blocker);});
+    var meetings=(calls.meetings||[]).filter(function(m){return !m.talent_id||INTEL.resolveTalent(m.talent_id)===INTEL.resolveTalent(auth.id);}).slice(0,6);
+    function taskRows(xs,empty){return xs.length?xs.slice(0,10).map(function(t){var detail=(t.brief&&((t.status==='blocked'&&t.brief.blocker)||t.brief.next_action))||t.task_type||'Task operativo';return '<div class="studio-item"><div><span class="studio-signal '+(t.status==='blocked'?'bad':(Number(t.priority||2)<=1?'warn':''))+'">P'+Number(t.priority||2)+'</span><b style="margin-top:8px">'+esc(String(t.title||'Task'))+'</b><small>'+esc(String(detail))+' · '+esc(opsDate(t.due_at))+'</small></div><span class="studio-signal">'+esc(opsStatus(t.status))+'</span></div>';}).join(''):studioEmpty(empty);}
+    var decisionRows=decisions.length?decisions.slice(0,8).map(function(d){return '<div class="studio-item"><div><span class="studio-signal warn">decisione</span><b style="margin-top:8px">'+esc(String(d.title||'Decisione'))+'</b><small>'+esc(String(d.rationale||'Richiede conferma umana'))+'</small></div><span class="studio-signal">'+esc(String(d.status||'review'))+'</span></div>';}).join(''):studioEmpty('Nessuna decisione richiesta.');
+    var meetingRows=meetings.length?meetings.map(function(m){return '<div class="studio-item"><div><span class="studio-signal good">call</span><b style="margin-top:8px">'+esc(String(m.meeting_type||'Aggiornamento'))+'</b><small>'+Number(m.action_items||0)+' action item · '+Number(m.ambiguous_items||0)+' da chiarire</small></div><span class="studio-signal">'+esc(opsDate(m.scheduled_start))+'</span></div>';}).join(''):studioEmpty('Le prossime call e i recap appariranno qui dopo l’elaborazione Fathom.');
+    content.innerHTML=studioHero('Agenda','Cosa serve da te','Task, blocchi, call e decisioni senza rumore operativo.',data.generated_at?'Aggiornato '+opsDate(data.generated_at):'Snapshot operativo')+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+open.length+'</strong><span>azioni aperte</span></div><div class="ops-kpi"><strong>'+blocked.length+'</strong><span>blocchi</span></div><div class="ops-kpi"><strong>'+decisions.length+'</strong><span>decisioni</span></div><div class="ops-kpi"><strong>'+meetings.length+'</strong><span>call</span></div></div>'+
+      '<div class="studio-grid"><section class="studio-card wide"><div class="studio-card-head"><div><h2>Prossime azioni</h2><div class="studio-kicker">Ordinate per priorità e scadenza</div></div></div><div class="studio-list">'+taskRows(open,'Nessuna azione aperta.')+'</div></section><aside class="studio-card"><div class="studio-card-head"><div><h2>Blocchi</h2><div class="studio-kicker">Da sbloccare con il team JBGRL</div></div></div><div class="studio-list">'+taskRows(blocked,'Nessun blocco aperto.')+'</div></aside><section class="studio-card wide"><div class="studio-card-head"><div><h2>Call e recap</h2><div class="studio-kicker">Fathom traduce le call in azioni</div></div></div><div class="studio-list">'+meetingRows+'</div></section><section class="studio-card"><div class="studio-card-head"><div><h2>Decisioni</h2><div class="studio-kicker">Nessuna azione rischiosa è automatica</div></div></div><div class="studio-list">'+decisionRows+'</div></section></div>';
+  }
+
   // ---------------- GENERALE ----------------
   function loadCallExecution(){
     destroyCharts();content.innerHTML=spinner('Carico call, priorità e funnel…');
@@ -1003,15 +1492,21 @@
   }
 
   function loadMarketing(){
-    destroyCharts();content.innerHTML=spinner('Carico email e webinar…');
+    destroyCharts();content.innerHTML=spinner('Carico la readiness marketing…');
     if(!auth||auth.id!=='jj'||!auth.opsToken||!ensureSb()){content.innerHTML='<div class="ops-empty">Area riservata agli admin.</div>';return;}
-    ensureSb().rpc('ops_email_webinar_dashboard',{p_session_token:auth.opsToken}).then(function(res){
-      if(res.error){content.innerHTML='<div class="ops-empty">Modulo non ancora collegato.</div>';return;}
-      var s=res.data||{}, campaigns=s.campaigns||[], webinars=s.webinars||[], contacts=s.contacts||{};
-      var campaignRows=rows(campaigns,function(x){return '<div class="ops-row"><span class="cc-badge '+(x.status==='sent'?'ok':'normal')+'">'+esc(x.status)+'</span><div class="ops-main"><b>'+esc(x.name)+'</b><small>'+esc(x.campaign_type)+' · '+Number(x.unique_clickers||0)+' click · '+Number(x.replies||0)+' risposte</small></div><span class="ops-status approved">'+Number(x.conversions||0)+' conv.</span></div>';},'Nessuna campagna misurata.');
-      var webinarRows=rows(webinars,function(x){return '<div class="ops-row"><span class="cc-badge normal">WEBINAR</span><div class="ops-main"><b>'+esc(x.webinar_id)+' · '+esc(INTEL.displayName(x.talent_id))+'</b><small>'+Number(x.registered||0)+' registrati · '+Number(x.attended||0)+' presenti · '+Number(x.no_show||0)+' assenti</small></div><span class="ops-status approved">'+Number(x.conversions||0)+' conv.</span></div>';},'Nessun webinar misurato.');
-      content.innerHTML='<div class="ops-head"><div><h2 class="ops-title">Email &amp; Webinar</h2><div class="muted">ActiveCampaign e WebinarJam · dati aggregati solo admin.</div></div></div><div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(contacts.subscribed||0)+'</strong><span>iscritti</span></div><div class="ops-kpi"><strong>'+Number(contacts.suppressed||0)+'</strong><span>soppressi</span></div><div class="ops-kpi"><strong>'+campaigns.length+'</strong><span>campagne</span></div><div class="ops-kpi"><strong>'+webinars.length+'</strong><span>webinar</span></div></div><div class="ops-layout"><section class="ops-section"><div class="ops-section-head"><h3>Campagne</h3></div>'+campaignRows+'</section><aside><section class="ops-section"><div class="ops-section-head"><h3>Webinar</h3></div>'+webinarRows+'</section></aside></div>';
-    });
+    ensureSb().rpc('ops_marketing_send_dashboard',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error||!res.data){content.innerHTML='<div class="ops-empty">Readiness marketing non disponibile.</div>';return;}
+      renderMarketingReadiness(res.data);
+    },function(){content.innerHTML='<div class="ops-empty">Connessione operativa non disponibile.</div>';});
+  }
+  function renderMarketingReadiness(m){
+    m=m||{};var f=m.ftd_audience||{},d=m.deliverability||{},w=m.current_webinar,r=m.first_campaign_readiness;
+    function statusRows(xs){xs=xs||[];return xs.length?xs.map(function(x){return '<div class="ops-row"><span class="ops-status">'+esc(x.status)+'</span><div class="ops-main"><b>'+Number(x.campaigns||0)+'</b><small>campagne</small></div></div>';}).join(''):'<div class="ops-empty">Nessuna campagna registrata.</div>';}
+    var webinar=w?'<div class="ops-row"><span class="cc-badge normal">WEBINAR</span><div class="ops-main"><b>'+esc(w.webinar_id||'—')+' · '+esc(INTEL.displayName(w.talent_id))+'</b><small>'+Number(w.registered||0)+' registrati · '+Number(w.attended||0)+' presenti · '+Number(w.high_intent||0)+' alto intento</small></div></div>':'<div class="ops-empty">Nessun webinar registrato.</div>';
+    var readiness=r?'<div class="ops-row"><div class="ops-main"><b>'+esc(r.name||'—')+'</b><small>'+esc(INTEL.displayName(r.talent_id))+' · '+esc(r.status)+' · scope '+esc(r.audience_scope||'—')+' · '+Number(r.eligible_contacts||0)+' idonei · '+Number(r.already_sent||0)+' già inviati</small></div></div>':'<div class="ops-empty">Nessuna campagna approvata o pianificata.</div>';
+    content.innerHTML='<div class="ops-head"><div><h2 class="ops-title">Marketing readiness</h2><div class="muted">Solo conteggi aggregati — nessun indirizzo email o dato personale.</div></div><div class="ops-sync">Aggiornato '+esc(m.generated_at?opsDate(m.generated_at):'—')+'</div></div>'+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(f.pending||0)+'</strong><span>FTD pending</span></div><div class="ops-kpi"><strong>'+Number(f.eligible||0)+'</strong><span>FTD idonei</span></div><div class="ops-kpi"><strong>'+Number(f.suppressed||0)+'</strong><span>FTD soppressi</span></div><div class="ops-kpi"><strong>'+Number(m.consent_blocks||0)+'</strong><span>blocchi consenso</span></div></div>'+
+      '<div class="ops-layout"><div><section class="ops-section"><div class="ops-section-head"><h3>Prima campagna</h3></div>'+readiness+'</section><section class="ops-section"><div class="ops-section-head"><h3>Webinar corrente</h3></div>'+webinar+'</section><section class="ops-section"><div class="ops-section-head"><h3>Deliverability</h3></div><div class="ops-row"><span class="ops-status">unsubscribe</span><div class="ops-main"><b>'+Number(d.unsubscribed||0)+'</b></div></div><div class="ops-row"><span class="ops-status">bounce</span><div class="ops-main"><b>'+Number(d.bounced||0)+'</b></div></div><div class="ops-row"><span class="ops-status">complaint</span><div class="ops-main"><b>'+Number(d.complained||0)+'</b></div></div></section></div><aside><section class="ops-section"><div class="ops-section-head"><h3>Futuri eventi</h3></div>'+statusRows(m.future_events)+'</section><section class="ops-section"><div class="ops-section-head"><h3>Future offerte</h3></div>'+statusRows(m.future_sales)+'</section></aside></div>';
   }
   function renderCallExecution(d){
     var meetings=d.meetings||[],actions=d.top_actions||[],funnel=d.funnel||[],opps=d.opportunities||[];
@@ -1025,16 +1520,28 @@
 
   // ---------------- GENERALE ----------------
   function renderGenerale(){
-    content.innerHTML='<div class="empty">La sezione <b>Generale</b> è il pool notizie condiviso.<br><br>'+
-      '<a class="btn primary" href="'+NEWS_URL+'">Apri il pool notizie</a></div>';
+    var admin=auth&&INTEL.isAdmin(auth.id);
+    content.innerHTML=studioHero(admin?'Newsroom':'News','Trova la storia giusta','Notizie, fonti e spunti editoriali per trasformare ciò che succede oggi in contenuti credibili.','Pool condiviso · verifica fonte obbligatoria')+
+      '<div class="news-gateway">'+
+        '<section class="studio-card wide"><div class="studio-card-head"><div><h2>News &amp; ricerca</h2><div class="studio-kicker">La notizia è la star; il trading resta il contesto</div></div><span class="studio-signal good">live desk</span></div><p class="studio-lead" style="max-width:70ch">Apri la classifica editoriale per scegliere la storia più forte: cronaca, attualità, macro, geopolitica, politica, studi, trend e mercati. Il motore SMM/copy trasforma la fonte in hook, scaletta e contenuto senza premiare cinque volte lo stesso tema.</p><a class="studio-action" href="'+NEWS_URL+'">Apri classifica e pool</a></section>'+ 
+        '<aside class="studio-card"><div class="studio-card-head"><div><h2>Metodo JBGRL</h2><div class="studio-kicker">Dalla fonte alla registrazione</div></div></div><div class="studio-list"><div class="studio-item"><div><span class="studio-signal">1</span><b style="margin-top:8px">Capisci il fatto</b><small>Fonte, contesto e perché interessa al tuo pubblico.</small></div></div><div class="studio-item"><div><span class="studio-signal">2</span><b style="margin-top:8px">Scegli l’angolo</b><small>Indignazione, consapevolezza o riscatto senza forzare il collegamento al trading.</small></div></div><div class="studio-item"><div><span class="studio-signal">3</span><b style="margin-top:8px">Produci e misura</b><small>Hook, script, asset e risultati restano collegati nello stesso flusso.</small></div></div></div></aside>'+
+      '</div>';
   }
 
   function render(){
     destroyCharts();
-    if(view==='ads') loadAds();
+    if(view==='adminhome') loadAdminHome();
+    else if(view==='news') renderGenerale();
+    else if(view==='foryou') loadIntelligence();
+    else if(view==='talentads') loadTalentAds();
+    else if(view==='production') loadTalentProduction();
+    else if(view==='results') loadTalentResults();
+    else if(view==='agenda') loadTalentAgenda();
+    else if(view==='ads') loadAds();
     else if(view==='metriche') loadMetriche();
     else if(view==='reels') loadReels();
     else if(view==='analisi') loadAnalisi();
+    else if(view==='piano') loadPiano();
     else if(view==='operazioni') loadOperazioni();
     else if(view==='command') loadCommandCenter();
     else if(view==='marketing') loadMarketing();
@@ -1049,19 +1556,27 @@
       var q; try{ q=new URLSearchParams(location.search); }catch(e){ q=null; }
       var asId=INTEL.resolveTalent((q&&q.get('as'))||'claudia');
       auth={id:asId,color:COLORS[asId]||'#e6b64c'};
-      view=(q&&q.get('view'))||(INTEL.isAdmin(asId)?'command':'operazioni');
+      view=(q&&q.get('view'))||(INTEL.isAdmin(asId)?'adminhome':'news');
     }
     if(!auth){ showLogin(); return; }
     hideLogin();
     setAccent(auth.id);
     var admin=INTEL.isAdmin(auth.id);
+    document.body.classList.toggle('talent-mode',!admin);
     document.getElementById('whoami').style.display='flex';
     document.getElementById('tabs').style.display='flex';
     document.getElementById('whoami-txt').textContent=(NAMES[auth.id]||auth.id)+(admin?' \u00b7 admin':'');
-    // Admin-only tabs (Command Center) visible only to the administrator (jj).
+    // Talent Studio has six focused destinations. Operational views remain admin-only.
+    Array.prototype.forEach.call(document.querySelectorAll('.tab.talent-only'),function(x){ x.style.display=admin?'none':''; });
     Array.prototype.forEach.call(document.querySelectorAll('.tab.admin-only'),function(x){ x.style.display=admin?'':'none'; });
-    if(!admin && (view==='command'||view==='marketing')){ view='intel'; }
-    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){x.classList.toggle('on',x.getAttribute('data-view')===view);});
+    var talentViews=['news','foryou','talentads','production','results','agenda'];
+    var adminViews=['adminhome','generale','reels','ads','metriche','analisi','piano','operazioni','command','marketing','intel','calls'];
+    var fixtureRequested=opsFixtureEnabled()&&new URLSearchParams(location.search).get('view');
+    if(!fixtureRequested){
+      if(admin&&adminViews.indexOf(view)<0) view='adminhome';
+      if(!admin&&talentViews.indexOf(view)<0) view='news';
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){var on=x.getAttribute('data-view')===view;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
     render();
   }
   // aspetta il caricamento del client
