@@ -1193,6 +1193,11 @@
     });
   }
   function renderTalentLibrary(aff){
+    var sessionTalent=INTEL.resolveTalent(auth&&auth.id);
+    if(!aff||INTEL.resolveTalent(aff.talent_id)!==sessionTalent){
+      content.innerHTML='<div class="empty"><b>Perimetro Drive non valido.</b><br>Nessun file è stato mostrato.</div>';
+      return;
+    }
     content.innerHTML=affiliateIntelHtml(aff);
     Array.prototype.forEach.call(content.querySelectorAll('.fbtn[data-fk]'),function(b){
       b.onclick=function(){
@@ -1212,9 +1217,12 @@
         if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){del(AUTH);auth=null;showLogin();lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';return;}
         renderCCError('Non riesco a caricare Intelligence e Drive.',loadTalentLibrary);return;
       }
+      var sessionTalent=INTEL.resolveTalent(auth.id);
       var list=(((res.data||{}).content_intelligence||{}).affiliates)||[affiliateFromSnapshot(res.data)];
-      var mine=list.filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(auth.id);});
-      var aff=mine[0]||affiliateFromSnapshot(res.data);
+      var mine=list.filter(function(x){return INTEL.resolveTalent(x.talent_id)===sessionTalent;});
+      // Fail closed on duplicate/missing affiliate payloads: rebuild only from the
+      // session-scoped snapshot, never fall back to another affiliate in the list.
+      var aff=mine.length===1?mine[0]:affiliateFromSnapshot(res.data);
       ensureSb().rpc('ops_organic_tracking_snapshot',{p_session_token:auth.opsToken}).then(function(org){
         if(!org.error&&org.data)aff=attachOrganicTracking([aff],org.data)[0];
         renderTalentLibrary(aff);
@@ -1222,6 +1230,9 @@
     },function(){renderCCError('Connessione operativa non disponibile.',loadTalentLibrary);});
   }
   function affiliateIntelHtml(aff){
+    if(auth&&!INTEL.isAdmin(auth.id)&&INTEL.resolveTalent(aff&&aff.talent_id)!==INTEL.resolveTalent(auth.id)){
+      return '<div class="empty"><b>Perimetro Drive non valido.</b><br>Nessun file è stato mostrato.</div>';
+    }
     var inv=aff.inventory||{};
     var drive=opsSafeDriveUrl(aff.drive_url);
     var driveLink=drive?'<a class="btn" target="_blank" rel="noopener noreferrer" href="'+esc(drive)+'" style="padding:6px 10px;font-size:12px">Cartella Drive (sola lettura)</a>':'';
