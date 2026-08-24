@@ -259,7 +259,7 @@
   @media(max-width:900px){.studio-card,.studio-card.wide{grid-column:span 6}.studio-production{grid-template-columns:1fr}}
   @media(max-width:680px){
     body.talent-mode{padding-bottom:82px}.wrap{padding:14px 14px 26px}header{margin-bottom:10px}.brand small{display:none}
-    body.talent-mode .tabs{position:fixed;z-index:45;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));margin:0;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;padding:5px;box-shadow:0 18px 60px #000}
+    body.talent-mode .tabs{position:fixed;z-index:45;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));margin:0;display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding:5px;box-shadow:0 18px 60px #000}
     body.talent-mode .tab.talent-only{min-height:52px;padding:6px 2px;justify-content:center;text-align:center;font-size:9.5px;line-height:1.15;border-radius:8px}
     .studio-hero{grid-template-columns:1fr;padding-top:12px}.studio-fresh{white-space:normal}.studio-grid{grid-template-columns:1fr}.studio-card,.studio-card.wide,.studio-card.full{grid-column:1}.studio-decision-grid{grid-template-columns:1fr}
     .studio-item{grid-template-columns:1fr}.studio-action{justify-self:start}.ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -282,6 +282,7 @@
     <button type="button" class="tab talent-only" data-view="foryou" style="display:none">Per te</button>
     <button type="button" class="tab talent-only" data-view="talentads" style="display:none">Ads</button>
     <button type="button" class="tab talent-only" data-view="production" style="display:none">Produzione</button>
+    <button type="button" class="tab talent-only" data-view="library" style="display:none">Intelligence</button>
     <button type="button" class="tab talent-only" data-view="results" style="display:none">Risultati</button>
     <button type="button" class="tab talent-only" data-view="agenda" style="display:none">Agenda</button>
     <button type="button" class="tab admin-only" data-view="adminhome" style="display:none">Control Tower</button>
@@ -1191,6 +1192,35 @@
       b.onclick=function(){ intelFilters[b.getAttribute('data-fk')]=b.getAttribute('data-fv'); save(INTEL_FILTERS_KEY,intelFilters); renderIntelligence(); };
     });
   }
+  function renderTalentLibrary(aff){
+    content.innerHTML=affiliateIntelHtml(aff);
+    Array.prototype.forEach.call(content.querySelectorAll('.fbtn[data-fk]'),function(b){
+      b.onclick=function(){
+        intelFilters[b.getAttribute('data-fk')]=b.getAttribute('data-fv');
+        save(INTEL_FILTERS_KEY,intelFilters);
+        renderTalentLibrary(aff);
+      };
+    });
+  }
+  function loadTalentLibrary(){
+    destroyCharts();
+    if(INTEL.isAdmin(auth.id)){content.innerHTML='<div class="empty">Usa Content Intelligence dal pannello admin.</div>';return;}
+    content.innerHTML=spinner('Carico Intelligence e Drive\u2026');
+    if(!auth.opsToken){content.innerHTML='<div class="empty"><b>Sessione operativa da attivare</b><br>Esci e accedi di nuovo con il tuo codice.</div>';return;}
+    ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error||!res.data){
+        if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){del(AUTH);auth=null;showLogin();lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';return;}
+        renderCCError('Non riesco a caricare Intelligence e Drive.',loadTalentLibrary);return;
+      }
+      var list=(((res.data||{}).content_intelligence||{}).affiliates)||[affiliateFromSnapshot(res.data)];
+      var mine=list.filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(auth.id);});
+      var aff=mine[0]||affiliateFromSnapshot(res.data);
+      ensureSb().rpc('ops_organic_tracking_snapshot',{p_session_token:auth.opsToken}).then(function(org){
+        if(!org.error&&org.data)aff=attachOrganicTracking([aff],org.data)[0];
+        renderTalentLibrary(aff);
+      },function(){renderTalentLibrary(aff);});
+    },function(){renderCCError('Connessione operativa non disponibile.',loadTalentLibrary);});
+  }
   function affiliateIntelHtml(aff){
     var inv=aff.inventory||{};
     var drive=opsSafeDriveUrl(aff.drive_url);
@@ -1535,6 +1565,7 @@
     else if(view==='foryou') loadIntelligence();
     else if(view==='talentads') loadTalentAds();
     else if(view==='production') loadTalentProduction();
+    else if(view==='library') loadTalentLibrary();
     else if(view==='results') loadTalentResults();
     else if(view==='agenda') loadTalentAgenda();
     else if(view==='ads') loadAds();
@@ -1569,7 +1600,7 @@
     // Talent Studio has six focused destinations. Operational views remain admin-only.
     Array.prototype.forEach.call(document.querySelectorAll('.tab.talent-only'),function(x){ x.style.display=admin?'none':''; });
     Array.prototype.forEach.call(document.querySelectorAll('.tab.admin-only'),function(x){ x.style.display=admin?'':'none'; });
-    var talentViews=['news','foryou','talentads','production','results','agenda'];
+    var talentViews=['news','foryou','talentads','production','library','results','agenda'];
     var adminViews=['adminhome','generale','reels','ads','metriche','analisi','piano','operazioni','command','marketing','intel','calls'];
     var fixtureRequested=opsFixtureEnabled()&&new URLSearchParams(location.search).get('view');
     if(!fixtureRequested){
