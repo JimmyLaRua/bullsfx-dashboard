@@ -221,6 +221,16 @@
   .studio-item b{display:block;font-size:13px;line-height:1.35}.studio-item small{display:block;color:var(--mut);font-size:11px;line-height:1.45;margin-top:3px}
   .studio-action{align-self:start;border:1px solid var(--line);border-radius:8px;background:#111c30;color:var(--txt);padding:7px 9px;font-size:11px;font-weight:750;text-decoration:none;white-space:nowrap;cursor:pointer}
   .studio-action:hover{border-color:var(--accent,var(--gold));color:var(--accent,var(--gold))}
+  .studio-action:focus-visible{outline:2px solid var(--accent,var(--gold));outline-offset:2px}
+  .studio-action[disabled]{cursor:not-allowed;opacity:.58}
+  .ad-inventory-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+  .ad-inventory-actions .studio-action{min-height:44px;padding:10px 13px}
+  .ad-inventory-actions .primary{background:var(--accent,var(--gold));border-color:var(--accent,var(--gold));color:#07111f}
+  .ad-inventory-actions .primary:hover{filter:brightness(1.08);color:#07111f}
+  .ad-inventory-card{transition:border-color 180ms ease,background-color 180ms ease,opacity 180ms ease,transform 180ms ease}
+  .ad-inventory-card.is-claimed{border-color:#27c281;background:linear-gradient(180deg,rgba(39,194,129,.09),var(--panel))}
+  .ad-inventory-card.is-busy{opacity:.58;transform:scale(.995);pointer-events:none}
+  .ad-inventory-status{min-height:22px;margin:10px 0 0;color:var(--muted);font-size:12px}
   .studio-signal{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--mut);font:700 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase}
   .studio-signal.good{color:var(--green);border-color:rgba(34,197,94,.3)}.studio-signal.warn{color:var(--gold);border-color:rgba(230,182,76,.3)}.studio-signal.bad{color:var(--red);border-color:rgba(239,68,68,.3)}
   .studio-empty{border:1px dashed var(--line);border-radius:10px;padding:18px;color:var(--mut);font-size:12px;line-height:1.5}
@@ -271,6 +281,7 @@
     .studio-hero{grid-template-columns:1fr;padding-top:12px}.studio-fresh{white-space:normal}.studio-grid{grid-template-columns:1fr}.studio-card,.studio-card.wide,.studio-card.full{grid-column:1}.studio-decision-grid{grid-template-columns:1fr}
     .studio-item{grid-template-columns:1fr}.studio-action{justify-self:start}.ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
+  @media (prefers-reduced-motion:reduce){.ad-inventory-card{transition:none}.studio-production-card .copy{transition:none}}
 </style>
 </head>
 <body>
@@ -371,6 +382,7 @@
   var reelsData=null;
   var productionFilter='all';
   var talentProductionCache=null;
+  var talentAdInventoryBusy=false;
   var TALENT_LIVE_READ_ONLY=true;
   var legacySnapshotCache=null;
   var legacySnapshotAt=0;
@@ -1367,6 +1379,32 @@
     Array.prototype.forEach.call(content.querySelectorAll('[data-studio-view]'),function(b){b.onclick=function(){setStudioView(b.getAttribute('data-studio-view'));};});
     bindStudioCopyToggles();
   }
+  function setAdInventoryStatus(message,isError){
+    var node=content.querySelector('[data-ad-inventory-status]');
+    if(node){node.textContent=message||'';node.style.color=isError?'#ff8585':'';}
+  }
+  function runTalentAdInventoryAction(rpc,args,button,successMessage){
+    if(talentAdInventoryBusy||!ensureSb())return;
+    talentAdInventoryBusy=true;
+    if(button)button.closest('.ad-inventory-card')?.classList.add('is-busy');
+    setAdInventoryStatus('Aggiorno il tuo inventario…');
+    ensureSb().rpc(rpc,args).then(function(res){
+      if(res.error)throw res.error;
+      setAdInventoryStatus(successMessage||'Inventario aggiornato.');
+      return new Promise(function(resolve){setTimeout(resolve,280);});
+    }).then(loadTalentAds).catch(function(error){
+      talentAdInventoryBusy=false;
+      if(button)button.closest('.ad-inventory-card')?.classList.remove('is-busy');
+      setAdInventoryStatus(String(error&&error.message||'Operazione non riuscita.'),true);
+    });
+  }
+  function bindTalentAdInventoryActions(){
+    var refresh=content.querySelector('[data-ad-inventory-refresh]');
+    if(refresh)refresh.onclick=function(){runTalentAdInventoryAction('refresh_talent_ad_inventory',{p_session_token:auth.opsToken,p_limit:20},refresh,'Nuova selezione pronta. Le Ads saltate potranno tornare più avanti.');};
+    Array.prototype.forEach.call(content.querySelectorAll('[data-ad-inventory-claim]'),function(button){button.onclick=function(){runTalentAdInventoryAction('claim_talent_ad_inventory',{p_session_token:auth.opsToken,p_inventory_id:button.getAttribute('data-ad-inventory-claim')},button,'Ads presa: resta visibile oggi e domani passa in produzione.');};});
+    Array.prototype.forEach.call(content.querySelectorAll('[data-ad-inventory-skip]'),function(button){button.onclick=function(){runTalentAdInventoryAction('skip_talent_ad_inventory',{p_session_token:auth.opsToken,p_inventory_id:button.getAttribute('data-ad-inventory-skip')},button,'Ads messa in pausa: non è eliminata e potrà ricomparire.');};});
+    bindStudioLinks();
+  }
   function studioEmpty(text){return '<div class="studio-empty">'+esc(text)+'</div>';}
   function creativeRpcPayload(r){
     if(r&&r.error)return {_load_error:String(r.error.message||r.error)};
@@ -1415,7 +1453,7 @@
     destroyCharts();content.innerHTML=spinner('Preparo il tuo banco Ads…');
     if(opsFixtureEnabled()){
       fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
-        .then(function(j){renderTalentAds({}, {}, j||{});})
+        .then(function(j){renderTalentAds({}, {}, j||{},{});})
         .catch(function(){content.innerHTML='<div class="empty">Fixture Ads non disponibile.</div>';});
       return;
     }
@@ -1423,43 +1461,63 @@
       .then(function(r){return r&&!r.error&&r.data?r.data:{};}).catch(function(){return {};});
     var creativePromise=ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
       .then(creativeRpcPayload).catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
-    Promise.all([loadLegacySnapshot(),brainPromise,creativePromise]).then(function(rows){renderTalentAds(rows[0],rows[1],rows[2]);})
+    var inventoryPromise=ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken})
+      .then(function(r){return r&&!r.error&&r.data?r.data:{_load_error:String(r&&r.error&&r.error.message||'Inventario Ads non disponibile')};})
+      .catch(function(e){return {_load_error:String(e&&e.message||'Inventario Ads non disponibile')};});
+    Promise.all([loadLegacySnapshot(),brainPromise,creativePromise,inventoryPromise]).then(function(rows){renderTalentAds(rows[0],rows[1],rows[2],rows[3]);})
       .catch(function(){content.innerHTML='<div class="empty">Ads non disponibili. Esci e accedi di nuovo.</div>';});
   }
-  function renderTalentAds(data,brain,creative){
-    data=data||{};brain=brain||{};creative=creative||{};
+  function renderTalentAds(data,brain,creative,inventory){
+    talentAdInventoryBusy=false;
+    data=data||{};brain=brain||{};creative=creative||{};inventory=inventory||{};
     var scripts=data.ads||[],metrics=data.metrics||[],daily=data.social_ads_daily||[],measured={},spend=0,leads=0,revenue=0;
     var assignments=Array.isArray(brain.assignments)?brain.assignments:[],brainSummary=brain.summary||{};
     var matrix=creative.ads_matrix||{},queue=((creative.weekly_queue||{}).items)||[],weeklyAds=queue.filter(function(x){return x.kind==='ad';});
+    var inventoryItems=Array.isArray(inventory.items)?inventory.items:[],inventorySummary=inventory.summary||{};
+    var adsTalentLabel=String(auth&&auth.id||'talent').toUpperCase().replace('MARCO','NOMATRIX');
+    function simpleAdsTitle(i){return 'ADS '+adsTalentLabel+' '+String(i+1).padStart(2,'0');}
     metrics.forEach(function(m){var type=String(m.item_type||'').toLowerCase();if(!type||type==='ad'||type==='ads')measured[String(m.item_id||'')]=m;});
     daily.forEach(function(d){spend+=Number(d.spend||0);leads+=Number(d.leads||0);revenue+=Number(d.revenue||0);});
     var linked=scripts.filter(function(a){return !!opsSafeDriveUrl(a.drive_url||a.asset_url||'');}).length;
     var measuredCount=scripts.filter(function(a){return !!measured[String(a.id||'')];}).length;
     var roas=spend>0?revenue/spend:0,cpl=leads>0?spend/leads:0;
     var legacyById={};scripts.forEach(function(a){legacyById[String(a.id||'')]=a;});
-    var weeklyCards=weeklyAds.map(function(a){
+    var inventoryCards=inventoryItems.map(function(a){
+      var claimed=a.status==='claimed',lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||'TEST';
+      return '<article class="studio-production-card ad-inventory-card '+(claimed?'is-claimed':'')+'" data-ad-inventory-card="'+esc(String(a.inventory_id||''))+'">'+
+        '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal '+(claimed?'good':'warn')+'">'+esc(claimed?'PRESA OGGI':(a.recommended?'CONSIGLIATA':'DISPONIBILE'))+'</span><span class="studio-signal">'+esc(lane)+' · score '+Math.round(Number(a.score||0))+'</span></div>'+
+        '<div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||a.library_id||'codice in preparazione'))+' · impronta '+esc(String(a.fingerprint||'in verifica').slice(0,14))+'</div>'+
+        '<div class="hook">'+esc(String(a.display_title||'ADS PERSONALE'))+'</div>'+
+        '<div class="studio-kicker" style="margin-top:7px">Hook</div>'+studioExpandableCopy(a.hook||'Hook in preparazione','Leggi tutto l’hook')+
+        '<div class="studio-kicker" style="margin-top:9px">Body</div>'+studioExpandableCopy(a.body||'Script in preparazione','Leggi tutto il body')+
+        '<div class="studio-kicker" style="margin-top:9px">CTA</div>'+studioExpandableCopy(a.cta||'CTA in preparazione','Leggi tutta la CTA')+
+        '<div class="foot"><small class="muted">'+esc([a.angle,a.format].filter(Boolean).join(' · ')||'Angolo verificato')+'</small><span class="studio-signal">'+esc(String(a.experiment_lane||'test'))+'</span></div>'+
+        '<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata sul profilo'))+'</div>'+
+        '<div class="ad-inventory-actions">'+(claimed?'<button type="button" class="studio-action" disabled aria-label="Ads già presa oggi">Presa oggi ✓</button>':'<button type="button" class="studio-action primary" data-ad-inventory-claim="'+esc(String(a.inventory_id||''))+'">Prendi questa Ads</button><button type="button" class="studio-action" data-ad-inventory-skip="'+esc(String(a.inventory_id||''))+'">Non ora</button>')+'</div></article>';
+    }).join('');
+    var weeklyCards=weeklyAds.map(function(a,index){
       var lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||'TEST';
       var draft=a.draft||{},status=String(a.production_status||'proposed').replace(/_/g,' ');
-      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal good">score '+Math.round(Number(a.source_score||0))+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||'codice in preparazione'))+' · '+esc(status)+'</div><div class="hook">'+esc(String(draft.hook||a.title||'Concept Ads'))+'</div>'+studioExpandableCopy(draft.body||a.rationale||'Riscrittura personale in preparazione','Leggi tutto lo script')+(draft.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(draft.cta))+'</div>':'')+'<div class="foot"><small class="muted">Fonte '+esc(String(a.source_kind||'ads_library'))+' · '+esc(String(a.format||''))+'</small><span class="studio-signal">'+esc(String(a.fingerprint?'impronta pronta':'impronta al draft'))+'</span></div><div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata'))+'</div></article>';
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal good">score '+Math.round(Number(a.source_score||0))+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||'codice in preparazione'))+' · '+esc(status)+'</div><div class="hook">'+esc(simpleAdsTitle(index))+'</div><div class="studio-kicker" style="margin-top:7px">Hook</div>'+studioExpandableCopy(draft.hook||a.title||'Hook in preparazione','Leggi tutto l’hook')+'<div class="studio-kicker" style="margin-top:9px">Body</div>'+studioExpandableCopy(draft.body||a.rationale||'Riscrittura personale in preparazione','Leggi tutto lo script')+(draft.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(draft.cta))+'</div>':'')+'<div class="foot"><small class="muted">Fonte '+esc(String(a.source_kind||'ads_library'))+' · '+esc(String(a.format||''))+'</small><span class="studio-signal">'+esc(String(a.fingerprint?'impronta pronta':'impronta al draft'))+'</span></div><div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata'))+'</div></article>';
     }).join('');
-    var assignmentCards=assignments.length?assignments.map(function(a){
+    var assignmentCards=assignments.length?assignments.map(function(a,index){
       var legacy=legacyById[String(a.legacy_ad_id||'')]||{},metric=measured[String(a.legacy_ad_id||'')];
       var url=opsSafeDriveUrl(a.reference_url||legacy.drive_url||legacy.asset_url||'');
       var lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||String(a.experiment_lane||'TEST').toUpperCase();
       var duplicate=a.duplicate_decision==='block'?'duplicato bloccato':(a.duplicate_decision==='human_review'?'review duplicato':'impronta unica');
       var duplicateTone=a.duplicate_decision==='block'?'bad':(a.duplicate_decision==='human_review'?'warn':'good');
-      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal '+duplicateTone+'">'+esc(duplicate)+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||a.library_id||'codice in preparazione'))+'</div><div class="hook">'+esc(String(a.title||a.hook||'Concept Ads'))+'</div><div class="studio-kicker" style="margin-top:6px">Hook</div>'+studioExpandableCopy(a.hook||'Hook in preparazione','Leggi tutto l’hook')+'<div class="studio-kicker" style="margin-top:9px">Script</div>'+studioExpandableCopy(a.body||'Script in preparazione','Leggi tutto lo script')+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.recording_direction?'<div class="studio-kicker" style="margin-top:6px">Regia · '+esc(String(a.recording_direction))+'</div>':'')+'<div class="foot"><small class="muted">'+esc([a.angle,a.format,a.language].filter(Boolean).join(' · ')||'DNA creativo verificato')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div><div class="studio-kicker" style="margin-top:9px">'+(metric?'Metriche collegate':'Misurazione pronta · binding piattaforma da collegare')+'</div></article>';
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal '+duplicateTone+'">'+esc(duplicate)+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||a.library_id||'codice in preparazione'))+'</div><div class="hook">'+esc(simpleAdsTitle(index))+'</div><div class="studio-kicker" style="margin-top:6px">Hook</div>'+studioExpandableCopy(a.hook||a.title||'Hook in preparazione','Leggi tutto l’hook')+'<div class="studio-kicker" style="margin-top:9px">Body</div>'+studioExpandableCopy(a.body||'Script in preparazione','Leggi tutto lo script')+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.recording_direction?'<div class="studio-kicker" style="margin-top:6px">Regia · '+esc(String(a.recording_direction))+'</div>':'')+'<div class="foot"><small class="muted">'+esc([a.angle,a.format,a.language].filter(Boolean).join(' · ')||'DNA creativo verificato')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div><div class="studio-kicker" style="margin-top:9px">'+(metric?'Metriche collegate':'Misurazione pronta · binding piattaforma da collegare')+'</div></article>';
     }).join(''):scripts.length?scripts.map(function(a){
       var id=String(a.id||''),metric=measured[id],url=opsSafeDriveUrl(a.drive_url||a.asset_url||'');
       var meta=[a.angolo,a.lingua,a.batch].filter(Boolean).join(' · ');
       return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal warn">ADS</span><span class="studio-signal '+(metric?'good':'')+'">'+(metric?'misurata':'da testare')+'</span></div><div class="hook">'+esc(String(a.hook||'Hook in preparazione'))+'</div>'+studioExpandableCopy(a.body||'Script in preparazione','Leggi tutto lo script')+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.fonte_a_schermo?'<div class="studio-kicker" style="margin-top:6px">Fonte · '+esc(String(a.fonte_a_schermo))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(meta||'Angolo da definire')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div></article>';
     }).join(''):'';
-    var cards=weeklyCards+assignmentCards;
+    var cards=inventoryCards||(weeklyCards+assignmentCards);
     if(!cards)cards=studioEmpty('La matrice è pronta ma la coda settimanale non è stata ancora generata. Nessun dato di altri talent viene mostrato.');
     content.innerHTML=creativeErrorBanner(creative)+studioHero('Ads','Hook, script e test','Il tuo banco Ads privato: cosa registrare, quale angolo testare e dove trovare gli asset.','Sola lettura · nessuna pubblicazione automatica')+
-      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(matrix.evaluated||0)+'</strong><span>libreria valutata</span></div><div class="ops-kpi"><strong>'+Number(weeklyAds.length)+'</strong><span>selezionate questa settimana</span></div><div class="ops-kpi"><strong>'+Number(brainSummary.fingerprinted||0)+'</strong><span>derivati improntati</span></div><div class="ops-kpi"><strong>'+(Math.round(roas*10)/10).toLocaleString('it-IT')+'×</strong><span>ROAS · CPL '+fmtEur(cpl)+'</span></div></div>'+
-      '<div class="bar"><div class="muted"><b>'+Number(matrix.eligible||0)+'</b> compatibili ora · '+Number(matrix.translation_required||0)+' richiedono traduzione/adattamento · spesa tracciata '+fmtEur(spend)+' · '+fmtInt(leads)+' lead</div><button type="button" class="studio-action" data-studio-view="results">Apri risultati</button></div><div class="studio-production">'+cards+'</div>';
-    bindStudioLinks();
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(inventorySummary.compatible_remaining==null?matrix.eligible:inventorySummary.compatible_remaining)+'</strong><span>compatibili rimaste</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.personalized_ready==null?brainSummary.fingerprinted:inventorySummary.personalized_ready)+'</strong><span>personalizzate pronte</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.claimed_today||0)+'</strong><span>prese oggi</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.in_production||0)+'</strong><span>in produzione</span></div></div>'+
+      '<div class="bar"><div class="muted"><b>'+Number(inventorySummary.compatible_total==null?matrix.eligible:inventorySummary.compatible_total)+'</b> compatibili totali · '+Number(inventorySummary.waiting_personalization||0)+' in personalizzazione · spesa tracciata '+fmtEur(spend)+' · '+fmtInt(leads)+' lead</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="studio-action" data-ad-inventory-refresh>Mostrami 20 nuove</button><button type="button" class="studio-action" data-studio-view="results">Apri risultati</button></div></div><div class="ad-inventory-status" role="status" aria-live="polite" data-ad-inventory-status></div><div class="studio-production">'+cards+'</div>';
+    bindTalentAdInventoryActions();
   }
 
   function loadTalentProduction(){
