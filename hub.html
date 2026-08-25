@@ -1484,16 +1484,17 @@
     var legacyById={};scripts.forEach(function(a){legacyById[String(a.id||'')]=a;});
     var inventoryCards=inventoryItems.map(function(a){
       var claimed=a.status==='claimed',lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||'TEST';
+      var actionHtml=claimed?'<button type="button" class="studio-action" disabled aria-label="Ads già presa oggi">Presa oggi ✓</button>':'<button type="button" class="studio-action primary" data-ad-inventory-claim="'+esc(String(a.inventory_id||''))+'">Prendi questa Ads</button><button type="button" class="studio-action" data-ad-inventory-skip="'+esc(String(a.inventory_id||''))+'">Non ora</button>';
       return '<article class="studio-production-card ad-inventory-card '+(claimed?'is-claimed':'')+'" data-ad-inventory-card="'+esc(String(a.inventory_id||''))+'">'+
         '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal '+(claimed?'good':'warn')+'">'+esc(claimed?'PRESA OGGI':(a.recommended?'CONSIGLIATA':'DISPONIBILE'))+'</span><span class="studio-signal">'+esc(lane)+' · score '+Math.round(Number(a.score||0))+'</span></div>'+
+        '<div class="ad-inventory-actions" style="margin-top:12px">'+actionHtml+'</div>'+
         '<div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||a.library_id||'codice in preparazione'))+' · impronta '+esc(String(a.fingerprint||'in verifica').slice(0,14))+'</div>'+
         '<div class="hook">'+esc(String(a.display_title||'ADS PERSONALE'))+'</div>'+
         '<div class="studio-kicker" style="margin-top:7px">Hook</div>'+studioExpandableCopy(a.hook||'Hook in preparazione','Leggi tutto l’hook')+
         '<div class="studio-kicker" style="margin-top:9px">Body</div>'+studioExpandableCopy(a.body||'Script in preparazione','Leggi tutto il body')+
         '<div class="studio-kicker" style="margin-top:9px">CTA</div>'+studioExpandableCopy(a.cta||'CTA in preparazione','Leggi tutta la CTA')+
         '<div class="foot"><small class="muted">'+esc([a.angle,a.format].filter(Boolean).join(' · ')||'Angolo verificato')+'</small><span class="studio-signal">'+esc(String(a.experiment_lane||'test'))+'</span></div>'+
-        '<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata sul profilo'))+'</div>'+
-        '<div class="ad-inventory-actions">'+(claimed?'<button type="button" class="studio-action" disabled aria-label="Ads già presa oggi">Presa oggi ✓</button>':'<button type="button" class="studio-action primary" data-ad-inventory-claim="'+esc(String(a.inventory_id||''))+'">Prendi questa Ads</button><button type="button" class="studio-action" data-ad-inventory-skip="'+esc(String(a.inventory_id||''))+'">Non ora</button>')+'</div></article>';
+        '<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata sul profilo'))+'</div></article>';
     }).join('');
     var weeklyCards=weeklyAds.map(function(a,index){
       var lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||'TEST';
