@@ -1449,7 +1449,7 @@
     bindStudioLinks();
   }
 
-  function loadTalentAds(){
+  function loadTalentAds(autoFillAttempted){
     destroyCharts();content.innerHTML=spinner('Preparo il tuo banco Ads…');
     if(opsFixtureEnabled()){
       fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
@@ -1464,7 +1464,15 @@
     var inventoryPromise=ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken})
       .then(function(r){return r&&!r.error&&r.data?r.data:{_load_error:String(r&&r.error&&r.error.message||'Inventario Ads non disponibile')};})
       .catch(function(e){return {_load_error:String(e&&e.message||'Inventario Ads non disponibile')};});
-    Promise.all([loadLegacySnapshot(),brainPromise,creativePromise,inventoryPromise]).then(function(rows){renderTalentAds(rows[0],rows[1],rows[2],rows[3]);})
+    Promise.all([loadLegacySnapshot(),brainPromise,creativePromise,inventoryPromise]).then(function(rows){
+      var inventory=rows[3]||{},items=Array.isArray(inventory.items)?inventory.items:[],summary=inventory.summary||{};
+      if(autoFillAttempted!==true&&items.length<20&&Number(summary.personalized_ready||0)>=20){
+        return ensureSb().rpc('refresh_talent_ad_inventory',{p_session_token:auth.opsToken,p_limit:20})
+          .then(function(){return loadTalentAds(true);})
+          .catch(function(){renderTalentAds(rows[0],rows[1],rows[2],rows[3]);});
+      }
+      renderTalentAds(rows[0],rows[1],rows[2],rows[3]);
+    })
       .catch(function(){content.innerHTML='<div class="empty">Ads non disponibili. Esci e accedi di nuovo.</div>';});
   }
   function renderTalentAds(data,brain,creative,inventory){
