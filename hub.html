@@ -230,7 +230,14 @@
   .studio-production{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .studio-production-card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:15px;min-width:0}
   .studio-production-card .hook{margin:9px 0 7px;font-size:16px;font-weight:800;line-height:1.35}
-  .studio-production-card .copy{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;color:#cbd5e1;font-size:12px;line-height:1.55;white-space:pre-wrap}
+  .studio-production-card .copy{position:relative;max-height:6.2em;overflow:hidden;color:#cbd5e1;font-size:12px;line-height:1.55;white-space:pre-wrap;transition:max-height 240ms ease}
+  .studio-production-card .copy::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.5em;background:linear-gradient(180deg,transparent,var(--panel));pointer-events:none}
+  .studio-production-card .copy.is-expanded{max-height:none;overflow:visible}
+  .studio-production-card .copy.is-expanded::after{display:none}
+  .studio-copy-toggle{display:none;align-items:center;gap:6px;margin-top:8px;border:0;background:transparent;color:var(--accent,var(--gold));padding:3px 0;font-size:11px;font-weight:800;cursor:pointer}
+  .studio-copy-toggle.is-visible{display:inline-flex}
+  .studio-copy-toggle:hover{text-decoration:underline}.studio-copy-toggle:focus-visible{outline:2px solid var(--accent,var(--gold));outline-offset:3px;border-radius:3px}
+  .studio-copy-toggle::after{content:"↓";font-size:12px}.studio-copy-toggle[aria-expanded="true"]::after{content:"↑"}
   .studio-production-card .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}
   .studio-decision-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
   .studio-decision{border:1px solid var(--line);border-top:3px solid var(--mut);border-radius:12px;background:var(--panel);padding:14px}
@@ -1331,8 +1338,34 @@
     render();
     try{document.getElementById('content').focus({preventScroll:true});}catch(e){}
   }
+  var studioCopySequence=0;
+  function studioExpandableCopy(value,label){
+    var id='studio-copy-'+(++studioCopySequence);
+    return '<div id="'+id+'" class="copy" data-studio-copy>'+esc(String(value||''))+'</div><button type="button" class="studio-copy-toggle" hidden data-studio-copy-toggle aria-expanded="false" aria-controls="'+id+'" data-collapsed-label="'+esc(label||'Leggi tutto')+'">'+esc(label||'Leggi tutto')+'</button>';
+  }
+  function bindStudioCopyToggles(){
+    var buttons=Array.prototype.slice.call(content.querySelectorAll('[data-studio-copy-toggle]'));
+    if(!buttons.length)return;
+    requestAnimationFrame(function(){
+      buttons.forEach(function(button){
+        var panel=document.getElementById(button.getAttribute('aria-controls'));
+        if(!panel)return;
+        var truncated=panel.scrollHeight>panel.clientHeight+2;
+        if(!truncated)return;
+        button.hidden=false;
+        button.classList.add('is-visible');
+        button.onclick=function(){
+          var expanded=button.getAttribute('aria-expanded')==='true';
+          panel.classList.toggle('is-expanded',!expanded);
+          button.setAttribute('aria-expanded',expanded?'false':'true');
+          button.textContent=expanded?button.getAttribute('data-collapsed-label'):'Chiudi';
+        };
+      });
+    });
+  }
   function bindStudioLinks(){
     Array.prototype.forEach.call(content.querySelectorAll('[data-studio-view]'),function(b){b.onclick=function(){setStudioView(b.getAttribute('data-studio-view'));};});
+    bindStudioCopyToggles();
   }
   function studioEmpty(text){return '<div class="studio-empty">'+esc(text)+'</div>';}
   function creativeRpcPayload(r){
@@ -1407,7 +1440,7 @@
     var weeklyCards=weeklyAds.map(function(a){
       var lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||'TEST';
       var draft=a.draft||{},status=String(a.production_status||'proposed').replace(/_/g,' ');
-      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal good">score '+Math.round(Number(a.source_score||0))+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||'codice in preparazione'))+' · '+esc(status)+'</div><div class="hook">'+esc(String(draft.hook||a.title||'Concept Ads'))+'</div><div class="copy">'+esc(String(draft.body||a.rationale||'Riscrittura personale in preparazione'))+'</div>'+(draft.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(draft.cta))+'</div>':'')+'<div class="foot"><small class="muted">Fonte '+esc(String(a.source_kind||'ads_library'))+' · '+esc(String(a.format||''))+'</small><span class="studio-signal">'+esc(String(a.fingerprint?'impronta pronta':'impronta al draft'))+'</span></div><div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata'))+'</div></article>';
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal good">score '+Math.round(Number(a.source_score||0))+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||'codice in preparazione'))+' · '+esc(status)+'</div><div class="hook">'+esc(String(draft.hook||a.title||'Concept Ads'))+'</div>'+studioExpandableCopy(draft.body||a.rationale||'Riscrittura personale in preparazione','Leggi tutto lo script')+(draft.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(draft.cta))+'</div>':'')+'<div class="foot"><small class="muted">Fonte '+esc(String(a.source_kind||'ads_library'))+' · '+esc(String(a.format||''))+'</small><span class="studio-signal">'+esc(String(a.fingerprint?'impronta pronta':'impronta al draft'))+'</span></div><div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(a.rationale||'Compatibilità verificata'))+'</div></article>';
     }).join('');
     var assignmentCards=assignments.length?assignments.map(function(a){
       var legacy=legacyById[String(a.legacy_ad_id||'')]||{},metric=measured[String(a.legacy_ad_id||'')];
@@ -1415,11 +1448,11 @@
       var lane={core:'CORE',variant:'VARIANTE',explore:'ESPLORA'}[a.experiment_lane]||String(a.experiment_lane||'TEST').toUpperCase();
       var duplicate=a.duplicate_decision==='block'?'duplicato bloccato':(a.duplicate_decision==='human_review'?'review duplicato':'impronta unica');
       var duplicateTone=a.duplicate_decision==='block'?'bad':(a.duplicate_decision==='human_review'?'warn':'good');
-      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal '+duplicateTone+'">'+esc(duplicate)+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||a.library_id||'codice in preparazione'))+'</div><div class="hook">'+esc(String(a.title||a.hook||'Concept Ads'))+'</div><div class="studio-kicker" style="margin-top:6px">Hook</div><div class="copy">'+esc(String(a.hook||'Hook in preparazione'))+'</div><div class="studio-kicker" style="margin-top:9px">Script</div><div class="copy">'+esc(String(a.body||'Script in preparazione'))+'</div>'+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.recording_direction?'<div class="studio-kicker" style="margin-top:6px">Regia · '+esc(String(a.recording_direction))+'</div>':'')+'<div class="foot"><small class="muted">'+esc([a.angle,a.format,a.language].filter(Boolean).join(' · ')||'DNA creativo verificato')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div><div class="studio-kicker" style="margin-top:9px">'+(metric?'Metriche collegate':'Misurazione pronta · binding piattaforma da collegare')+'</div></article>';
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="studio-signal warn">'+esc(lane)+'</span><span class="studio-signal '+duplicateTone+'">'+esc(duplicate)+'</span></div><div class="studio-kicker" style="margin-top:12px">'+esc(String(a.content_code||a.library_id||'codice in preparazione'))+'</div><div class="hook">'+esc(String(a.title||a.hook||'Concept Ads'))+'</div><div class="studio-kicker" style="margin-top:6px">Hook</div>'+studioExpandableCopy(a.hook||'Hook in preparazione','Leggi tutto l’hook')+'<div class="studio-kicker" style="margin-top:9px">Script</div>'+studioExpandableCopy(a.body||'Script in preparazione','Leggi tutto lo script')+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.recording_direction?'<div class="studio-kicker" style="margin-top:6px">Regia · '+esc(String(a.recording_direction))+'</div>':'')+'<div class="foot"><small class="muted">'+esc([a.angle,a.format,a.language].filter(Boolean).join(' · ')||'DNA creativo verificato')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div><div class="studio-kicker" style="margin-top:9px">'+(metric?'Metriche collegate':'Misurazione pronta · binding piattaforma da collegare')+'</div></article>';
     }).join(''):scripts.length?scripts.map(function(a){
       var id=String(a.id||''),metric=measured[id],url=opsSafeDriveUrl(a.drive_url||a.asset_url||'');
       var meta=[a.angolo,a.lingua,a.batch].filter(Boolean).join(' · ');
-      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal warn">ADS</span><span class="studio-signal '+(metric?'good':'')+'">'+(metric?'misurata':'da testare')+'</span></div><div class="hook">'+esc(String(a.hook||'Hook in preparazione'))+'</div><div class="copy">'+esc(String(a.body||'Script in preparazione'))+'</div>'+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.fonte_a_schermo?'<div class="studio-kicker" style="margin-top:6px">Fonte · '+esc(String(a.fonte_a_schermo))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(meta||'Angolo da definire')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div></article>';
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal warn">ADS</span><span class="studio-signal '+(metric?'good':'')+'">'+(metric?'misurata':'da testare')+'</span></div><div class="hook">'+esc(String(a.hook||'Hook in preparazione'))+'</div>'+studioExpandableCopy(a.body||'Script in preparazione','Leggi tutto lo script')+(a.cta?'<div class="studio-kicker" style="margin-top:10px">CTA · '+esc(String(a.cta))+'</div>':'')+(a.fonte_a_schermo?'<div class="studio-kicker" style="margin-top:6px">Fonte · '+esc(String(a.fonte_a_schermo))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(meta||'Angolo da definire')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri asset</a>':'<span class="studio-signal">asset da collegare</span>')+'</div></article>';
     }).join(''):'';
     var cards=weeklyCards+assignmentCards;
     if(!cards)cards=studioEmpty('La matrice è pronta ma la coda settimanale non è stata ancora generata. Nessun dato di altri talent viene mostrato.');
@@ -1460,12 +1493,13 @@
     var shown=all.slice(0,24);
     var cards=shown.length?shown.map(function(x){
       var metric=done[x.id],url=opsSafeDriveUrl(x.url);
-      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal '+(x.kind==='ads'?'warn':'good')+'">'+(x.kind==='ads'?'ADS':'ORGANICO')+'</span><span class="studio-signal">'+esc(String(x.status|| (metric?'misurato':'da produrre')).replace(/_/g,' '))+'</span></div>'+(x.code?'<div class="studio-kicker" style="margin-top:10px">'+esc(String(x.code))+(x.score==null?'':' · score '+Math.round(Number(x.score)))+'</div>':'')+'<div class="hook">'+esc(String(x.title))+'</div><div class="copy">'+esc(String(x.copy||'Brief in preparazione'))+'</div>'+(x.reason?'<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(x.reason))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(String(x.source||x.angle))+(x.format?' · '+esc(String(x.format)):'')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri fonte</a>':'')+'</div></article>';
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal '+(x.kind==='ads'?'warn':'good')+'">'+(x.kind==='ads'?'ADS':'ORGANICO')+'</span><span class="studio-signal">'+esc(String(x.status|| (metric?'misurato':'da produrre')).replace(/_/g,' '))+'</span></div>'+(x.code?'<div class="studio-kicker" style="margin-top:10px">'+esc(String(x.code))+(x.score==null?'':' · score '+Math.round(Number(x.score)))+'</div>':'')+'<div class="hook">'+esc(String(x.title))+'</div>'+studioExpandableCopy(x.copy||'Brief in preparazione',x.kind==='ads'?'Leggi tutto lo script':'Leggi tutto il brief')+(x.reason?'<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(x.reason))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(String(x.source||x.angle))+(x.format?' · '+esc(String(x.format)):'')+'</small>'+(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri fonte</a>':'')+'</div></article>';
     }).join(''):studioEmpty('Nessun contenuto in questa vista.');
     content.innerHTML=creativeErrorBanner(pack.creative)+studioHero('Produzione','Dal brief alla pubblicazione','Ads e contenuti organici nello stesso flusso, con script, stato e asset collegati.','Sola lettura durante il pilot')+
       '<div class="studio-segment" role="group" aria-label="Filtra produzione"><button type="button" data-production-filter="all" class="'+(productionFilter==='all'?'on':'')+'">Tutti</button><button type="button" data-production-filter="ads" class="'+(productionFilter==='ads'?'on':'')+'">Ads</button><button type="button" data-production-filter="organic" class="'+(productionFilter==='organic'?'on':'')+'">Organico</button></div>'+
       '<div class="bar"><div class="muted"><b>'+all.length+'</b> contenuti · ne mostro '+shown.length+' per mantenere la vista leggibile</div></div><div class="studio-production">'+cards+'</div>';
     Array.prototype.forEach.call(content.querySelectorAll('[data-production-filter]'),function(b){b.onclick=function(){productionFilter=b.getAttribute('data-production-filter');renderTalentProduction();};});
+    bindStudioCopyToggles();
   }
 
   function loadTalentResults(){
