@@ -1449,6 +1449,13 @@
     bindStudioLinks();
   }
 
+  function studioTimeout(promise,ms,fallback){
+    return Promise.race([
+      Promise.resolve(promise),
+      new Promise(function(resolve){setTimeout(function(){resolve(fallback);},ms);})
+    ]);
+  }
+
   function loadTalentAds(){
     destroyCharts();content.innerHTML=spinner('Preparo il tuo banco Ads…');
     if(opsFixtureEnabled()){
@@ -1457,17 +1464,18 @@
         .catch(function(){content.innerHTML='<div class="empty">Fixture Ads non disponibile.</div>';});
       return;
     }
-    var ensureInventoryPromise=ensureSb().rpc('ensure_talent_ad_inventory_batch',{p_session_token:auth.opsToken,p_limit:20})
+    studioTimeout(ensureSb().rpc('ensure_talent_ad_inventory_batch',{p_session_token:auth.opsToken,p_limit:20}),8000,null)
       .catch(function(){return null;});
-    var brainPromise=ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken})
+    var brainPromise=studioTimeout(ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken}),8000,null)
       .then(function(r){return r&&!r.error&&r.data?r.data:{};}).catch(function(){return {};});
-    var creativePromise=ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
-      .then(creativeRpcPayload).catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
-    var inventoryPromise=ensureInventoryPromise.then(function(){
-      return ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken});
-    }).then(function(r){return r&&!r.error&&r.data?r.data:{_load_error:String(r&&r.error&&r.error.message||'Inventario Ads non disponibile')};})
+    var creativePromise=studioTimeout(ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken}),8000,null)
+      .then(function(r){return r?creativeRpcPayload(r):{_load_error:'Creative Brain lento: mostro intanto le Ads disponibili'};})
+      .catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
+    var inventoryPromise=studioTimeout(ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken}),10000,null)
+      .then(function(r){return r&&!r.error&&r.data?r.data:{_load_error:String(r&&r.error&&r.error.message||'Inventario Ads temporaneamente lento')};})
       .catch(function(e){return {_load_error:String(e&&e.message||'Inventario Ads non disponibile')};});
-    Promise.all([loadLegacySnapshot(),brainPromise,creativePromise,inventoryPromise]).then(function(rows){
+    var legacyPromise=studioTimeout(loadLegacySnapshot(),8000,{}).catch(function(){return {};});
+    Promise.all([legacyPromise,brainPromise,creativePromise,inventoryPromise]).then(function(rows){
       renderTalentAds(rows[0],rows[1],rows[2],rows[3]);
     })
       .catch(function(){content.innerHTML='<div class="empty">Ads non disponibili. Esci e accedi di nuovo.</div>';});
