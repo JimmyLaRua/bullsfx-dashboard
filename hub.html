@@ -188,7 +188,7 @@
     --txt:#f8fafc;--mut:#94a3b8;--green:#22c55e;--red:#ef4444;
   }
   html{scroll-behavior:smooth}
-  body{min-height:100vh;background:
+  body{min-height:100dvh;background:
     radial-gradient(circle at 8% -10%,color-mix(in srgb,var(--accent,var(--gold)) 12%,transparent),transparent 33rem),
     var(--bg)}
   button,input{font:inherit}
@@ -249,6 +249,16 @@
   .studio-copy-toggle:hover{text-decoration:underline}.studio-copy-toggle:focus-visible{outline:2px solid var(--accent,var(--gold));outline-offset:3px;border-radius:3px}
   .studio-copy-toggle::after{content:"↓";font-size:12px}.studio-copy-toggle[aria-expanded="true"]::after{content:"↑"}
   .studio-production-card .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}
+  .agency-today{border:1px solid var(--line);border-radius:14px;background:linear-gradient(140deg,rgba(15,23,42,.98),rgba(6,14,27,.98));padding:16px;margin-bottom:14px}
+  .agency-today-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}.agency-today-head h2{font-size:18px;margin:0 0 3px}.agency-today-head p{margin:0;color:var(--mut);font-size:12px;max-width:68ch}
+  .agency-priority-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--panel2)}
+  .agency-priority{min-width:0;padding:12px 13px;border-right:1px solid var(--line)}.agency-priority:last-child{border-right:0}
+  .agency-priority strong{display:block;font:750 20px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}.agency-priority span{display:block;color:var(--mut);font-size:10px;margin-top:5px}.agency-priority.bad strong{color:var(--red)}.agency-priority.warn strong{color:var(--gold)}.agency-priority.good strong{color:var(--green)}
+  .agency-quick-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:13px}.agency-quick-actions .studio-action{min-height:40px;display:inline-flex;align-items:center;padding:9px 12px}
+  .agency-focus-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px}.agency-focus{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;border:1px solid var(--line);border-radius:9px;padding:10px;background:rgba(2,6,23,.32)}.agency-focus b{display:block;font-size:12px}.agency-focus small{display:block;color:var(--mut);font-size:10px;line-height:1.4;margin-top:2px}
+  .agency-attention{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}.agency-attention-item{border:1px solid var(--line);border-left:3px solid var(--mut);border-radius:10px;background:var(--panel2);padding:11px 12px}.agency-attention-item.bad{border-left-color:var(--red)}.agency-attention-item.warn{border-left-color:var(--gold)}.agency-attention-item.good{border-left-color:var(--green)}.agency-attention-item b{display:block;font:750 17px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace}.agency-attention-item small{display:block;color:var(--mut);font-size:10px;margin-top:5px;line-height:1.35}
+  .agency-pipeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:12px 0 2px}.agency-stage{position:relative;padding-top:8px;border-top:2px solid var(--line);color:var(--mut);font-size:9px;line-height:1.2}.agency-stage.done{border-top-color:var(--green);color:#b8f7d2}.agency-stage.current{border-top-color:var(--accent,var(--gold));color:var(--txt);font-weight:750}
+  .studio-error{border:1px solid rgba(239,68,68,.35);border-left:3px solid var(--red);border-radius:10px;background:rgba(127,29,29,.12);padding:14px;color:#fecaca}.studio-error b{display:block;color:#fff;margin-bottom:3px}.studio-error p{margin:0;color:#fca5a5;font-size:12px}.studio-error .studio-action{display:inline-flex;margin-top:10px;color:var(--txt)}
   .studio-decision-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
   .studio-decision{border:1px solid var(--line);border-top:3px solid var(--mut);border-radius:12px;background:var(--panel);padding:14px}
   .studio-decision.repeat{border-top-color:var(--green)}.studio-decision.change{border-top-color:var(--gold)}.studio-decision.stop{border-top-color:var(--red)}
@@ -271,15 +281,16 @@
   .tower-detail{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);gap:14px;margin-top:14px}.tower-source-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;padding:12px}.tower-source{border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--panel)}.tower-source b{display:block;font-size:11px}.tower-source small{display:block;color:var(--mut);font-size:9px;margin-top:5px;line-height:1.35}
   .tower-meter{height:7px;background:#172033;border-radius:999px;overflow:hidden;margin:8px 0 5px}.tower-meter span{display:block;height:100%;background:var(--accent,var(--gold));border-radius:inherit;max-width:100%}
   .tower-missing{color:var(--mut);font-style:italic}.tower-alert{color:var(--red);font-weight:800}.tower-warn{color:var(--gold);font-weight:800}
-  @media(max-width:1080px){.tower-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.tower-kpi:nth-child(3){border-right:0}.tower-kpi:nth-child(-n+3){border-bottom:1px solid var(--line)}.tower-source-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media(max-width:760px){.tower-head{grid-template-columns:1fr}.tower-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.tower-kpi:nth-child(3){border-right:1px solid var(--line)}.tower-kpi:nth-child(2n){border-right:0}.tower-kpi{border-bottom:1px solid var(--line)}.tower-kpi:nth-last-child(-n+2){border-bottom:0}.tower-detail{grid-template-columns:1fr}.tower-source-grid{grid-template-columns:1fr}}
+  @media(max-width:1080px){.tower-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.tower-kpi:nth-child(3){border-right:0}.tower-kpi:nth-child(-n+3){border-bottom:1px solid var(--line)}.tower-source-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.agency-attention{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:760px){.tower-head{grid-template-columns:1fr}.tower-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.tower-kpi:nth-child(3){border-right:1px solid var(--line)}.tower-kpi:nth-child(2n){border-right:0}.tower-kpi{border-bottom:1px solid var(--line)}.tower-kpi:nth-last-child(-n+2){border-bottom:0}.tower-detail{grid-template-columns:1fr}.tower-source-grid{grid-template-columns:1fr}.agency-priority-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.agency-priority:nth-child(2){border-right:0}.agency-priority:nth-child(-n+2){border-bottom:1px solid var(--line)}.agency-focus-list{grid-template-columns:1fr}}
   @media(max-width:900px){.studio-card,.studio-card.wide{grid-column:span 6}.studio-production{grid-template-columns:1fr}}
   @media(max-width:680px){
-    body.talent-mode{padding-bottom:82px}.wrap{padding:14px 14px 26px}header{margin-bottom:10px}.brand small{display:none}
-    body.talent-mode .tabs{position:fixed;z-index:45;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));margin:0;display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding:5px;box-shadow:0 18px 60px #000}
-    body.talent-mode .tab.talent-only{min-height:52px;padding:6px 2px;justify-content:center;text-align:center;font-size:9.5px;line-height:1.15;border-radius:8px}
+    body.talent-mode{padding-bottom:calc(86px + env(safe-area-inset-bottom))}.wrap{padding:14px 14px 26px}header{margin-bottom:10px}.brand small{display:none}
+    body.talent-mode .tabs{position:fixed;z-index:45;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));margin:0;display:flex!important;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;gap:3px;padding:5px;box-shadow:0 18px 60px rgba(0,0,0,.72);scrollbar-width:none}
+    body.talent-mode .tabs::-webkit-scrollbar{display:none}
+    body.talent-mode .tab.talent-only{flex:0 0 auto;min-width:76px;min-height:52px;padding:7px 9px;justify-content:center;text-align:center;font-size:10px;line-height:1.15;border-radius:8px;scroll-snap-align:start}
     .studio-hero{grid-template-columns:1fr;padding-top:12px}.studio-fresh{white-space:normal}.studio-grid{grid-template-columns:1fr}.studio-card,.studio-card.wide,.studio-card.full{grid-column:1}.studio-decision-grid{grid-template-columns:1fr}
-    .studio-item{grid-template-columns:1fr}.studio-action{justify-self:start}.ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .studio-item{grid-template-columns:1fr}.studio-action{justify-self:start;min-height:44px;display:inline-flex;align-items:center}.ops-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.agency-today-head{display:block}.agency-today-head .studio-signal{margin-top:9px}.agency-attention{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){.ad-inventory-card{transition:none}.studio-production-card .copy{transition:none}}
 </style>
@@ -317,7 +328,7 @@
     <button type="button" class="tab admin-only" data-view="calls" style="display:none">Call &amp; Priorità</button>
   </div>
 
-  <main id="content" tabindex="-1"></main>
+  <main id="content" role="tabpanel" aria-live="polite" tabindex="-1"></main>
 </div>
 
 <!-- LOGIN -->
@@ -450,13 +461,24 @@
 
   // tabs
   Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(t){
-    t.setAttribute('role','tab');t.setAttribute('tabindex','0');
+    t.setAttribute('role','tab');t.setAttribute('tabindex','-1');
     t.onclick=function(){
-      Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){x.classList.remove('on');x.setAttribute('aria-selected','false');});
+      Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){x.classList.remove('on');x.setAttribute('aria-selected','false');x.setAttribute('tabindex','-1');});
       t.classList.add('on'); view=t.getAttribute('data-view'); render();
-      t.setAttribute('aria-selected','true');
+      t.setAttribute('aria-selected','true');t.setAttribute('tabindex','0');
     };
     t.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t.click();}};
+  });
+  document.getElementById('tabs').addEventListener('keydown',function(e){
+    if(['ArrowLeft','ArrowRight','Home','End'].indexOf(e.key)<0)return;
+    var visible=Array.prototype.filter.call(document.querySelectorAll('.tab'),function(x){return x.style.display!=='none';});
+    if(!visible.length)return;
+    var current=Math.max(0,visible.indexOf(document.activeElement)),next=current;
+    if(e.key==='ArrowRight')next=(current+1)%visible.length;
+    if(e.key==='ArrowLeft')next=(current-1+visible.length)%visible.length;
+    if(e.key==='Home')next=0;
+    if(e.key==='End')next=visible.length-1;
+    e.preventDefault();visible[next].focus();visible[next].click();
   });
 
   function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -893,6 +915,19 @@
   function towerStatus(v){v=String(v||'not_connected');return '<span class="tower-status '+towerText(v)+'">'+towerText(v.replace(/_/g,' '))+'</span>';}
   function towerHasData(status){return status==='live'||status==='stale'||status==='approved'||status==='closed';}
   function towerMetric(v,status,kind){if(!towerHasData(status))return '<span class="tower-missing">—</span>';if(kind==='money')return towerMoney(v);if(kind==='ratio')return v==null?'—':Number(v).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2})+'x';return towerNum(v);}
+  function renderAdminAttention(totals,talents){
+    talents=talents||[];
+    var blocked=talents.reduce(function(sum,x){return sum+Number(((x.tasks||{}).blocked)||0);},0);
+    var missing=talents.reduce(function(sum,x){return sum+['funnel','organic','ads','drive','chat'].filter(function(k){return !towerHasData(((x[k]||{}).status));}).length;},0);
+    var overdue=Number(totals.overdue_tasks||0),unanswered=Number(totals.unanswered_chats||0);
+    function item(value,label,detail,tone){return '<div class="agency-attention-item '+tone+'"><b>'+towerNum(value)+'</b><small>'+towerText(label)+'</small><small>'+towerText(detail)+'</small></div>';}
+    return '<section aria-label="Attenzioni operative di oggi"><div class="agency-today-head"><div><h2>Attenzione oggi</h2><p>Eccezioni da gestire prima del lavoro ordinario. I contatori arrivano dalle fonti operative, non da stime.</p></div><span class="studio-signal '+((overdue+blocked+unanswered)>0?'warn':'good')+'">'+((overdue+blocked+unanswered)>0?'intervento richiesto':'operatività regolare')+'</span></div><div class="agency-attention">'+
+      item(overdue,'task in ritardo',overdue?'Apri il dettaglio talent e assegna il prossimo passo.':'Nessun ritardo registrato.',overdue?'bad':'good')+
+      item(blocked,'task bloccati',blocked?'Serve una decisione o una dipendenza del team.':'Nessun blocco aperto.',blocked?'bad':'good')+
+      item(unanswered,'chat senza risposta',unanswered?'Proteggi lo SLA e assegna un owner.':'SLA chat sotto controllo.',unanswered?'warn':'good')+
+      item(missing,'fonti non collegate',missing?'Il trattino resta visibile finché il tracking non arriva.':'Copertura fonti completa.',missing?'warn':'good')+
+      '</div></section>';
+  }
   function loadAdminHome(){
     destroyCharts();
     if(!INTEL.isAdmin(auth.id)){content.innerHTML='<div class="empty">Sezione riservata agli amministratori.</div>';return;}
@@ -930,7 +965,7 @@
     var head='<div class="tower-head"><div><div class="studio-eyebrow">Admin only · portfolio operativo</div><h1 class="tower-title">Control Tower affiliati</h1><p>Metriche reali, budget, ritardi, Drive e SLA chat. Un trattino indica tracking assente: non viene mai trasformato in uno zero finto.</p></div><div class="ops-sync">Aggiornato '+towerText(opsDate(_towerData.generated_at))+'<br>6 talent · dati personali esclusi</div></div>';
     var kpis='<div class="tower-kpis"><div class="tower-kpi"><b>'+towerNum(totals.ftd_30d)+'</b><small>FTD · 30 giorni</small></div><div class="tower-kpi"><b>'+towerMoney(totals.ad_spend)+'</b><small>spesa ads misurata</small></div><div class="tower-kpi"><b>'+towerNum(totals.open_tasks)+'</b><small>task aperti</small></div><div class="tower-kpi"><b class="'+(Number(totals.overdue_tasks)>0?'tower-alert':'')+'">'+towerNum(totals.overdue_tasks)+'</b><small>task in ritardo</small></div><div class="tower-kpi"><b class="'+(Number(totals.unanswered_chats)>0?'tower-warn':'')+'">'+towerNum(totals.unanswered_chats)+'</b><small>chat senza risposta</small></div><div class="tower-kpi"><b>'+towerNum(totals.drive_assets)+'</b><small>asset Drive catalogati</small></div></div>';
     var table='<section class="ops-section"><div class="ops-section-head"><h3>Portfolio per talent</h3><span class="ops-count">clicca una riga per il dettaglio</span></div><div class="cc-tablewrap"><table class="tower-table"><thead><tr><th>Talent / owner</th><th>FTD 30g</th><th>Organico view</th><th>Spesa Ads</th><th>ROAS</th><th>Budget</th><th>Task</th><th>Drive</th><th>Chat</th><th>Brain</th><th>Fonti</th></tr></thead><tbody>'+talents.map(function(x){var f=x.funnel||{},o=x.organic||{},a=x.ads||{},b=x.budget||{},t=x.tasks||{},d=x.drive||{},c=x.chat||{},cr=x.creative||{},own=x.ownership||{},att=sourceAttention(x),q=Number(cr.weekly_ads||0)+Number(cr.weekly_reels||0);return '<tr class="tower-row'+(x.talent_id===row.talent_id?' on':'')+'" data-tower-talent="'+towerText(x.talent_id)+'" tabindex="0"><td><div class="tower-person"><span class="tower-avatar">'+towerText((x.display_name||x.talent_id).slice(0,2).toUpperCase())+'</span><span><b>'+towerText(x.display_name)+'</b><small>'+towerText(own.owner_name||own.owner_id||'owner da assegnare')+'</small></span></div></td><td>'+towerMetric(f.ftd_30d,f.status)+'</td><td>'+towerMetric(o.views,o.status)+'</td><td>'+towerMetric(a.spend,a.status,'money')+'</td><td>'+towerMetric(a.roas,a.status,'ratio')+'</td><td>'+towerMetric(b.approved_budget,b.status,'money')+'</td><td><span class="'+(Number(t.overdue)>0?'tower-alert':'')+'">'+towerNum(t.overdue)+'</span> / '+towerNum(t.open)+'</td><td>'+towerMetric(d.assets,d.status)+' <span class="muted">('+towerNum(d.unmapped)+')</span></td><td><span class="'+(Number(c.unanswered)>0?'tower-warn':'')+'">'+towerMetric(c.unanswered,c.status)+'</span> / '+towerMetric(c.received_24h,c.status)+'</td><td>'+(q?'<span style="color:var(--green)">'+q+'/8</span>':'<span class="tower-missing">—</span>')+'</td><td>'+(att?'<span class="tower-warn">'+att+' mancanti</span>':'<span style="color:var(--green)">complete</span>')+'</td></tr>';}).join('')+'</tbody></table></div></section>';
-    content.innerHTML=head+kpis+renderFtdReporting(_towerData.ftd_reporting||{})+table+towerTalentDetail(row);
+    content.innerHTML=head+renderAdminAttention(totals,talents)+kpis+renderFtdReporting(_towerData.ftd_reporting||{})+table+towerTalentDetail(row);
     Array.prototype.forEach.call(content.querySelectorAll('[data-tower-talent]'),function(el){var pick=function(){save(TOWER_SEL_KEY,el.getAttribute('data-tower-talent'));renderAdminHome(_towerData);};el.onclick=pick;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}};});
   }
   function renderFtdReporting(report){
@@ -1126,6 +1161,19 @@
   var INTEL_FILTERS_KEY='bullshub_intel_filters_v1', INTEL_SEL_KEY='bullshub_intel_sel_v1';
   var intelFilters=load(INTEL_FILTERS_KEY,{ctype:'all',platform:'all'});
   var _intelList=null, _creativeBrain={};
+  function intelDriveReference(asset){
+    var name=String((asset&&asset.file_name)||'').toLowerCase();
+    var rules=[
+      [/bibbia|brand.?book|tone.?of.?voice|linee.?guida/,'Bibbia e posizionamento'],
+      [/contratt|fattur|amministr|compliance/,'Amministrazione'],
+      [/kpi|bilancio|dashboard|sheet|report|metric/,'KPI e numeri'],
+      [/chat.?script|script.?chat|audio|vocale|voice.?note/,'Script chat e vocali'],
+      [/tutorial|processo|onboarding|materiale.?per.?partire|setup/,'Materiale per partire'],
+      [/telegram|\btg\b|community|grupp/,'Community e Telegram']
+    ];
+    for(var i=0;i<rules.length;i++)if(rules[i][0].test(name))return {label:rules[i][1]};
+    return null;
+  }
   function attachOrganicTracking(list,payload){
     payload=payload||{};
     var accounts=payload.accounts||[], performance=payload.performance||[], recommendations=payload.recommendations||[], quarantine=payload.quarantine||[];
@@ -1291,12 +1339,19 @@
         '<div class="ops-main"><b>'+esc(h.hook_text)+'</b><small>'+Number(h.publications||0)+' pubbl. \u00b7 '+Number(h.views||0).toLocaleString('it-IT')+' view \u00b7 '+Number(h.ftd||0)+' FTD</small></div>'+
         '<span class="ops-status approved">EI '+Number(h.engagement_index||0)+'</span></div>';
     }).join(''):'<div class="ops-empty">Nessun hook con evidenza sufficiente per questo filtro.</div>';
-    // Unmapped assets (senza content_code)
-    var un=(aff.unmapped_assets||[]);
+    // I documenti di riferimento (Bibbia, KPI, contratti, script chat) non
+    // richiedono un content_code. Restano visibili nel solo perimetro talent,
+    // separati dai file creativi che devono davvero essere classificati.
+    var rawUn=(aff.unmapped_assets||[]), references=(aff.reference_assets||[]).slice(), un=[];
+    rawUn.forEach(function(a){var role=intelDriveReference(a);if(role)references.push(Object.assign({},a,{reference_role:role.label}));else un.push(a);});
+    var refRows=references.length?references.map(function(a){
+      var url=opsSafeDriveUrl(a.url),name=url?'<a target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">'+esc(a.file_name)+'</a>':esc(a.file_name);
+      return '<div class="ops-row"><span class="ops-priority approved">fonte</span><div class="ops-main"><b>'+name+'</b><small>'+esc(a.reference_role||'Documento operativo')+' · '+esc(opsDate(a.modified_at))+'</small></div></div>';
+    }).join(''):'<div class="ops-empty">Nessun documento di riferimento disponibile.</div>';
     var unRows=un.length?un.map(function(a){
       var url=opsSafeDriveUrl(a.url); var name=url?'<a target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">'+esc(a.file_name)+'</a>':esc(a.file_name);
-      return '<div class="ops-row"><span class="ops-priority blocked">no code</span><div class="ops-main"><b>'+name+'</b><small>da mappare \u00b7 '+esc(opsDate(a.modified_at))+'</small></div></div>';
-    }).join(''):'<div class="ops-empty">Tutti gli asset hanno un content_code.</div>';
+      return '<div class="ops-row"><span class="ops-priority blocked">no code</span><div class="ops-main"><b>'+name+'</b><small>file creativo da classificare \u00b7 '+esc(opsDate(a.modified_at))+'</small></div></div>';
+    }).join(''):'<div class="ops-empty">Nessun file creativo resta da classificare.</div>';
     // In production
     var prod=(aff.in_production||[]).filter(function(c){return typeMatch(c.content_type||(String(c.content_code||'').indexOf('-ADS-')>=0?'ad':'organic'));});
     var prodRows=(aff.in_production||[]).length?(aff.in_production||[]).map(function(c){
@@ -1336,7 +1391,8 @@
       '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(inv.total_assets||0)+'</strong><span>asset totali</span></div>'+
       '<div class="ops-kpi"><strong>'+Number(inv.ads||0)+'</strong><span>ads</span></div>'+
       '<div class="ops-kpi"><strong>'+Number(inv.organico||0)+'</strong><span>organico</span></div>'+
-      '<div class="ops-kpi"><strong'+(Number(inv.unmapped_count)>0?' style="color:var(--gold)"':'')+'>'+Number(inv.unmapped_count||0)+'</strong><span>senza content_code</span></div></div>'+
+      '<div class="ops-kpi"><strong>'+references.length+'</strong><span>documenti Drive</span></div>'+
+      '<div class="ops-kpi"><strong'+(un.length>0?' style="color:var(--gold)"':'')+'>'+un.length+'</strong><span>creativi da classificare</span></div></div>'+
       filterBar+
       '<div class="ops-layout"><div>'+
         '<section class="ops-section"><div class="ops-section-head"><h3>Angle Mix &amp; copertura</h3><span class="ops-count">'+mix.length+'</span></div><div style="padding:6px 4px">'+mixTable+'</div><div class="cc-note">L\u2019indicazione usa pubblicazioni, view, engagement e FTD \u2014 mai il solo numero di asset.</div></section>'+
@@ -1346,7 +1402,8 @@
       '</div><aside>'+
         '<section class="ops-section"><div class="ops-section-head"><h3>Direttive organico</h3><span class="ops-count">'+organicRecs.length+'</span></div>'+organicRecRows+'</section>'+
         '<section class="ops-section"><div class="ops-section-head"><h3>Post da mappare</h3><span class="ops-count">'+organicQuarantine.length+'</span></div>'+(organicQuarantine.length?organicQuarantine.map(function(q){return '<div class="ops-row"><span class="ops-priority blocked">'+esc(q.platform)+'</span><div class="ops-main"><b>'+esc(q.entity_ref||'post')+'</b><small>'+esc(q.rule_code)+' · '+esc(opsDate(q.created_at))+'</small></div></div>';}).join(''):'<div class="ops-empty">Nessun post organico in quarantena.</div>')+'</section>'+
-        '<section class="ops-section"><div class="ops-section-head"><h3>Asset senza content_code</h3><span class="ops-count">'+un.length+'</span></div>'+unRows+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Knowledge Base Drive</h3><span class="ops-count">'+references.length+'</span></div>'+refRows+'</section>'+
+        '<section class="ops-section"><div class="ops-section-head"><h3>Creativi da classificare</h3><span class="ops-count">'+un.length+'</span></div>'+unRows+'</section>'+
         '<section class="ops-section"><div class="ops-section-head"><h3>In produzione</h3><span class="ops-count">'+(aff.in_production||[]).length+'</span></div>'+prodRows+'</section>'+
       '</aside></div>';
   }
@@ -1358,7 +1415,7 @@
   }
   function setStudioView(next){
     view=next;
-    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){var on=x.getAttribute('data-view')===view;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){var on=x.getAttribute('data-view')===view;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');x.setAttribute('tabindex',on?'0':'-1');if(on&&x.scrollIntoView)try{x.scrollIntoView({block:'nearest',inline:'center'});}catch(e){}});
     render();
     try{document.getElementById('content').focus({preventScroll:true});}catch(e){}
   }
@@ -1430,6 +1487,9 @@
     bindStudioLinks();
   }
   function studioEmpty(text){return '<div class="studio-empty">'+esc(text)+'</div>';}
+  function studioError(title,text,retryView){
+    return '<div class="studio-error" role="alert"><b>'+esc(title||'Dati non disponibili')+'</b><p>'+esc(text||'Riprova tra poco. Le informazioni già salvate non vengono modificate.')+'</p>'+(retryView?'<button type="button" class="studio-action" data-studio-view="'+esc(retryView)+'">Riprova</button>':'')+'</div>';
+  }
   function creativeRpcPayload(r){
     if(r&&r.error)return {_load_error:String(r.error.message||r.error)};
     if(!r||!r.data)return {_load_error:'Snapshot Creative Brain non disponibile'};
@@ -1484,8 +1544,8 @@
     destroyCharts();content.innerHTML=spinner('Preparo il tuo banco Ads…');
     if(opsFixtureEnabled()){
       fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
-        .then(function(j){renderTalentAds({}, {}, j||{},{});})
-        .catch(function(){content.innerHTML='<div class="empty">Fixture Ads non disponibile.</div>';});
+        .then(function(j){var scoped=j&&INTEL.resolveTalent(j.talent_id)===INTEL.resolveTalent(auth.id)?j:{_load_error:'Fixture Creative Brain non disponibile per questo talent'};renderTalentAds({}, {}, scoped,{});})
+        .catch(function(){content.innerHTML=studioError('Fixture Ads non disponibile','Ricarica la vista o usa una sessione collegata.','talentads');bindStudioLinks();});
       return;
     }
     var brainPromise=studioTimeout(ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken}),8000,null)
@@ -1512,7 +1572,7 @@
     Promise.all([legacyPromise,brainPromise,creativePromise,inventoryPromise]).then(function(rows){
       renderTalentAds(rows[0],rows[1],rows[2],rows[3]);
     })
-      .catch(function(){content.innerHTML='<div class="empty">Ads non disponibili. Esci e accedi di nuovo.</div>';});
+      .catch(function(){content.innerHTML=studioError('Ads non disponibili','Riprova. Se il problema continua, esci e accedi di nuovo.','talentads');bindStudioLinks();});
   }
   function renderTalentAds(data,brain,creative,inventory){
     talentAdInventoryBusy=false;
@@ -1566,7 +1626,7 @@
     var cards=inventoryCards;
     if(!cards)cards=studioEmpty(inventory._load_error||'Sto preparando le prossime Ads personalizzate. Le Ads già saltate restano conservate e potranno tornare più avanti.');
     content.innerHTML=creativeErrorBanner(creative)+studioHero('Ads','Hook, script e test','Il tuo banco Ads privato: cosa registrare, quale angolo testare e dove trovare gli asset.','Sola lettura · nessuna pubblicazione automatica')+
-      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(inventorySummary.compatible_remaining==null?matrix.eligible:inventorySummary.compatible_remaining)+'</strong><span>compatibili rimaste</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.personalized_ready==null?brainSummary.fingerprinted:inventorySummary.personalized_ready)+'</strong><span>personalizzate pronte</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.claimed_today||0)+'</strong><span>prese oggi</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.in_production||0)+'</strong><span>in produzione</span></div></div>'+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(inventorySummary.compatible_remaining==null?(matrix.eligible||0):inventorySummary.compatible_remaining)+'</strong><span>compatibili rimaste</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.personalized_ready==null?(brainSummary.fingerprinted||0):inventorySummary.personalized_ready)+'</strong><span>personalizzate pronte</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.claimed_today||0)+'</strong><span>prese oggi</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.in_production||0)+'</strong><span>in produzione</span></div></div>'+
       '<div class="bar"><div class="muted"><b>'+Number(inventorySummary.compatible_total==null?matrix.eligible:inventorySummary.compatible_total)+'</b> compatibili totali · '+Number(inventorySummary.waiting_personalization||0)+' in personalizzazione · spesa tracciata '+fmtEur(spend)+' · '+fmtInt(leads)+' lead</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="studio-action" data-ad-inventory-refresh>Mostrami 20 nuove</button><button type="button" class="studio-action" data-studio-view="results">Apri risultati</button></div></div><div class="ad-inventory-status" role="status" aria-live="polite" data-ad-inventory-status></div><div class="studio-production">'+cards+'</div>';
     bindTalentAdInventoryActions();
   }
@@ -1577,8 +1637,8 @@
       Promise.all([
         fetch('reels_organici.json').then(function(r){if(!r.ok)throw 0;return r.json();}),
         fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
-      ]).then(function(rows){talentProductionCache={legacy:{},reels:rows[0].reels||[],brain:{},creative:rows[1]||{},inventory:{production_items:[]}};renderTalentProduction();})
-        .catch(function(){content.innerHTML='<div class="empty">Fixture produzione non disponibile.</div>';});
+      ]).then(function(rows){var scoped=rows[1]&&INTEL.resolveTalent(rows[1].talent_id)===INTEL.resolveTalent(auth.id)?rows[1]:{};talentProductionCache={legacy:{},reels:rows[0].reels||[],brain:{},creative:scoped,inventory:{production_items:[]}};renderTalentProduction();})
+        .catch(function(){content.innerHTML=studioError('Fixture produzione non disponibile','Ricarica la vista o usa una sessione collegata.','production');bindStudioLinks();});
       return;
     }
     var reelsPromise=reelsData?Promise.resolve(reelsData):fetch('reels_organici.json').then(function(r){if(!r.ok)throw new Error('reels');return r.json();}).then(function(j){reelsData=j.reels||[];return reelsData;});
@@ -1589,7 +1649,7 @@
     var inventoryPromise=studioTimeout(ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken}),10000,null)
       .then(function(r){return r&&!r.error&&r.data?r.data:{production_items:[]};}).catch(function(){return {production_items:[]};});
     Promise.all([loadLegacySnapshot(),reelsPromise,brainPromise,creativePromise,inventoryPromise]).then(function(rows){talentProductionCache={legacy:rows[0],reels:rows[1],brain:rows[2],creative:rows[3],inventory:rows[4]};renderTalentProduction();})
-      .catch(function(){content.innerHTML='<div class="empty">Produzione non disponibile. Esci e accedi di nuovo.</div>';});
+      .catch(function(){content.innerHTML=studioError('Produzione non disponibile','Riprova. Se il problema continua, esci e accedi di nuovo.','production');bindStudioLinks();});
   }
   function renderTalentProduction(){
     var pack=talentProductionCache||{legacy:{},reels:[],brain:{},creative:{},inventory:{}},legacy=pack.legacy||{},done={};
@@ -1605,12 +1665,21 @@
     var organics=creativeReels.length?creativeReels:(pack.reels||[]).filter(function(r){return INTEL.resolveTalent(r.talent)===INTEL.resolveTalent(auth.id);}).map(function(r){return {kind:'organic',id:String(r.id||''),title:r.testo_schermo||r.hook||'Reel organico',copy:r.script_parlato||r.caption||'',angle:r.format||'Organico',format:r.regia||'',url:r.drive_url||r.asset_url||''};});
     var all=productionFilter==='ads'?ads:(productionFilter==='organic'?organics:ads.concat(organics));
     var shown=all.slice(0,24);
+    var withDrive=ads.filter(function(x){return !!opsSafeDriveUrl(x.url);}).length,measured=ads.concat(organics).filter(function(x){return !!done[x.id];}).length;
+    function productionPipeline(x,metric,url){
+      var status=String(x.status||'').toLowerCase(),level=0;
+      if(['claimed','in_production','recording','editing','review','approved','completed','published','live'].indexOf(status)>=0)level=1;
+      if(url)level=Math.max(level,2);
+      if(metric)level=3;
+      return '<div class="agency-pipeline" aria-label="Stato produzione"><span class="agency-stage '+(level>0?'done':'current')+'">Scelta</span><span class="agency-stage '+(level>1?'done':(level===1?'current':''))+'">Registrazione</span><span class="agency-stage '+(level>2?'done':(level===2?'current':''))+'">Drive</span><span class="agency-stage '+(level===3?'done':'')+'">Misurazione</span></div>';
+    }
     var cards=shown.length?shown.map(function(x){
       var metric=done[x.id],url=opsSafeDriveUrl(x.url),rootUrl=opsSafeDriveUrl(x.driveRootUrl);
       var driveAction=x.kind==='ads'?(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri cartella Ads</a>':(rootUrl?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(rootUrl)+'">Apri ADS e crea la cartella '+esc(String(x.driveExpected||'ADS'))+'</a>':'<span class="studio-signal warn">Drive personale non collegato</span>')):(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri fonte</a>':'');
-      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal '+(x.kind==='ads'?'warn':'good')+'">'+(x.kind==='ads'?'ADS PRESA':'ORGANICO')+'</span><span class="studio-signal">'+esc(String(x.status|| (metric?'misurato':'da produrre')).replace(/_/g,' '))+'</span></div>'+(x.code?'<div class="studio-kicker" style="margin-top:10px">'+esc(String(x.code))+(x.score==null?'':' · score '+Math.round(Number(x.score)))+'</div>':'')+'<div class="hook">'+esc(String(x.title))+'</div>'+studioExpandableCopy(x.copy||'Brief in preparazione',x.kind==='ads'?'Leggi tutto lo script':'Leggi tutto il brief')+(x.reason?'<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(x.reason))+'</div>':'')+(x.kind==='ads'&&x.driveExpected?'<div class="studio-kicker" style="margin-top:9px">Cartella attesa · '+esc(String(x.driveExpected))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(String(x.source||x.angle))+(x.format?' · '+esc(String(x.format)):'')+'</small>'+driveAction+'</div></article>';
+      return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal '+(x.kind==='ads'?'warn':'good')+'">'+(x.kind==='ads'?'ADS PRESA':'ORGANICO')+'</span><span class="studio-signal">'+esc(String(x.status|| (metric?'misurato':'da produrre')).replace(/_/g,' '))+'</span></div>'+productionPipeline(x,metric,url)+(x.code?'<div class="studio-kicker" style="margin-top:10px">'+esc(String(x.code))+(x.score==null?'':' · score '+Math.round(Number(x.score)))+'</div>':'')+'<div class="hook">'+esc(String(x.title))+'</div>'+studioExpandableCopy(x.copy||'Brief in preparazione',x.kind==='ads'?'Leggi tutto lo script':'Leggi tutto il brief')+(x.reason?'<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(x.reason))+'</div>':'')+(x.kind==='ads'&&x.driveExpected?'<div class="studio-kicker" style="margin-top:9px">Cartella attesa · '+esc(String(x.driveExpected))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(String(x.source||x.angle))+(x.format?' · '+esc(String(x.format)):'')+'</small>'+driveAction+'</div></article>';
     }).join(''):studioEmpty('Nessun contenuto in questa vista.');
     content.innerHTML=creativeErrorBanner(pack.creative)+studioHero('Produzione','Dal brief alla registrazione','Qui trovi soltanto le Ads che hai preso e i contenuti organici assegnati, con la cartella Drive collegata per titolo.','Drive in sola lettura · nessuna pubblicazione automatica')+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+ads.length+'</strong><span>Ads prese</span></div><div class="ops-kpi"><strong>'+organics.length+'</strong><span>Reel assegnati</span></div><div class="ops-kpi"><strong>'+withDrive+'</strong><span>cartelle Ads trovate</span></div><div class="ops-kpi"><strong>'+measured+'</strong><span>contenuti misurati</span></div></div>'+
       '<div class="studio-segment" role="group" aria-label="Filtra produzione"><button type="button" data-production-filter="all" class="'+(productionFilter==='all'?'on':'')+'">Tutti</button><button type="button" data-production-filter="ads" class="'+(productionFilter==='ads'?'on':'')+'">Ads</button><button type="button" data-production-filter="organic" class="'+(productionFilter==='organic'?'on':'')+'">Organico</button></div>'+
       '<div class="bar"><div class="muted"><b>'+all.length+'</b> contenuti · ne mostro '+shown.length+' per mantenere la vista leggibile</div></div><div class="studio-production">'+cards+'</div>';
     Array.prototype.forEach.call(content.querySelectorAll('[data-production-filter]'),function(b){b.onclick=function(){productionFilter=b.getAttribute('data-production-filter');renderTalentProduction();};});
@@ -1628,7 +1697,7 @@
       if(!org.error&&org.data)list=attachOrganicTracking(list,org.data);
       var aff=list.filter(function(x){return INTEL.resolveTalent(x.talent_id)===INTEL.resolveTalent(auth.id);})[0]||affiliateFromSnapshot(ops);
       renderTalentResults(rows[0],aff,ops.generated_at);
-    }).catch(function(){content.innerHTML='<div class="empty">Risultati non disponibili. Riprova tra poco.</div>';});
+    }).catch(function(){content.innerHTML=studioError('Risultati non disponibili','Le metriche esistenti non vengono modificate. Riprova tra poco.','results');bindStudioLinks();});
   }
   function renderTalentResults(data,aff,generatedAt){
     data=data||{};aff=aff||{};
@@ -1639,7 +1708,9 @@
     var days=Object.keys(byDay).sort(),growth=days.length>1?byDay[days[days.length-1]]-byDay[days[0]]:0;
     var recs=aff.organic_recommendations||[];
     function recBlock(code,cls,title,empty){var xs=recs.filter(function(r){return code.indexOf(r.recommendation)>=0;}).slice(0,5);return '<section class="studio-decision '+cls+'"><h3>'+title+'</h3>'+(xs.length?xs.map(function(r){return '<div class="ops-row"><div class="ops-main"><b>'+esc(String(r.angle||'Angolo'))+'</b><small>'+esc(studioRecLabel(r.recommendation))+' · '+Number(r.views||0).toLocaleString('it-IT')+' view</small></div></div>';}).join(''):studioEmpty(empty))+'</section>';}
-    var topPosts=posts.slice().sort(function(a,b){return Number(b.views||0)-Number(a.views||0);}).slice(0,8);
+    var topPosts=posts.filter(function(p){
+      return !/\[demo\]/i.test(String(p.caption||p.title||p.name||p.id||''));
+    }).sort(function(a,b){return Number(b.views||0)-Number(a.views||0);}).slice(0,8);
     var postRows=topPosts.length?topPosts.map(function(p){return '<div class="studio-item"><div><span class="studio-signal">'+esc(String(p.platform||'social'))+'</span><b style="margin-top:8px">'+esc(String(p.caption||p.id||'Contenuto'))+'</b></div><strong>'+Number(p.views||0).toLocaleString('it-IT')+' view</strong></div>';}).join(''):studioEmpty('I contenuti migliori appariranno quando saranno collegate le fonti social ufficiali.');
     content.innerHTML=studioHero('Risultati','Numeri che portano a una decisione','Confronti, contenuti migliori e indicazioni operative del tuo solo perimetro.',generatedAt?'Aggiornato '+opsDate(generatedAt):'Ultimo snapshot verificato')+
       '<div class="ops-kpis"><div class="ops-kpi"><strong>'+fmtEur(spend)+'</strong><span>spesa 30 giorni</span></div><div class="ops-kpi"><strong>'+(Math.round(roas*10)/10).toLocaleString('it-IT')+'×</strong><span>ROAS</span></div><div class="ops-kpi"><strong>'+fmtInt(leads)+'</strong><span>lead · CPL '+fmtEur(cpl)+'</span></div><div class="ops-kpi"><strong>'+(growth>=0?'+':'')+fmtInt(growth)+'</strong><span>follower 30 giorni</span></div></div>'+
@@ -1657,7 +1728,7 @@
       ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}),
       ensureSb().rpc('ops_call_execution_snapshot',{p_session_token:auth.opsToken})
     ]).then(function(rows){if(rows[0].error||!rows[0].data)throw new Error('agenda');renderTalentAgenda(rows[0].data,rows[1].error?{}:(rows[1].data||{}));})
-      .catch(function(){content.innerHTML='<div class="empty">Agenda non disponibile. Riprova tra poco.</div>';});
+      .catch(function(){content.innerHTML=studioError('Agenda non disponibile','Task e call restano salvati. Riprova tra poco.','agenda');bindStudioLinks();});
   }
   function renderTalentAgenda(data,calls){
     if(!data||data.talent_id!==auth.id){content.innerHTML='<div class="empty">Perimetro agenda non valido.</div>';return;}
@@ -1709,19 +1780,54 @@
   }
 
   // ---------------- GENERALE ----------------
+  function newsGatewayHtml(){
+    return '<div class="news-gateway">'+
+      '<section class="studio-card wide"><div class="studio-card-head"><div><h2>News &amp; ricerca</h2><div class="studio-kicker">La notizia è la star; il trading resta il contesto</div></div><span class="studio-signal good">live desk</span></div><p class="studio-lead" style="max-width:70ch">Apri la classifica editoriale per scegliere la storia più forte: cronaca, attualità, macro, geopolitica, politica, studi, trend e mercati. Il motore SMM/copy trasforma la fonte in hook, scaletta e contenuto senza premiare cinque volte lo stesso tema.</p><a class="studio-action" href="'+NEWS_URL+'">Apri classifica e pool</a></section>'+
+      '<aside class="studio-card"><div class="studio-card-head"><div><h2>Metodo JBGRL</h2><div class="studio-kicker">Dalla fonte alla registrazione</div></div></div><div class="studio-list"><div class="studio-item"><div><span class="studio-signal">1</span><b style="margin-top:8px">Capisci il fatto</b><small>Fonte, contesto e perché interessa al tuo pubblico.</small></div></div><div class="studio-item"><div><span class="studio-signal">2</span><b style="margin-top:8px">Scegli l’angolo</b><small>Indignazione, consapevolezza o riscatto senza forzare il collegamento al trading.</small></div></div><div class="studio-item"><div><span class="studio-signal">3</span><b style="margin-top:8px">Produci e misura</b><small>Hook, script, asset e risultati restano collegati nello stesso flusso.</small></div></div></div></aside>'+
+      '</div>';
+  }
+  function loadTalentToday(){
+    destroyCharts();content.innerHTML=spinner('Metto in ordine priorità e notizie…');
+    if(opsFixtureEnabled()){
+      fetch('fixtures/operations.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){renderTalentToday(d,{meetings:[]});}).catch(function(){renderTalentToday(null,null,'Agenda operativa non disponibile nella fixture.');});
+      return;
+    }
+    if(!auth.opsToken){renderTalentToday(null,null,'Sessione operativa scaduta. Esci e accedi di nuovo.');return;}
+    Promise.all([
+      ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}),
+      ensureSb().rpc('ops_call_execution_snapshot',{p_session_token:auth.opsToken})
+    ]).then(function(rows){
+      var agenda=rows[0]&&!rows[0].error?rows[0].data:null,calls=rows[1]&&!rows[1].error?rows[1].data:{};
+      renderTalentToday(agenda,calls,agenda?null:'Priorità operative temporaneamente non disponibili.');
+    }).catch(function(){renderTalentToday(null,null,'Connessione alle priorità non disponibile. News e strumenti restano accessibili.');});
+  }
+  function renderTalentToday(data,calls,errorMessage){
+    var valid=!!(data&&(!data.talent_id||INTEL.resolveTalent(data.talent_id)===INTEL.resolveTalent(auth.id)));
+    var tasks=valid?(data.tasks||[]):[],decisions=valid?(data.decisions||[]):[];
+    var open=tasks.filter(function(t){return ['done','completed','blocked'].indexOf(String(t.status||''))<0;});
+    var blocked=tasks.filter(function(t){return t.status==='blocked'||(t.brief&&t.brief.blocker);});
+    var overdue=open.filter(function(t){var due=Date.parse(t.due_at||'');return isFinite(due)&&due<Date.now();});
+    var meetings=((calls||{}).meetings||[]).filter(function(m){return !m.talent_id||INTEL.resolveTalent(m.talent_id)===INTEL.resolveTalent(auth.id);}).sort(function(a,b){return Date.parse(a.scheduled_start||0)-Date.parse(b.scheduled_start||0);});
+    var futureMeetings=meetings.filter(function(m){var at=Date.parse(m.scheduled_start||'');return isFinite(at)&&at>Date.now()-3600000;}),next=futureMeetings[0]||meetings[0];
+    var focus=open.slice().sort(function(a,b){return Number(a.priority||2)-Number(b.priority||2)||(Date.parse(a.due_at||'')||Infinity)-(Date.parse(b.due_at||'')||Infinity);}).slice(0,4);
+    var focusRows=focus.length?'<div class="agency-focus-list">'+focus.map(function(t){var detail=(t.brief&&t.brief.next_action)||t.task_type||'Prossimo passo da verificare';return '<div class="agency-focus"><span class="studio-signal '+(Number(t.priority||2)<=1?'warn':'')+'">P'+Number(t.priority||2)+'</span><div><b>'+esc(String(t.title||'Task operativo'))+'</b><small>'+esc(String(detail))+' - '+esc(opsDate(t.due_at))+'</small></div></div>';}).join('')+'</div>':'';
+    function amount(value){return valid?String(value):'--';}
+    var nextCall=next?opsDate(next.scheduled_start):'Nessuna call in agenda';
+    var today='<section class="agency-today" aria-labelledby="agency-today-title"><div class="agency-today-head"><div><h2 id="agency-today-title">Il piano di oggi</h2><p>Prima le dipendenze, poi la produzione. Ogni voce resta limitata al tuo perimetro.</p></div><span class="studio-signal '+(overdue.length||blocked.length?'warn':'good')+'">'+(valid?(overdue.length||blocked.length?'attenzione richiesta':'piano sotto controllo'):'agenda non collegata')+'</span></div>'+
+      '<div class="agency-priority-grid"><div class="agency-priority '+(overdue.length?'bad':'good')+'"><strong>'+amount(overdue.length)+'</strong><span>azioni scadute</span></div><div class="agency-priority '+(blocked.length?'warn':'good')+'"><strong>'+amount(blocked.length)+'</strong><span>blocchi da sbloccare</span></div><div class="agency-priority"><strong>'+amount(open.length)+'</strong><span>azioni aperte</span></div><div class="agency-priority '+(decisions.length?'warn':'good')+'"><strong>'+amount(decisions.length)+'</strong><span>decisioni richieste</span></div></div>'+
+      focusRows+'<div class="agency-quick-actions"><span class="studio-signal">Prossima call: '+esc(nextCall)+'</span><button type="button" class="studio-action" data-studio-view="agenda">Apri agenda</button><button type="button" class="studio-action" data-studio-view="talentads">Scegli Ads</button><button type="button" class="studio-action" data-studio-view="production">Vai in produzione</button></div></section>';
+    content.innerHTML=studioHero('News','Oggi, poi il resto','Priorità operative e storie da trasformare in contenuti credibili.','Perimetro '+INTEL.displayName(auth.id))+(errorMessage?studioError('Priorità non aggiornate',errorMessage,'news'):'')+today+newsGatewayHtml();
+    bindStudioLinks();
+  }
   function renderGenerale(){
     var admin=auth&&INTEL.isAdmin(auth.id);
-    content.innerHTML=studioHero(admin?'Newsroom':'News','Trova la storia giusta','Notizie, fonti e spunti editoriali per trasformare ciò che succede oggi in contenuti credibili.','Pool condiviso · verifica fonte obbligatoria')+
-      '<div class="news-gateway">'+
-        '<section class="studio-card wide"><div class="studio-card-head"><div><h2>News &amp; ricerca</h2><div class="studio-kicker">La notizia è la star; il trading resta il contesto</div></div><span class="studio-signal good">live desk</span></div><p class="studio-lead" style="max-width:70ch">Apri la classifica editoriale per scegliere la storia più forte: cronaca, attualità, macro, geopolitica, politica, studi, trend e mercati. Il motore SMM/copy trasforma la fonte in hook, scaletta e contenuto senza premiare cinque volte lo stesso tema.</p><a class="studio-action" href="'+NEWS_URL+'">Apri classifica e pool</a></section>'+ 
-        '<aside class="studio-card"><div class="studio-card-head"><div><h2>Metodo JBGRL</h2><div class="studio-kicker">Dalla fonte alla registrazione</div></div></div><div class="studio-list"><div class="studio-item"><div><span class="studio-signal">1</span><b style="margin-top:8px">Capisci il fatto</b><small>Fonte, contesto e perché interessa al tuo pubblico.</small></div></div><div class="studio-item"><div><span class="studio-signal">2</span><b style="margin-top:8px">Scegli l’angolo</b><small>Indignazione, consapevolezza o riscatto senza forzare il collegamento al trading.</small></div></div><div class="studio-item"><div><span class="studio-signal">3</span><b style="margin-top:8px">Produci e misura</b><small>Hook, script, asset e risultati restano collegati nello stesso flusso.</small></div></div></div></aside>'+
-      '</div>';
+    content.innerHTML=studioHero(admin?'Newsroom':'News','Trova la storia giusta','Notizie, fonti e spunti editoriali per trasformare ciò che succede oggi in contenuti credibili.','Pool condiviso - verifica fonte obbligatoria')+newsGatewayHtml();
   }
 
   function render(){
     destroyCharts();
     if(view==='adminhome') loadAdminHome();
-    else if(view==='news') renderGenerale();
+    else if(view==='news') (auth&&INTEL.isAdmin(auth.id)?renderGenerale():loadTalentToday());
     else if(view==='foryou') loadIntelligence();
     else if(view==='talentads') loadTalentAds();
     else if(view==='production') loadTalentProduction();
@@ -1767,7 +1873,7 @@
       if(admin&&adminViews.indexOf(view)<0) view='adminhome';
       if(!admin&&talentViews.indexOf(view)<0) view='news';
     }
-    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){var on=x.getAttribute('data-view')===view;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(x){var on=x.getAttribute('data-view')===view;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');x.setAttribute('tabindex',on?'0':'-1');});
     render();
   }
   // aspetta il caricamento del client

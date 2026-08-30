@@ -7339,6 +7339,7 @@
   var AUTH='bullsfx_auth_v2';
   function load(k,d){ try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
   function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+  function drop(k){ try{localStorage.removeItem(k);}catch(e){} }
 
   var auth = load(AUTH,null);
   function myId(){ return auth?auth.id:""; }
@@ -7346,6 +7347,20 @@
   (DATA.talents||[]).forEach(function(t){ colorMap[t.id]=t.color; });
   var claims = {};
   var openIds = {};
+
+  function stableClaimKey(it){
+    if(it.claim_key) return it.claim_key;
+    var s=it.source||{};
+    var raw=[s.url||'',s.headline||'',s.date||'',it.solo||''].join('|');
+    var seeds=[2166136261,2246822519,3266489917];
+    var bytes=new TextEncoder().encode(raw);
+    var chunks=seeds.map(function(seed){
+      var value=seed>>>0;
+      for(var i=0;i<bytes.length;i++){ value=Math.imul((value^bytes[i])>>>0,16777619)>>>0; }
+      return value.toString(16).padStart(8,'0').toUpperCase();
+    });
+    return 'SRC-'+chunks.join('');
+  }
 
   function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
   function colorForId(id){ return colorMap[id] || css('--gold'); }
@@ -7420,7 +7435,8 @@
   function card(it){
     var n=daysOld(it.date), f=freshLabel(n), s=it.source||{};
     var vs=viralScore(it), ws=windowStatus(it);
-    var takenBy=claims[it.id]||"";
+    var key=stableClaimKey(it);
+    var takenBy=claims[key]||"";
     var mine = takenBy && takenBy===myId();
     var el=document.createElement('div'); el.className='card'+(takenBy?' claimed':'')+(openIds[it.id]?' open':'');
 
@@ -7429,10 +7445,10 @@
 
     var canClaim=!!auth, btnLabel, dis=false;
     if(!takenBy){ btnLabel=canClaim?'\u270B Prendo io':'Entra col codice per prendere'; if(!canClaim) dis=true; }
-    else if(mine){ btnLabel='\u21A9\uFE0E Libera (preso da te)'; }
+    else if(mine){ btnLabel='\u2713 Preso da te'; dis=true; }
     else { btnLabel='\uD83D\uDD12 Gi\u00e0 preso'; dis=true; }
 
-    var claimBar='<div class="claimbar"><button class="claimbtn'+(takenBy?' taken':'')+'" data-claim="'+it.id+'"'+(dis?' disabled style="opacity:.55;cursor:not-allowed"':'')+'>'+esc(btnLabel)+'</button>'+
+    var claimBar='<div class="claimbar"><button class="claimbtn'+(takenBy?' taken':'')+'" data-claim="'+key+'"'+(dis?' disabled style="opacity:.55;cursor:not-allowed"':'')+'>'+esc(btnLabel)+'</button>'+
       (takenBy?'<span class="claimmsg">'+(mine?'Preso da te.':'Preso da un altro talent.')+'</span>':'<span class="claimmsg">Libero.</span>')+'</div>';
 
     var body='<div class="cbody">'+claimBar+'<div class="grid">'+
@@ -7466,7 +7482,7 @@
   function match(it){
     if(it.solo && it.solo!==myId()) return false;
     if(state.cat!=="Tutte" && it.categoria!==state.cat) return false;
-    var tb=claims[it.id]||"";
+    var tb=claims[stableClaimKey(it)]||"";
     if(state.claim==='free' && tb) return false;
     if(state.claim==='taken' && !tb) return false;
     if(state.claim==='mine' && tb!==myId()) return false;
@@ -7504,12 +7520,17 @@
     [].forEach.call(document.querySelectorAll('.claimbtn'),function(b){
       if(b.disabled) return;
       b.onclick=function(e){ e.stopPropagation();
-        var id=b.getAttribute('data-claim'); var tb=claims[id]||""; var mid=myId();
-        if(!auth){ return; } var s=ensureSb(); if(!s){ return; }
+        var key=b.getAttribute('data-claim'); var tb=claims[key]||""; var mid=myId();
+        if(!auth||!auth.opsToken){ return; } var s=ensureSb(); if(!s){ return; }
         b.disabled=true;
-        if(!tb){ s.from('aff_claims').insert({item_id:String(id), talent_id:mid}).then(function(){ loadClaims(true); }); }
-        else if(tb===mid){ s.from('aff_claims').delete().eq('item_id',String(id)).eq('talent_id',mid).then(function(){ loadClaims(true); }); }
-        else { b.disabled=false; }
+        var it=DATA.items.find(function(item){return stableClaimKey(item)===key;});
+        if(!tb&&it){
+          var payload={legacy_id:String(it.id),title:it.titolo,angle:it.categoria,format:it.format,
+            language:it.lang||'it',hook:(it.hooks||[])[0]||it.overlay||'',script:it.script,
+            caption:it.caption,source:it.source||{}};
+          s.rpc('claim_pool_content',{p_session_token:auth.opsToken,p_claim_key:key,p_content:payload})
+            .then(function(){ loadClaims(true); },function(){ b.disabled=false; });
+        } else { b.disabled=false; }
       };
     });
   }
@@ -7518,8 +7539,13 @@
 
   function loadClaims(rerender){
     var s=ensureSb(); if(!s){ if(rerender) render(); return; }
-    s.from('aff_claims').select('item_id,talent_id').then(function(res){
-      var next={}; (res.data||[]).forEach(function(r){ next[r.item_id]=r.talent_id; });
+    if(!auth||!auth.opsToken){ claims={}; if(rerender) render(); return; }
+    s.rpc('pool_claim_snapshot',{p_session_token:auth.opsToken}).then(function(res){
+      if(res.error){
+        if(String(res.error.message||'').includes('expired_session')){ claims={}; drop(AUTH); auth=null; showLogin(); }
+        if(rerender) render(); return;
+      }
+      var next={}; (res.data||[]).forEach(function(r){ next[r.item_id]=r.claimant; });
       var changed = JSON.stringify(next)!==JSON.stringify(claims);
       claims=next;
       if(rerender || changed) render();
@@ -7551,10 +7577,12 @@
     if(!code){ lgErr.textContent='Inserisci il tuo codice.'; return; }
     var s=ensureSb(); if(!s){ lgErr.textContent='Connessione non disponibile. Riprova tra un istante.'; return; }
     lgErr.textContent='Verifica\u2026';
-    s.rpc('aff_login_code',{p_pin:code}).then(function(res){
+    var clientRef=localStorage.getItem('bullsfx_client_ref');
+    if(!clientRef){ clientRef='web_'+Array.from(crypto.getRandomValues(new Uint8Array(18)),function(x){return x.toString(16).padStart(2,'0');}).join(''); localStorage.setItem('bullsfx_client_ref',clientRef); }
+    s.rpc('ops_login_code_v2',{p_pin:code,p_client_ref:clientRef}).then(function(res){
       var row=(res.data&&res.data[0])||null;
-      if(res.error||!row){ lgErr.textContent='Codice errato. Riprova.'; return; }
-      auth={id:row.id,color:row.color}; colorMap[row.id]=row.color; save(AUTH,auth);
+      if(res.error||!row){ lgErr.textContent=res.error&&String(res.error.message).includes('locked')?'Troppi tentativi. Riprova pi\u00f9 tardi.':'Codice errato. Riprova.'; return; }
+      auth={id:row.talent_id,color:row.color,opsToken:row.session_token,opsExpiresAt:row.expires_at}; colorMap[row.talent_id]=row.color; save(AUTH,auth);
       hideLogin(); renderWhoami(); loadClaims(true);
     }, function(){ lgErr.textContent='Errore di connessione. Riprova.'; });
   }

@@ -36,6 +36,22 @@ PER_QUERY  = 8          # candidati letti da ogni query
 # chiamata API. Il timeout si applica SOLO durante la lettura dei feed RSS.
 FEED_TIMEOUT = 15
 
+def stable_claim_key(item):
+    """Return the same 24-hex claim key in Python and in the browser."""
+    source = item.get("source") or {}
+    raw = "|".join(str(value or "") for value in (
+        source.get("url"), source.get("headline"), source.get("date"), item.get("solo")
+    ))
+    seeds = (2166136261, 2246822519, 3266489917)
+    chunks = []
+    for seed in seeds:
+        value = seed
+        for byte in raw.encode("utf-8"):
+            value ^= byte
+            value = (value * 16777619) & 0xFFFFFFFF
+        chunks.append(f"{value:08X}")
+    return "SRC-" + "".join(chunks)
+
 # Il pool non deve trasformarsi in un bollettino finanziario. Ogni run riserva
 # spazio a temi diversi, limita la ripetizione di categoria/testata e preferisce
 # le fonti dirette autorevoli rispetto ai risultati di discovery di Google News.
@@ -659,6 +675,7 @@ def generate_item(client, c):
     if ch["solo"]:
         item["solo"] = ch["solo"]
         item["lang"] = lang
+    item["claim_key"] = stable_claim_key(item)
     return item
 
 
@@ -757,6 +774,7 @@ def main():
     kept.sort(key=lambda i: i.get("date", ""), reverse=True)
     for idx, i in enumerate(kept, 1):
         i["id"] = idx
+        i["claim_key"] = i.get("claim_key") or stable_claim_key(i)
     data["items"] = kept
 
     # safety: nessun warning residuo nelle caption
