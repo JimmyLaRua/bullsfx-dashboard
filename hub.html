@@ -889,6 +889,7 @@
   function towerText(v){return esc(String(v==null?'':v));}
   function towerNum(v){return Number(v||0).toLocaleString('it-IT');}
   function towerMoney(v){return '€'+Number(v||0).toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:2});}
+  function towerCurrency(v,c){return (String(c||'EUR').toUpperCase()==='USD'?'$':'€')+Number(v||0).toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:2});}
   function towerStatus(v){v=String(v||'not_connected');return '<span class="tower-status '+towerText(v)+'">'+towerText(v.replace(/_/g,' '))+'</span>';}
   function towerHasData(status){return status==='live'||status==='stale'||status==='approved'||status==='closed';}
   function towerMetric(v,status,kind){if(!towerHasData(status))return '<span class="tower-missing">—</span>';if(kind==='money')return towerMoney(v);if(kind==='ratio')return v==null?'—':Number(v).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2})+'x';return towerNum(v);}
@@ -899,19 +900,22 @@
     if(opsFixtureEnabled()){
       Promise.all([
         fetch('fixtures/admin-control-tower.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();}),
-        fetch('fixtures/admin-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
-      ]).then(function(rows){rows[0].creative_brain=rows[1];renderAdminHome(rows[0]);})
+        fetch('fixtures/admin-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();}),
+        fetch('fixtures/admin-ftd-reporting.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
+      ]).then(function(rows){rows[0].creative_brain=rows[1];rows[0].ftd_reporting=rows[2];renderAdminHome(rows[0]);})
         .catch(function(){content.innerHTML='<div class="empty">Fixture Control Tower non disponibile.</div>';});
       return;
     }
     if(!auth.opsToken){content.innerHTML='<div class="empty"><b>Sessione admin scaduta.</b><br>Esci e accedi di nuovo.</div>';return;}
     Promise.all([
       ensureSb().rpc('ops_admin_talent_control_tower',{p_session_token:auth.opsToken}),
-      ensureSb().rpc('ops_admin_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
+      ensureSb().rpc('ops_admin_talent_creative_brain_snapshot',{p_session_token:auth.opsToken}),
+      ensureSb().rpc('ops_ftd_reporting_snapshot',{p_session_token:auth.opsToken})
     ]).then(function(rows){
-      var res=rows[0],creative=rows[1];
+      var res=rows[0],creative=rows[1],ftdReporting=rows[2];
       if(res.error||!res.data){content.innerHTML='<div class="empty"><b>Control Tower non ancora collegata.</b><br>'+towerText(res.error&&res.error.message||'Applica il gateway admin e verifica i connettori.')+'<br><button class="btn" id="tower-retry" style="margin-top:12px">Riprova</button></div>';var b=document.getElementById('tower-retry');if(b)b.onclick=loadAdminHome;return;}
       res.data.creative_brain=creative&&!creative.error&&creative.data?creative.data:{talents:[],status:'not_connected'};
+      res.data.ftd_reporting=ftdReporting&&!ftdReporting.error&&ftdReporting.data?ftdReporting.data:{status:'not_connected',history:[]};
       renderAdminHome(res.data);
     },function(){content.innerHTML='<div class="empty">Connessione Control Tower non disponibile.</div>';});
   }
@@ -926,8 +930,16 @@
     var head='<div class="tower-head"><div><div class="studio-eyebrow">Admin only · portfolio operativo</div><h1 class="tower-title">Control Tower affiliati</h1><p>Metriche reali, budget, ritardi, Drive e SLA chat. Un trattino indica tracking assente: non viene mai trasformato in uno zero finto.</p></div><div class="ops-sync">Aggiornato '+towerText(opsDate(_towerData.generated_at))+'<br>6 talent · dati personali esclusi</div></div>';
     var kpis='<div class="tower-kpis"><div class="tower-kpi"><b>'+towerNum(totals.ftd_30d)+'</b><small>FTD · 30 giorni</small></div><div class="tower-kpi"><b>'+towerMoney(totals.ad_spend)+'</b><small>spesa ads misurata</small></div><div class="tower-kpi"><b>'+towerNum(totals.open_tasks)+'</b><small>task aperti</small></div><div class="tower-kpi"><b class="'+(Number(totals.overdue_tasks)>0?'tower-alert':'')+'">'+towerNum(totals.overdue_tasks)+'</b><small>task in ritardo</small></div><div class="tower-kpi"><b class="'+(Number(totals.unanswered_chats)>0?'tower-warn':'')+'">'+towerNum(totals.unanswered_chats)+'</b><small>chat senza risposta</small></div><div class="tower-kpi"><b>'+towerNum(totals.drive_assets)+'</b><small>asset Drive catalogati</small></div></div>';
     var table='<section class="ops-section"><div class="ops-section-head"><h3>Portfolio per talent</h3><span class="ops-count">clicca una riga per il dettaglio</span></div><div class="cc-tablewrap"><table class="tower-table"><thead><tr><th>Talent / owner</th><th>FTD 30g</th><th>Organico view</th><th>Spesa Ads</th><th>ROAS</th><th>Budget</th><th>Task</th><th>Drive</th><th>Chat</th><th>Brain</th><th>Fonti</th></tr></thead><tbody>'+talents.map(function(x){var f=x.funnel||{},o=x.organic||{},a=x.ads||{},b=x.budget||{},t=x.tasks||{},d=x.drive||{},c=x.chat||{},cr=x.creative||{},own=x.ownership||{},att=sourceAttention(x),q=Number(cr.weekly_ads||0)+Number(cr.weekly_reels||0);return '<tr class="tower-row'+(x.talent_id===row.talent_id?' on':'')+'" data-tower-talent="'+towerText(x.talent_id)+'" tabindex="0"><td><div class="tower-person"><span class="tower-avatar">'+towerText((x.display_name||x.talent_id).slice(0,2).toUpperCase())+'</span><span><b>'+towerText(x.display_name)+'</b><small>'+towerText(own.owner_name||own.owner_id||'owner da assegnare')+'</small></span></div></td><td>'+towerMetric(f.ftd_30d,f.status)+'</td><td>'+towerMetric(o.views,o.status)+'</td><td>'+towerMetric(a.spend,a.status,'money')+'</td><td>'+towerMetric(a.roas,a.status,'ratio')+'</td><td>'+towerMetric(b.approved_budget,b.status,'money')+'</td><td><span class="'+(Number(t.overdue)>0?'tower-alert':'')+'">'+towerNum(t.overdue)+'</span> / '+towerNum(t.open)+'</td><td>'+towerMetric(d.assets,d.status)+' <span class="muted">('+towerNum(d.unmapped)+')</span></td><td><span class="'+(Number(c.unanswered)>0?'tower-warn':'')+'">'+towerMetric(c.unanswered,c.status)+'</span> / '+towerMetric(c.received_24h,c.status)+'</td><td>'+(q?'<span style="color:var(--green)">'+q+'/8</span>':'<span class="tower-missing">—</span>')+'</td><td>'+(att?'<span class="tower-warn">'+att+' mancanti</span>':'<span style="color:var(--green)">complete</span>')+'</td></tr>';}).join('')+'</tbody></table></div></section>';
-    content.innerHTML=head+kpis+table+towerTalentDetail(row);
+    content.innerHTML=head+kpis+renderFtdReporting(_towerData.ftd_reporting||{})+table+towerTalentDetail(row);
     Array.prototype.forEach.call(content.querySelectorAll('[data-tower-talent]'),function(el){var pick=function(){save(TOWER_SEL_KEY,el.getAttribute('data-tower-talent'));renderAdminHome(_towerData);};el.onclick=pick;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}};});
+  }
+  function renderFtdReporting(report){
+    var latest=report.latest||{},period=report.period_7d||{},currency=latest.currency||'USD',breakdown=latest.breakdown||[];
+    if(report.status==='not_connected'||!latest.report_day){
+      return '<section class="ops-section"><div class="ops-section-head"><h3>FTD EOD · Slack</h3><span class="tower-status not_connected">non collegato</span></div><div class="ops-empty">La classifica di #ftd-reporting non è ancora arrivata nel database. I valori per talent restano vuoti: non vengono inventati.</div></section>';
+    }
+    var rows=breakdown.map(function(x){return '<div class="ops-row"><span class="ops-priority">'+towerText(x.label)+'</span><div class="ops-main"><b>'+towerNum(x.ftd)+' FTD</b><small>'+towerCurrency(x.deposited,currency)+' depositati · '+towerCurrency(x.cpa,currency)+' CPA</small></div></div>';}).join('')||'<div class="ops-empty">Nessuna riga attribuita nel report.</div>';
+    return '<section class="ops-section"><div class="ops-section-head"><h3>FTD EOD · #ftd-reporting</h3>'+towerStatus(report.status)+'</div><div class="ops-kpis" style="margin:0;border:0;border-radius:0"><div class="ops-kpi"><strong>'+towerNum(latest.total_ftd)+'</strong><span>FTD · '+towerText(latest.report_day)+'</span></div><div class="ops-kpi"><strong>'+towerCurrency(latest.total_deposited,currency)+'</strong><span>depositati</span></div><div class="ops-kpi"><strong>'+towerCurrency(latest.total_cpa,currency)+'</strong><span>CPA</span></div><div class="ops-kpi"><strong>'+towerNum(period.ftd)+'</strong><span>FTD · ultimi 7 report</span></div></div><div style="padding:0 14px">'+rows+'</div><div class="cc-note">Fonte: Lorenzo · canale Slack verificato. CLUTCH TRADING escluso. Il report globale non viene assegnato artificialmente a un talent.</div></section>';
   }
   function towerTalentDetail(x){
     var f=x.funnel||{},o=x.organic||{},a=x.ads||{},b=x.budget||{},t=x.tasks||{},d=x.drive||{},c=x.chat||{},on=x.onboarding||{},cr=x.creative||{};
