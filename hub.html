@@ -1386,15 +1386,27 @@
   function runTalentAdInventoryAction(rpc,args,button,successMessage){
     if(talentAdInventoryBusy||!ensureSb())return;
     talentAdInventoryBusy=true;
-    if(button)button.closest('.ad-inventory-card')?.classList.add('is-busy');
+    if(button){
+      button.disabled=true;
+      button.setAttribute('aria-busy','true');
+      button.closest('.ad-inventory-card')?.classList.add('is-busy');
+    }
     setAdInventoryStatus('Aggiorno il tuo inventario…');
-    ensureSb().rpc(rpc,args).then(function(res){
+    studioTimeout(ensureSb().rpc(rpc,args),12000,{_studio_timeout:true}).then(function(res){
+      if(res&&res._studio_timeout)throw new Error('Aggiornamento lento: riprova tra qualche secondo. Nessuna Ads è stata persa.');
       if(res.error)throw res.error;
       setAdInventoryStatus(successMessage||'Inventario aggiornato.');
       return new Promise(function(resolve){setTimeout(resolve,280);});
-    }).then(loadTalentAds).catch(function(error){
+    }).then(function(){
       talentAdInventoryBusy=false;
-      if(button)button.closest('.ad-inventory-card')?.classList.remove('is-busy');
+      loadTalentAds();
+    }).catch(function(error){
+      talentAdInventoryBusy=false;
+      if(button){
+        button.disabled=false;
+        button.removeAttribute('aria-busy');
+        button.closest('.ad-inventory-card')?.classList.remove('is-busy');
+      }
       setAdInventoryStatus(String(error&&error.message||'Operazione non riuscita.'),true);
     });
   }
@@ -1464,16 +1476,26 @@
         .catch(function(){content.innerHTML='<div class="empty">Fixture Ads non disponibile.</div>';});
       return;
     }
-    studioTimeout(ensureSb().rpc('ensure_talent_ad_inventory_batch',{p_session_token:auth.opsToken,p_limit:20}),8000,null)
-      .catch(function(){return null;});
     var brainPromise=studioTimeout(ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken}),8000,null)
       .then(function(r){return r&&!r.error&&r.data?r.data:{};}).catch(function(){return {};});
     var creativePromise=studioTimeout(ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken}),8000,null)
       .then(function(r){return r?creativeRpcPayload(r):{_load_error:'Creative Brain lento: mostro intanto le Ads disponibili'};})
       .catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
-    var inventoryPromise=studioTimeout(ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken}),10000,null)
-      .then(function(r){return r&&!r.error&&r.data?r.data:{_load_error:String(r&&r.error&&r.error.message||'Inventario Ads temporaneamente lento')};})
-      .catch(function(e){return {_load_error:String(e&&e.message||'Inventario Ads non disponibile')};});
+    function inventorySnapshot(){
+      return studioTimeout(ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken}),10000,null)
+        .then(function(r){return r&&!r.error&&r.data?r.data:{_load_error:String(r&&r.error&&r.error.message||'Inventario Ads temporaneamente lento')};})
+        .catch(function(e){return {_load_error:String(e&&e.message||'Inventario Ads non disponibile')};});
+    }
+    // The inventory must be prepared before its snapshot is read. Previously these
+    // calls ran in parallel, so a fast snapshot could return an empty list and the
+    // UI fell back to legacy cards without the claim/skip controls.
+    var inventoryPromise=studioTimeout(ensureSb().rpc('ensure_talent_ad_inventory_batch',{p_session_token:auth.opsToken,p_limit:20}),15000,null)
+      .catch(function(){return null;})
+      .then(function(){return inventorySnapshot();})
+      .then(function(snapshot){
+        if(Array.isArray(snapshot&&snapshot.items)&&snapshot.items.length)return snapshot;
+        return new Promise(function(resolve){setTimeout(resolve,650);}).then(inventorySnapshot);
+      });
     var legacyPromise=studioTimeout(loadLegacySnapshot(),8000,{}).catch(function(){return {};});
     Promise.all([legacyPromise,brainPromise,creativePromise,inventoryPromise]).then(function(rows){
       renderTalentAds(rows[0],rows[1],rows[2],rows[3]);
