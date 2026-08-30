@@ -18,6 +18,10 @@ sys.modules.setdefault("anthropic", anthropic_stub)
 
 import generate
 
+source = pathlib.Path(generate.__file__).read_text(encoding="utf-8")
+assert '"categoria": ch["cat"]' in source
+assert '"area": ch["area"]' in source
+
 
 def candidate(cat, outlet, headline, tier="authoritative", solo=None, lang="it"):
     return {
