@@ -36,6 +36,16 @@ PER_QUERY  = 8          # candidati letti da ogni query
 # chiamata API. Il timeout si applica SOLO durante la lettura dei feed RSS.
 FEED_TIMEOUT = 15
 
+# Il pool non deve trasformarsi in un bollettino finanziario. Ogni run riserva
+# spazio a temi diversi, limita la ripetizione di categoria/testata e preferisce
+# le fonti dirette autorevoli rispetto ai risultati di discovery di Google News.
+CATEGORY_ORDER = [
+    "Cronaca", "Scienza", "Tecnologia", "Societa", "Cultura", "Curiosita",
+    "Ambiente", "Politica", "Geo", "Macro", "Trading", "Random",
+]
+MAX_PER_CATEGORY = 2
+MIN_AUTHORITATIVE_SHARE = 0.50
+
 # Ogni "canale" = una ricerca Google News + i metadati dell'item.
 # solo="alberto" + lang="es"  => contenuto visibile SOLO ad Alberto (spagnolo).
 CHANNELS = [
@@ -69,6 +79,30 @@ CHANNELS = [
          q="truffe online risparmi soldi vittime italia when:5d", hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Cronaca",  area="Italia / Giovani",      lang="it", solo=None,
          q="caro affitti stipendi giovani precari italia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Cronaca",  area="Italia / Attualita",    lang="it", solo=None,
+         q="attualita italiana fatto del giorno cronaca when:3d", hl="it", gl="IT", ceid="IT:it"),
+    # ---- SCIENZA / TECNOLOGIA / SALUTE -----------------------------------
+    dict(cat="Scienza",  area="Ricerca",                lang="it", solo=None,
+         q="scoperta scientifica studio ricerca universita when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Scienza",  area="Spazio",                 lang="it", solo=None,
+         q="NASA ESA spazio scoperta pianeta missione when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Scienza",  area="Salute",                 lang="it", solo=None,
+         q="studio medico salute ricerca scoperta when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Tecnologia", area="AI / Innovazione",     lang="it", solo=None,
+         q="intelligenza artificiale innovazione tecnologia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Tecnologia", area="Cyber / Privacy",      lang="it", solo=None,
+         q="cybersecurity privacy app social tecnologia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    # ---- AMBIENTE / SOCIETA / CULTURA / CURIOSITA -------------------------
+    dict(cat="Ambiente", area="Clima / Pianeta",        lang="it", solo=None,
+         q="clima ambiente fenomeni estremi energia pianeta when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Societa",  area="Italia / Societa",       lang="it", solo=None,
+         q="societa scuola lavoro giovani demografia italia when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Cultura",  area="Cultura / Spettacolo",   lang="it", solo=None,
+         q="cinema musica libri cultura fenomeno when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Curiosita", area="Mondo / Curiosita",     lang="it", solo=None,
+         q="scoperta curiosita archeologia animali spazio when:5d", hl="it", gl="IT", ceid="IT:it"),
+    dict(cat="Curiosita", area="Trend / Virale",        lang="it", solo=None,
+         q="fenomeno virale trend social tiktok instagram when:3d", hl="it", gl="IT", ceid="IT:it"),
     dict(cat="Cronaca",  area="Espana",                lang="es", solo="alberto",
          q="estafas online ahorros jovenes alquiler espana when:5d", hl="es", gl="ES", ceid="ES:es"),
     # ---- GEO / energia -----------------------------------------------------
@@ -112,6 +146,12 @@ CHANNELS = [
          q="pensiones ahorro inversion espana when:5d", hl="es", gl="ES", ceid="ES:es"),
     dict(cat="Random",   area="Espana / Trabajo",      lang="es", solo="alberto",
          q="empleo salarios trabajo espana when:5d",   hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Scienza",  area="Espana / Ciencia",      lang="es", solo="alberto",
+         q="ciencia descubrimiento salud espacio espana when:5d", hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Tecnologia", area="Espana / Tecnologia", lang="es", solo="alberto",
+         q="inteligencia artificial tecnologia privacidad espana when:5d", hl="es", gl="ES", ceid="ES:es"),
+    dict(cat="Cultura",  area="Espana / Cultura",      lang="es", solo="alberto",
+         q="cultura cine musica tendencia viral espana when:5d", hl="es", gl="ES", ceid="ES:es"),
     # Globali in spagnolo
     dict(cat="Macro",    area="USA / Mercados globales",lang="es", solo="alberto",
          q="wall street s&p 500 nasdaq when:5d",       hl="es", gl="ES", ceid="ES:es"),
@@ -147,6 +187,12 @@ CHANNELS = [
          q="credit immobilier taux logement france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
     dict(cat="Random",   area="France / Retraite",     lang="fr", solo="nabil",
          q="retraite epargne investissement france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Scienza",  area="France / Science",      lang="fr", solo="nabil",
+         q="science decouverte sante espace france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Tecnologia", area="France / Technologie", lang="fr", solo="nabil",
+         q="intelligence artificielle technologie vie privee france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
+    dict(cat="Cultura",  area="France / Culture",      lang="fr", solo="nabil",
+         q="culture cinema musique tendance virale france when:5d", hl="fr", gl="FR", ceid="FR:fr"),
     # Globali in francese
     dict(cat="Macro",    area="USA / Marches globaux", lang="fr", solo="nabil",
          q="wall street s&p 500 nasdaq when:5d",       hl="fr", gl="FR", ceid="FR:fr"),
@@ -181,6 +227,13 @@ FEEDS = [
     dict(cat="Politica", area="Italia",             lang="it", solo=None, outlet="ANSA Politica",           url="https://www.ansa.it/sito/notizie/politica/politica_rss.xml"),
     dict(cat="Cronaca",  area="Italia",             lang="it", solo=None, outlet="ANSA Cronaca",            url="https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml"),
     dict(cat="Geo",      area="Mondo",              lang="it", solo=None, outlet="ANSA Mondo",              url="https://www.ansa.it/sito/notizie/mondo/mondo_rss.xml"),
+    dict(cat="Cultura",  area="Italia / Cultura",    lang="it", solo=None, outlet="ANSA Cultura",            url="https://www.ansa.it/sito/notizie/cultura/cultura_rss.xml"),
+    dict(cat="Scienza",  area="Italia / Scienza",    lang="it", solo=None, outlet="ANSA Scienza",            url="https://www.ansa.it/canale_scienza_tecnica/notizie/scienzaetecnica_rss.xml"),
+    dict(cat="Tecnologia", area="Italia / Tecnologia", lang="it", solo=None, outlet="ANSA Tecnologia",      url="https://www.ansa.it/canale_tecnologia/notizie/tecnologia_rss.xml"),
+    dict(cat="Scienza",  area="Italia / Salute",     lang="it", solo=None, outlet="ANSA Salute e Benessere", url="https://www.ansa.it/canale_saluteebenessere/notizie/saluteebenessere_rss.xml"),
+    dict(cat="Curiosita", area="Italia / Lifestyle", lang="it", solo=None, outlet="ANSA Lifestyle",         url="https://www.ansa.it/canale_lifestyle/notizie/lifestyle_rss.xml"),
+    dict(cat="Scienza",  area="Spazio / Ricerca",    lang="it", solo=None, outlet="NASA JPL",               url="https://www.jpl.nasa.gov/feeds/news/"),
+    dict(cat="Scienza",  area="Mondo / Ricerca",     lang="it", solo=None, outlet="Nature News",            url="https://www.nature.com/nature/articles?format=rss&type=news"),
     # ---- Internazionali veloci --------------------------------------------
     dict(cat="Macro",    area="USA / Finanza",      lang="it", solo=None, outlet="CNBC Finance",           url="https://www.cnbc.com/id/15839069/device/rss/rss.html"),
     dict(cat="Macro",    area="USA / Mercati",      lang="it", solo=None, outlet="CNBC Markets",           url="https://www.cnbc.com/id/20910258/device/rss/rss.html"),
@@ -215,6 +268,12 @@ Ricevi UNA notizia reale (outlet, titolo, data, link, categoria, area) e produci
 
 PRINCIPIO N.1 - LA NOTIZIA E' LA STAR, IL TRADING E' INVISIBILE (assoluto):
 Questo e' contenuto ORGANICO: deve cavalcare la VIRALITA' della notizia, NON fare contenuto di trading. Il reel deve interessare a CHIUNQUE scrolli, non solo ai "nerd del trading". Parti sempre da qualcosa ad alto appeal di massa (benzina che sale, caro-vita, la maglietta made-in-China che costa il triplo, la spesa dopo le elezioni, il mutuo, lo stipendio che non basta, una dichiarazione politica assurda, una notizia geopolitica). Il collegamento a soldi/mercati resta IMPLICITO e leggero: chi guarda deve pensare "vero, non ci avevo pensato", non "questo mi vuole vendere trading". VIETATO parlare esplicitamente di grafici, indicatori, pip, leva, spread, broker, "operazioni": se compaiono, riscrivi dal punto di vista del consumatore comune. Test: se lo mostri a una persona che non sa cosa sia il forex, deve comunque incuriosirla, farla arrabbiare o farle venire un dubbio. La vendita e' una CONSEGUENZA, mai il messaggio.
+
+VARIETA' EDITORIALE (obbligatoria):
+- Non forzare ogni storia verso soldi o mercati. Scienza, salute, tecnologia, ambiente, societa', cultura e curiosita' devono restare interessanti per il loro valore umano.
+- Cerca il dettaglio sorprendente, il contrasto, la conseguenza concreta o la domanda che una persona manderebbe a un amico.
+- Se la fonte e' scientifica o istituzionale, distingui chiaramente dato osservato, ipotesi e opinione. Non gonfiare lo studio e non inventare causalita'.
+- Evita serie di contenuti con lo stesso tono: alterna meraviglia, utilita', attualita', indignazione, scoperta e conversazione.
 
 REGOLE DI CONFORMITA' (assolute):
 - NON nominare MAI un broker. Usa sempre l'espressione "un partner regolamentato". Mai scrivere nomi di broker.
@@ -302,7 +361,8 @@ def parse_entry(e, ch):
     if getattr(e, "published_parsed", None):
         d = datetime(*e.published_parsed[:6], tzinfo=timezone.utc).date()
     return dict(outlet=outlet or "Google News", headline=headline,
-                url=getattr(e, "link", ""), pub=d, ch=ch)
+                url=getattr(e, "link", ""), pub=d, ch=ch,
+                source_tier="discovery")
 
 def collect_candidates(existing_urls):
     today = datetime.now(timezone.utc).date()
@@ -349,7 +409,8 @@ def parse_direct(e, ch):
     elif getattr(e, "updated_parsed", None):
         d = datetime(*e.updated_parsed[:6], tzinfo=timezone.utc).date()
     return dict(outlet=ch.get("outlet", "Fonte"), headline=headline,
-                url=getattr(e, "link", ""), pub=d, ch=ch)
+                url=getattr(e, "link", ""), pub=d, ch=ch,
+                source_tier="authoritative")
 
 def collect_direct(existing_urls):
     """Legge i feed RSS diretti (FEEDS). Stessa logica di freschezza/dedup."""
@@ -384,21 +445,113 @@ def collect_direct(existing_urls):
         socket.setdefaulttimeout(None)
     return cands
 
-def pick_spread(cands, n):
-    """Sceglie n candidati alternando i canali per varieta'."""
-    buckets = {}
-    for c in cands:
-        buckets.setdefault(c["ch"]["q"], []).append(c)
-    out, keys = [], list(buckets.keys())
-    i = 0
-    while len(out) < n and any(buckets.values()):
-        k = keys[i % len(keys)]
-        if buckets[k]:
-            out.append(buckets[k].pop(0))
-        i += 1
-        if i > n * 20:
-            break
+_TITLE_STOPWORDS = {
+    "della", "delle", "degli", "dello", "alla", "alle", "agli", "nella",
+    "nelle", "sono", "come", "dopo", "prima", "anche", "questo", "questa",
+    "para", "como", "desde", "entre", "sobre", "dans", "avec", "pour",
+    "that", "with", "from", "after", "about", "into", "their", "what",
+}
+
+def _headline_tokens(c):
+    words = re.findall(r"[a-z0-9]{4,}", (c.get("headline") or "").lower())
+    return {w for w in words if w not in _TITLE_STOPWORDS}
+
+def _too_similar(a, b):
+    aa, bb = _headline_tokens(a), _headline_tokens(b)
+    if not aa or not bb:
+        return False
+    return len(aa & bb) / max(1, len(aa | bb)) >= 0.55
+
+def _category_cycle():
+    """Ruota la priorita' ai diversi aggiornamenti della giornata."""
+    shift = datetime.now(timezone.utc).hour % len(CATEGORY_ORDER)
+    return CATEGORY_ORDER[shift:] + CATEGORY_ORDER[:shift]
+
+def _select_balanced(pool, limit, out, used_outlets, category_counts,
+                     authoritative_only=False, relax=False):
+    """Round-robin per categoria, con dedup di testata e titolo."""
+    order = _category_cycle()
+    buckets = {cat: [] for cat in order}
+    for c in pool:
+        if authoritative_only and c.get("source_tier") != "authoritative":
+            continue
+        buckets.setdefault(c["ch"]["cat"], []).append(c)
+    for rows in buckets.values():
+        rows.sort(key=lambda c: (c.get("pub") or date.min), reverse=True)
+
+    progressed = True
+    while len(out) < limit and progressed:
+        progressed = False
+        unseen_available = any(
+            rows and category_counts.get(cat, 0) == 0
+            for cat, rows in buckets.items()
+        )
+        for cat in order:
+            rows = buckets.get(cat, [])
+            if (not relax and unseen_available
+                    and category_counts.get(cat, 0) > 0):
+                continue
+            while rows:
+                c = rows.pop(0)
+                outlet = (c.get("outlet") or "").strip().casefold()
+                if c in out:
+                    continue
+                if not relax and category_counts.get(cat, 0) >= MAX_PER_CATEGORY:
+                    continue
+                if not relax and outlet and outlet in used_outlets:
+                    continue
+                if any(_too_similar(c, prior) for prior in out):
+                    continue
+                out.append(c)
+                category_counts[cat] = category_counts.get(cat, 0) + 1
+                if outlet:
+                    used_outlets.add(outlet)
+                progressed = True
+                break
+            if len(out) >= limit:
+                break
     return out
+
+def _pick_audience(pool, limit):
+    if limit <= 0:
+        return []
+    out, used_outlets, category_counts = [], set(), {}
+    min_authoritative = 0 if limit < 3 else min(
+        limit,
+        int((limit * MIN_AUTHORITATIVE_SHARE) + 0.999),
+        sum(1 for c in pool if c.get("source_tier") == "authoritative"),
+    )
+    _select_balanced(pool, min_authoritative, out, used_outlets,
+                     category_counts, authoritative_only=True)
+    _select_balanced(pool, limit, out, used_outlets, category_counts)
+    if len(out) < limit:
+        _select_balanced(pool, limit, out, used_outlets, category_counts,
+                         relax=True)
+    return out[:limit]
+
+def pick_spread(cands, n):
+    """Mix autorevole e vario, senza contaminare i contenuti privati.
+
+    Con almeno 6 slot: 2 sono riservati ai feed privati ES/FR (uno ciascuno)
+    e tutti gli altri restano condivisi. Se un pool privato non ha candidati,
+    lo slot torna automaticamente al pool condiviso.
+    """
+    if n <= 0:
+        return []
+    private_slots = 1 if n >= 6 else 0
+    pools = {
+        None: [c for c in cands if not c["ch"].get("solo")],
+        "alberto": [c for c in cands if c["ch"].get("solo") == "alberto"],
+        "nabil": [c for c in cands if c["ch"].get("solo") == "nabil"],
+    }
+    out = []
+    out.extend(_pick_audience(pools["alberto"], private_slots))
+    out.extend(_pick_audience(pools["nabil"], private_slots))
+    out.extend(_pick_audience(pools[None], n - len(out)))
+    if len(out) < n:
+        remaining = [c for c in cands if c not in out]
+        out.extend(_pick_audience(remaining, n - len(out)))
+    return out[:n]
 
 
 # ----------------------------------------------------------------------------
@@ -496,7 +649,8 @@ def generate_item(client, c):
         "fornire": obj.get("fornire", ""),
         "source": {"outlet": c["outlet"], "headline": c["headline"],
                    "date": (c["pub"].isoformat() if c["pub"] else datetime.now(timezone.utc).date().isoformat()),
-                   "url": c["url"]},
+                   "url": c["url"],
+                   "authority": c.get("source_tier", "discovery")},
         "regia": obj.get("regia", ""),
     }
     if ch["solo"]:
