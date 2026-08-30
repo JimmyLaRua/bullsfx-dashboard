@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-08-30T01:01:00Z",
+  "status": "live",
+  "source": { "channel_id": "C0BT73RM5QR", "channel_name": "ftd-reporting", "owner": "lorenzo", "raw_message_persisted": false },
+  "latest": {
+    "report_day": "2026-08-29",
+    "total_ftd": 1,
+    "total_deposited": 349,
+    "total_cpa": 250,
+    "currency": "USD",
+    "breakdown": [
+      { "label": "SIMOJAYFX", "ftd": 1, "deposited": 349, "cpa": 250 },
+      { "label": "ALBERTO", "ftd": 0, "deposited": 0, "cpa": 0 },
+      { "label": "CLAUDIA", "ftd": 0, "deposited": 0, "cpa": 0 },
+      { "label": "JBGRL", "ftd": 0, "deposited": 0, "cpa": 0 },
+      { "label": "LUCA PULEO", "ftd": 0, "deposited": 0, "cpa": 0 },
+      { "label": "NABIL", "ftd": 0, "deposited": 0, "cpa": 0 },
+      { "label": "NOMATRIX", "ftd": 0, "deposited": 0, "cpa": 0 },
+      { "label": "SAMANTHA", "ftd": 0, "deposited": 0, "cpa": 0 }
+    ],
+    "sales_legends": [{ "label": "RGL", "ftd": 1 }],
+    "excluded_labels": ["CLUTCH TRADING"]
+  },
+  "period_7d": { "ftd": 11, "deposited": 6610, "days": 6 },
+  "period_30d": { "ftd": 14, "deposited": 8013, "days": 10 },
+  "history": []
+}
