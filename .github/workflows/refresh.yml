@@ -36,6 +36,12 @@ jobs:
       - name: Verify news diversity contract
         run: python tests/test_news_diversity.py
 
+      - name: Verify dashboard security headers
+        run: python tests/test_security_headers.py
+
+      - name: Verify secure Content Engine claims
+        run: python tests/test_secure_claim_gateway.py
+
       - name: Generate content
         run: python generate.py
 
