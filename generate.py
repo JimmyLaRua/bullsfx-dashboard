@@ -633,8 +633,11 @@ def generate_item(client, c):
         # cosi' il feed mostra sempre "news di oggi". La data reale dell'articolo
         # resta dentro "source" per la citazione a schermo.
         "date": datetime.now(timezone.utc).date().isoformat(),
-        "categoria": obj.get("categoria", ch["cat"]),
-        "area": obj.get("area", ch["area"]),
+        # Categoria e area sono decise dal motore editoriale. Il modello puo'
+        # scrivere il contenuto, ma non riclassificarlo in "Random" e rompere
+        # quote/filtri/isolare le corsie private.
+        "categoria": ch["cat"],
+        "area": ch["area"],
         "format": obj.get("format", "Talking head"),
         "tipo": obj.get("tipo", "News reaction"),
         "durata": obj.get("durata", "20-35s"),
