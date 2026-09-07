@@ -323,6 +323,7 @@
     <button type="button" class="tab admin-only" data-view="piano" style="display:none">Talent Control</button>
     <button type="button" class="tab admin-only" data-view="operazioni" style="display:none">Operazioni</button>
     <button type="button" class="tab admin-only" data-view="command" style="display:none">Command Center</button>
+    <button type="button" class="tab admin-only" data-view="activity" style="display:none">Attività talent</button>
     <button type="button" class="tab admin-only" data-view="marketing" style="display:none">Marketing readiness</button>
     <button type="button" class="tab admin-only" data-view="intel" style="display:none">Content Intelligence</button>
     <button type="button" class="tab admin-only" data-view="calls" style="display:none">Call &amp; Priorità</button>
@@ -371,10 +372,12 @@
   function ensureSb(){ if(!sb && window.supabase){ try{ sb=window.supabase.createClient(SB_URL,SB_KEY);}catch(e){sb=null;} } return sb; }
 
   var AUTH='bullshub_auth_v1';
+  var PRIMARY_AUTH='bullsfx_auth_v2';
   function load(k,d){ try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
   function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
   function del(k){ try{localStorage.removeItem(k);}catch(e){} }
 
+  /*AUTH_SYNC_START*/
   function sessionUsable(a){
     if(!a||!a.id||!a.opsToken) return false;
     if(!a.opsExpiresAt) return true;
@@ -382,13 +385,39 @@
     return !isFinite(expiry)||expiry>Date.now()+30000;
   }
 
-  var auth=load(AUTH,null);
-  // Hub e newsroom vivono sullo stesso dominio: riusa la sessione valida invece
-  // di costringere il talent a un secondo login. Una sessione scaduta non deve
-  // mai lasciare le sezioni in uno stato apparentemente vuoto.
-  if(!sessionUsable(auth)) auth=load('bullsfx_auth_v2',null);
-  if(!sessionUsable(auth)){ auth=null; del(AUTH); }
-  else save(AUTH,auth);
+  function authExpiry(a){
+    if(!a||!a.opsExpiresAt) return 0;
+    var expiry=Date.parse(a.opsExpiresAt);
+    return isFinite(expiry)?expiry:0;
+  }
+
+  function selectNewestSession(primary,hub){
+    var p=sessionUsable(primary)?primary:null;
+    var h=sessionUsable(hub)?hub:null;
+    if(!p) return h;
+    if(!h) return p;
+    if(p.opsToken===h.opsToken) return p;
+    var pe=authExpiry(p), he=authExpiry(h);
+    // Il login principale e' la fonte canonica a parita' o senza scadenza.
+    return he>pe?h:p;
+  }
+  /*AUTH_SYNC_END*/
+
+  function persistAuth(a){ save(AUTH,a); save(PRIMARY_AUTH,a); }
+  function clearAuth(){ del(AUTH); del(PRIMARY_AUTH); }
+
+  // Hub e newsroom condividono una sola identita'. Se esistono due sessioni
+  // valide, usa la piu' recente: una vecchia sessione Luca non puo' prevalere
+  // su un login No Matrix appena effettuato (o viceversa).
+  var auth=selectNewestSession(load(PRIMARY_AUTH,null),load(AUTH,null));
+  if(!auth){ clearAuth(); }
+  else persistAuth(auth);
+
+  window.addEventListener('storage',function(e){
+    if(e.key!==AUTH&&e.key!==PRIMARY_AUTH) return;
+    var next=selectNewestSession(load(PRIMARY_AUTH,null),load(AUTH,null));
+    if(!next || !auth || next.opsToken!==auth.opsToken || next.id!==auth.id) location.reload();
+  });
   var view='news';
   var reelsData=null;
   var productionFilter='all';
@@ -404,7 +433,7 @@
     return ensureSb().rpc('ops_legacy_talent_snapshot',{p_session_token:auth.opsToken}).then(function(res){
       if(res.error||!res.data){
         if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){
-          del(AUTH); auth=null; showLogin(); lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';
+          clearAuth(); auth=null; showLogin(); lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';
         }
         throw (res.error||new Error('snapshot non disponibile'));
       }
@@ -434,7 +463,7 @@
       var row=(res.data&&res.data[0])||null;
       if(res.error||!row){ lgErr.textContent=res.error&&String(res.error.message).includes('locked')?'Troppi tentativi. Riprova più tardi.':'Codice errato. Riprova.'; return; }
       auth={id:row.talent_id,color:row.color,opsToken:row.session_token,opsExpiresAt:row.expires_at};
-      save(AUTH,auth); hideLogin(); boot();
+      persistAuth(auth); hideLogin(); boot();
     }, function(){ lgErr.textContent='Errore di connessione. Riprova.'; });
   }
   document.getElementById('lg-go').onclick=doLogin;
@@ -442,7 +471,7 @@
   document.getElementById('logout').onclick=function(){
     var token=auth&&auth.opsToken;
     if(token&&ensureSb()){ ensureSb().rpc('ops_logout',{p_session_token:token}); }
-    del(AUTH); auth=null; location.reload();
+    clearAuth(); auth=null; location.reload();
   };
 
   // ---------------- PLATFORM PICKER ----------------
@@ -757,7 +786,7 @@
     }
     ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
       if(res.error||!res.data){
-        if(/expired|invalid/i.test((res.error&&res.error.message)||'')){ delete auth.opsToken; save(AUTH,auth); }
+        if(/expired|invalid/i.test((res.error&&res.error.message)||'')){ clearAuth(); auth=null; }
         renderOpsError('Non riesco a caricare le operazioni. Riprova tra poco.'); return;
       }
       renderOperazioni(res.data);
@@ -989,6 +1018,38 @@
     return '<div class="tower-detail"><div><section class="ops-section"><div class="ops-section-head"><h3>'+towerText(x.display_name)+' · copertura dati</h3><span class="ops-count">nessuna PII</span></div>'+sourceGrid+'</section>'+creative+'<section class="ops-section"><div class="ops-section-head"><h3>Task e ritardi</h3><span class="ops-count">'+towerNum(t.open)+' aperti · '+towerNum(t.blocked)+' bloccati</span></div>'+overdue+'</section></div><aside><section class="ops-section"><div class="ops-section-head"><h3>Budget &amp; Ads</h3>'+towerStatus(b.status)+'</div><div style="padding:12px 14px">'+progress+'</div></section><section class="ops-section"><div class="ops-section-head"><h3>Chat &amp; SLA</h3>'+towerStatus(c.status)+'</div><div class="ops-kpis" style="margin:0;border:0;border-radius:0"><div class="ops-kpi"><strong>'+towerMetric(c.received_24h,c.status)+'</strong><span>arrivate 24h</span></div><div class="ops-kpi"><strong>'+towerMetric(c.unanswered,c.status)+'</strong><span>senza risposta</span></div><div class="ops-kpi"><strong>'+(c.avg_response_minutes==null?'—':towerNum(c.avg_response_minutes)+'m')+'</strong><span>risposta media</span></div><div class="ops-kpi"><strong>'+(c.p95_response_minutes==null?'—':towerNum(c.p95_response_minutes)+'m')+'</strong><span>p95 risposta</span></div></div><div class="cc-note">Messaggio più vecchio senza risposta: '+towerText(oldest)+'. Contenuti chat non conservati.</div></section><section class="ops-section"><div class="ops-section-head"><h3>Drive affiliato</h3><span class="ops-count">'+towerNum(d.assets)+' asset</span></div><div style="padding:0 14px">'+roots+'</div></section><section class="ops-section"><div class="ops-section-head"><h3>Onboarding</h3>'+towerStatus(on.status)+'</div><div style="padding:12px 14px"><b>Fase '+towerText(on.phase||'—')+' · '+towerNum(on.progress_pct)+'%</b><div class="tower-meter"><span style="width:'+Math.max(0,Math.min(100,Number(on.progress_pct||0)))+'%"></span></div><small class="muted">'+towerNum(on.completed)+' / '+towerNum(on.items)+' deliverable · '+towerNum(on.blocked)+' bloccati</small></div></section></aside></div>';
   }
 
+  // ---------------- TALENT ACTIVITY (admin) ----------------
+  var _activityData=null;
+  var _activityFilter='all';
+  function activityLabel(area){
+    return ({ads:'Ads',news:'News',organic:'Organico'})[String(area||'')]||String(area||'Altro');
+  }
+  function renderAdminActivity(data){
+    _activityData=data||{};var events=_activityData.events||[],totals=_activityData.totals||[];
+    var visible=_activityFilter==='all'?events:events.filter(function(x){return x.activity_area===_activityFilter;});
+    var byArea={ads:0,news:0,organic:0};
+    events.forEach(function(x){byArea[x.activity_area]=(byArea[x.activity_area]||0)+1;});
+    function filterButton(key,label){return '<button type="button" class="tab '+(_activityFilter===key?'on':'')+'" data-activity-filter="'+key+'" aria-pressed="'+(_activityFilter===key?'true':'false')+'">'+label+'</button>';}
+    var filters='<div class="tabs" style="margin-bottom:14px" aria-label="Filtra attività">'+filterButton('all','Tutte · '+events.length)+filterButton('ads','Ads · '+(byArea.ads||0))+filterButton('news','News · '+(byArea.news||0))+filterButton('organic','Organico · '+(byArea.organic||0))+'</div>';
+    var rows=visible.map(function(x){return '<tr><td data-l="Quando">'+towerText(opsDate(x.occurred_at))+'</td><td data-l="Talent"><b>'+towerText(INTEL.displayName(x.talent_id))+'</b></td><td data-l="Area">'+towerText(activityLabel(x.activity_area))+'</td><td data-l="Azione">'+towerText(String(x.action||'').replace(/_/g,' '))+'</td><td data-l="Elemento"><b>'+towerText(x.title||x.content_code||x.item_ref||'Elemento')+'</b><br><small class="muted">'+towerText(x.content_code||x.item_ref||'')+'</small></td><td data-l="Stato">'+towerText(String(x.status||'—').replace(/_/g,' '))+'</td></tr>';}).join('');
+    var table=visible.length?'<div class="cc-tablewrap"><table class="cc-table"><thead><tr><th>Quando</th><th>Talent</th><th>Area</th><th>Azione</th><th>Elemento</th><th>Stato</th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="ops-empty">Nessuna attività per questo filtro. Le fonti restano intatte.</div>';
+    var activeTalents={};events.forEach(function(x){activeTalents[x.talent_id]=true;});
+    content.innerHTML='<div class="tower-head"><div><div class="studio-eyebrow">Admin only · audit operativo</div><h1 class="tower-title">Attività prese dai talent</h1><p>Un solo registro per Ads, News e contenuti organici. Nessun testo grezzo, email o trascrizione viene mostrato.</p></div><div class="ops-sync">Aggiornato '+towerText(opsDate(_activityData.generated_at))+'</div></div>'+
+      '<div class="tower-kpis"><div class="tower-kpi"><b>'+towerNum(events.length)+'</b><small>eventi recenti</small></div><div class="tower-kpi"><b>'+towerNum(Object.keys(activeTalents).length)+'</b><small>talent attivi</small></div><div class="tower-kpi"><b>'+towerNum(byArea.ads||0)+'</b><small>azioni Ads</small></div><div class="tower-kpi"><b>'+towerNum((byArea.news||0)+(byArea.organic||0))+'</b><small>azioni organiche</small></div></div>'+
+      filters+'<section class="ops-section"><div class="ops-section-head"><h3>Timeline</h3><span class="ops-count">'+visible.length+' eventi</span></div>'+table+'<div class="cc-note">Fonte: ledger operativo Supabase. Il registro è append-only rispetto alle sorgenti e non sposta né elimina file Drive.</div></section>';
+    Array.prototype.forEach.call(content.querySelectorAll('[data-activity-filter]'),function(el){el.onclick=function(){_activityFilter=el.getAttribute('data-activity-filter');renderAdminActivity(_activityData);};});
+  }
+  function loadAdminActivity(){
+    destroyCharts();
+    if(!INTEL.isAdmin(auth.id)){content.innerHTML='<div class="empty">Sezione riservata agli amministratori.</div>';return;}
+    if(!auth.opsToken){content.innerHTML='<div class="empty"><b>Sessione admin scaduta.</b><br>Esci e accedi di nuovo.</div>';return;}
+    content.innerHTML=spinner('Carico il registro attività…');
+    ensureSb().rpc('ops_admin_talent_activity_snapshot',{p_session_token:auth.opsToken,p_limit:250}).then(function(res){
+      if(res.error||!res.data){content.innerHTML='<div class="empty"><b>Registro attività non ancora collegato.</b><br>'+towerText(res.error&&res.error.message||'La migration proposta deve essere verificata e promossa.')+'<br><button class="btn" id="activity-retry" style="margin-top:12px">Riprova</button></div>';var b=document.getElementById('activity-retry');if(b)b.onclick=loadAdminActivity;return;}
+      renderAdminActivity(res.data);
+    },function(){content.innerHTML='<div class="empty"><b>Registro attività temporaneamente non disponibile.</b><br>Nessun dato è stato perso. Riprova tra poco.<br><button class="btn" id="activity-retry" style="margin-top:12px">Riprova</button></div>';var b=document.getElementById('activity-retry');if(b)b.onclick=loadAdminActivity;});
+  }
+
   // ---------------- COMMAND CENTER (admin) ----------------
   function ccSecs(s){
     s=Number(s); if(!isFinite(s)) return '\u2014';
@@ -1213,7 +1274,7 @@
     if(!auth.opsToken){ content.innerHTML='<div class="empty"><b>Sessione operativa da attivare</b><br>Esci e accedi di nuovo con il tuo codice.</div>'; return; }
     ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
       if(res.error||!res.data){
-        if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){del(AUTH);auth=null;showLogin();lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';return;}
+        if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){clearAuth();auth=null;showLogin();lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';return;}
         renderCCError('Non riesco a caricare la Content Intelligence.',loadIntelligence); return;
       }
       var ci=res.data.content_intelligence;
@@ -1293,7 +1354,7 @@
     if(!auth.opsToken){content.innerHTML='<div class="empty"><b>Sessione operativa da attivare</b><br>Esci e accedi di nuovo con il tuo codice.</div>';return;}
     ensureSb().rpc('ops_dashboard_snapshot',{p_session_token:auth.opsToken}).then(function(res){
       if(res.error||!res.data){
-        if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){del(AUTH);auth=null;showLogin();lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';return;}
+        if(res.error&&/(invalid|expired).*session/i.test(String(res.error.message||res.error))){clearAuth();auth=null;showLogin();lgErr.textContent='Sessione scaduta. Inserisci di nuovo il tuo codice.';return;}
         renderCCError('Non riesco a caricare Intelligence e Drive.',loadTalentLibrary);return;
       }
       var sessionTalent=INTEL.resolveTalent(auth.id);
@@ -1841,6 +1902,7 @@
     else if(view==='piano') loadPiano();
     else if(view==='operazioni') loadOperazioni();
     else if(view==='command') loadCommandCenter();
+    else if(view==='activity') loadAdminActivity();
     else if(view==='marketing') loadMarketing();
     else if(view==='intel') loadIntelligence();
     else if(view==='calls') loadCallExecution();
@@ -1867,7 +1929,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.tab.talent-only'),function(x){ x.style.display=admin?'none':''; });
     Array.prototype.forEach.call(document.querySelectorAll('.tab.admin-only'),function(x){ x.style.display=admin?'':'none'; });
     var talentViews=['news','foryou','talentads','production','library','results','agenda'];
-    var adminViews=['adminhome','generale','reels','ads','metriche','analisi','piano','operazioni','command','marketing','intel','calls'];
+    var adminViews=['adminhome','generale','reels','ads','metriche','analisi','piano','operazioni','command','activity','marketing','intel','calls'];
     var fixtureRequested=opsFixtureEnabled()&&new URLSearchParams(location.search).get('view');
     if(!fixtureRequested){
       if(admin&&adminViews.indexOf(view)<0) view='adminhome';
