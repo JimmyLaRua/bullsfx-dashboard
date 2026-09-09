@@ -21,6 +21,10 @@ for required in ["ops_login_code_v2", "claim_pool_content", "pool_claim_snapshot
     assert required in html, required
 for forbidden in ["s.from('aff_claims')", "s.rpc('aff_login_code'"]:
     assert forbidden not in html, forbidden
+assert "claims[stableClaimKey(i)]" in html
+assert "if(res&&res.error)" in html
+assert "already_claimed" in html
+assert "expired_session" in html
 
 sample = {
     "source": {"url": "https://example.test/story", "headline": "Story", "date": "2026-08-30"},
