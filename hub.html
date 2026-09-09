@@ -1099,15 +1099,6 @@
         sources=operational.sources||[], destinations=operational.destinations||[], waRecent=operational.whatsapp_recent||[],
         outbox=operational.outbox||{};
     var p0=exceptions.filter(function(e){return Number(e.priority)===0;}).length;
-    function apprRows(){
-      if(!approvals.length) return '<div class="ops-empty">Nessuna approvazione in attesa.</div>';
-      return approvals.map(function(a){
-        var u=a.urgency||a.risk_level||'normal';
-        return '<div class="ops-row"><span class="cc-badge '+esc(u)+'">'+esc(u)+'</span>'+
-          '<div class="ops-main"><b>'+esc(a.title)+'</b><small>'+ccName(a.talent_id)+' \u00b7 '+esc(a.rationale||'Richiede conferma umana')+'</small></div>'+
-          '<span class="ops-status">'+ccSecs(a.seconds_remaining)+'</span></div>';
-      }).join('');
-    }
     function excRows(){
       if(!exceptions.length) return '<div class="ops-empty">Nessuna eccezione P0/P1.</div>';
       return exceptions.map(function(e){
@@ -1198,12 +1189,11 @@
       }).join('');
     }
     var html='<div class="ops-head"><div><h2 class="ops-title">Command Center</h2><div class="muted">Supervisione operativa \u2014 sola lettura. Le azioni restano nel backend approvato.</div></div><div class="ops-sync">Aggiornato '+esc(opsDate(cc.generated_at||(cc.approvals&&'')))+'</div></div>'+
-      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+approvals.length+'</strong><span>approvazioni in attesa</span></div>'+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+overdue.length+'</strong><span>task in ritardo</span></div>'+
       '<div class="ops-kpi"><strong'+(p0>0?' style="color:var(--red)"':'')+'>'+p0+'</strong><span>eccezioni P0</span></div>'+
       '<div class="ops-kpi"><strong'+(dls.length>0?' style="color:var(--red)"':'')+'>'+dls.length+'</strong><span>dead letter</span></div>'+
       '<div class="ops-kpi"><strong'+(Number(costs.sla_breaches)>0?' style="color:var(--gold)"':'')+'>'+Number(costs.sla_breaches||0)+'</strong><span>violazioni SLA</span></div></div>'+
       '<div class="ops-layout"><div>'+
-        '<section class="ops-section"><div class="ops-section-head"><h3>Approval Inbox</h3><span class="ops-count">'+approvals.length+'</span></div>'+apprRows()+'<div class="cc-note">Approva o rifiuta dal backend operativo: qui vedi solo lo stato.</div></section>'+
         '<section class="ops-section"><div class="ops-section-head"><h3>Eccezioni P0 / P1</h3><span class="ops-count">'+exceptions.length+'</span></div>'+excRows()+'</section>'+
         '<section class="ops-section"><div class="ops-section-head"><h3>Salute agenti</h3><span class="ops-count">'+health.length+'</span></div>'+healthTable()+'</section>'+
         '<section class="ops-section"><div class="ops-section-head"><h3>Integrazioni e fonti</h3><span class="ops-count">'+(sources.length+destinations.length)+'</span></div>'+integrationsBlock()+'</section>'+
