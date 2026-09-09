@@ -45,6 +45,13 @@ jobs:
       - name: Generate content
         run: python generate.py
 
+      - name: Verify generated dashboard before publish
+        run: |
+          python tests/test_news_diversity.py
+          python tests/test_security_headers.py
+          python tests/test_secure_claim_gateway.py
+          python tests/test_generated_news_freshness.py
+
       - name: Commit updated dashboard
         run: |
           git config user.name  "bullsfx-bot"
