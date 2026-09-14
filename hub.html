@@ -248,7 +248,7 @@
   .studio-copy-toggle.is-visible{display:inline-flex}
   .studio-copy-toggle:hover{text-decoration:underline}.studio-copy-toggle:focus-visible{outline:2px solid var(--accent,var(--gold));outline-offset:3px;border-radius:3px}
   .studio-copy-toggle::after{content:"↓";font-size:12px}.studio-copy-toggle[aria-expanded="true"]::after{content:"↑"}
-  .studio-production-card .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}
+  .studio-production-card .foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}
   .agency-today{border:1px solid var(--line);border-radius:14px;background:linear-gradient(140deg,rgba(15,23,42,.98),rgba(6,14,27,.98));padding:16px;margin-bottom:14px}
   .agency-today-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}.agency-today-head h2{font-size:18px;margin:0 0 3px}.agency-today-head p{margin:0;color:var(--mut);font-size:12px;max-width:68ch}
   .agency-priority-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--panel2)}
@@ -423,6 +423,32 @@
   var productionFilter='all';
   var talentProductionCache=null;
   var talentAdInventoryBusy=false;
+  var inventoryLoadSequence=0;
+  var inventoryRefreshRequest=null;
+  function inventoryContext(target){
+    return {sequence:++inventoryLoadSequence,target:target,id:auth&&auth.id,token:auth&&auth.opsToken};
+  }
+  function inventoryContextActive(c){
+    return !!auth&&auth.id===c.id&&auth.opsToken===c.token&&view===c.target&&inventoryLoadSequence===c.sequence;
+  }
+  function inventoryRpc(name,args,ms){
+    var controller=new AbortController(),timer;
+    var request=ensureSb().rpc(name,args);
+    if(request.abortSignal)request=request.abortSignal(controller.signal);
+    return new Promise(function(resolve,reject){
+      timer=setTimeout(function(){controller.abort();reject(new Error('Risposta lenta: verifica lo stato prima di ripetere.'));},ms||8000);
+      Promise.resolve(request).then(function(r){
+        if(r&&r.error)throw r.error;
+        if(!r||!r.data)throw new Error('Risposta inventario non disponibile');
+        resolve(r.data);
+      }).catch(reject);
+    }).finally(function(){clearTimeout(timer);});
+  }
+  function setInventoryButtonsBusy(busy){
+    Array.prototype.forEach.call(content.querySelectorAll('[data-ad-inventory-refresh],[data-ad-inventory-claim],[data-ad-inventory-skip]'),function(b){
+      b.disabled=busy;b.setAttribute('aria-busy',busy?'true':'false');
+    });
+  }
   var TALENT_LIVE_READ_ONLY=true;
   var legacySnapshotCache=null;
   var legacySnapshotAt=0;
@@ -1505,23 +1531,30 @@
   }
   function runTalentAdInventoryAction(rpc,args,button,successMessage){
     if(talentAdInventoryBusy||!ensureSb())return;
+    var context={sequence:inventoryLoadSequence,target:'talentads',id:auth.id,token:auth.opsToken};
     talentAdInventoryBusy=true;
+    setInventoryButtonsBusy(true);
     if(button){
       button.disabled=true;
       button.setAttribute('aria-busy','true');
       button.closest('.ad-inventory-card')?.classList.add('is-busy');
     }
     setAdInventoryStatus('Aggiorno il tuo inventario…');
-    studioTimeout(ensureSb().rpc(rpc,args),12000,{_studio_timeout:true}).then(function(res){
-      if(res&&res._studio_timeout)throw new Error('Aggiornamento lento: riprova tra qualche secondo. Nessuna Ads è stata persa.');
-      if(res.error)throw res.error;
-      setAdInventoryStatus(successMessage||'Inventario aggiornato.');
-      return new Promise(function(resolve){setTimeout(resolve,280);});
+    inventoryRpc(rpc,args,12000).then(function(res){
+      if(rpc==='refresh_talent_ad_inventory_v2')inventoryRefreshRequest=null;
+      if(!inventoryContextActive(context))return;
+      if(rpc==='refresh_talent_ad_inventory_v2'){
+        successMessage=res.status==='waiting_generation'?
+          'Nuove Ads in preparazione. Conserviamo la selezione attuale e tutte le Ads già prese. Pronte per il prossimo lotto: '+Number(res.ready_for_next_batch||0)+'.':
+          'Selezione aggiornata: '+Number(res.newly_offered==null?res.offered||0:res.newly_offered)+' Ads mai proposte'+(Number(res.reoffered)>0?' e '+Number(res.reoffered)+' riproposte dopo la pausa':'')+'. Le Ads prese restano in Produzione.';
+      }
     }).then(function(){
       talentAdInventoryBusy=false;
-      loadTalentAds();
+      if(inventoryContextActive(context))loadTalentAds(successMessage);
     }).catch(function(error){
       talentAdInventoryBusy=false;
+      if(!inventoryContextActive(context))return;
+      setInventoryButtonsBusy(false);
       if(button){
         button.disabled=false;
         button.removeAttribute('aria-busy');
@@ -1532,7 +1565,10 @@
   }
   function bindTalentAdInventoryActions(){
     var refresh=content.querySelector('[data-ad-inventory-refresh]');
-    if(refresh)refresh.onclick=function(){runTalentAdInventoryAction('refresh_talent_ad_inventory',{p_session_token:auth.opsToken,p_limit:20},refresh,'Nuova selezione pronta. Le Ads saltate potranno tornare più avanti.');};
+    if(refresh)refresh.onclick=function(){
+      if(!inventoryRefreshRequest||inventoryRefreshRequest.token!==auth.opsToken)inventoryRefreshRequest={token:auth.opsToken,id:crypto.randomUUID()};
+      runTalentAdInventoryAction('refresh_talent_ad_inventory_v2',{p_session_token:auth.opsToken,p_limit:20,p_request_id:inventoryRefreshRequest.id},refresh);
+    };
     Array.prototype.forEach.call(content.querySelectorAll('[data-ad-inventory-claim]'),function(button){button.onclick=function(){runTalentAdInventoryAction('claim_talent_ad_inventory',{p_session_token:auth.opsToken,p_inventory_id:button.getAttribute('data-ad-inventory-claim')},button,'Ads presa: resta visibile oggi e domani passa in produzione.');};});
     Array.prototype.forEach.call(content.querySelectorAll('[data-ad-inventory-skip]'),function(button){button.onclick=function(){runTalentAdInventoryAction('skip_talent_ad_inventory',{p_session_token:auth.opsToken,p_inventory_id:button.getAttribute('data-ad-inventory-skip')},button,'Ads messa in pausa: non è eliminata e potrà ricomparire.');};});
     bindStudioLinks();
@@ -1591,7 +1627,8 @@
     ]);
   }
 
-  function loadTalentAds(){
+  function loadTalentAds(message){
+    var context=inventoryContext('talentads');
     destroyCharts();content.innerHTML=spinner('Preparo il tuo banco Ads…');
     if(opsFixtureEnabled()){
       fetch('fixtures/talent-creative-brain.sample.json').then(function(r){if(!r.ok)throw 0;return r.json();})
@@ -1599,34 +1636,31 @@
         .catch(function(){content.innerHTML=studioError('Fixture Ads non disponibile','Ricarica la vista o usa una sessione collegata.','talentads');bindStudioLinks();});
       return;
     }
-    var brainPromise=studioTimeout(ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken}),8000,null)
-      .then(function(r){return r&&!r.error&&r.data?r.data:{};}).catch(function(){return {};});
-    var creativePromise=studioTimeout(ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken}),8000,null)
-      .then(function(r){return r?creativeRpcPayload(r):{_load_error:'Creative Brain lento: mostro intanto le Ads disponibili'};})
-      .catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
-    function inventorySnapshot(){
-      return studioTimeout(ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken}),10000,null)
-        .then(function(r){return r&&!r.error&&r.data?r.data:{_load_error:String(r&&r.error&&r.error.message||'Inventario Ads temporaneamente lento')};})
-        .catch(function(e){return {_load_error:String(e&&e.message||'Inventario Ads non disponibile')};});
-    }
-    // The inventory must be prepared before its snapshot is read. Previously these
-    // calls ran in parallel, so a fast snapshot could return an empty list and the
-    // UI fell back to legacy cards without the claim/skip controls.
-    var inventoryPromise=studioTimeout(ensureSb().rpc('ensure_talent_ad_inventory_batch',{p_session_token:auth.opsToken,p_limit:20}),15000,null)
-      .catch(function(){return null;})
-      .then(function(){return inventorySnapshot();})
-      .then(function(snapshot){
-        if(Array.isArray(snapshot&&snapshot.items)&&snapshot.items.length)return snapshot;
-        return new Promise(function(resolve){setTimeout(resolve,650);}).then(inventorySnapshot);
-      });
-    var legacyPromise=studioTimeout(loadLegacySnapshot(),8000,{}).catch(function(){return {};});
-    Promise.all([legacyPromise,brainPromise,creativePromise,inventoryPromise]).then(function(rows){
-      renderTalentAds(rows[0],rows[1],rows[2],rows[3]);
-    })
-      .catch(function(){content.innerHTML=studioError('Ads non disponibili','Riprova. Se il problema continua, esci e accedi di nuovo.','talentads');bindStudioLinks();});
+    function snapshot(){return inventoryRpc('ops_talent_ad_inventory_snapshot',{p_session_token:context.token},8000);}
+    snapshot().then(function(data){
+      if(!inventoryContextActive(context))return;
+      if(data.talent_id!==context.id||!Array.isArray(data.items))throw new Error('Perimetro inventario non valido');
+      renderTalentAds({}, {}, {},data);
+      setAdInventoryStatus(message||'');
+      // Read first; no matrix/top-up call for a full shelf. Never replace cards
+      // with a legacy fallback, and never let late replies overwrite another view.
+      if(data.items.length>=20||talentAdInventoryBusy)return;
+      talentAdInventoryBusy=true;setInventoryButtonsBusy(true);
+      setAdInventoryStatus('Le Ads disponibili sono già visibili. Completo la selezione…');
+      inventoryRpc('ensure_talent_ad_inventory_batch',{p_session_token:context.token,p_limit:20},12000)
+        .then(snapshot).then(function(next){
+          if(!inventoryContextActive(context))return;
+          if(next.talent_id!==context.id||!Array.isArray(next.items))throw new Error('Perimetro inventario non valido');
+          renderTalentAds({}, {}, {},next);
+          setAdInventoryStatus(next.items.length<20?'Disponibili '+next.items.length+' Ads. Altre personalizzazioni in attesa; nessuna Ads è stata cancellata.':'Selezione aggiornata.');
+        }).catch(function(e){if(inventoryContextActive(context))setAdInventoryStatus('Proposte conservate. '+String(e.message||e)+' Puoi ricaricare la vista.',true);})
+        .finally(function(){talentAdInventoryBusy=false;if(inventoryContextActive(context))setInventoryButtonsBusy(false);});
+    }).catch(function(e){
+      if(!inventoryContextActive(context))return;
+      content.innerHTML=studioError('Ads non disponibili',String(e.message||'Riprova: non sono state modificate le Ads.'),'talentads');bindStudioLinks();
+    });
   }
   function renderTalentAds(data,brain,creative,inventory){
-    talentAdInventoryBusy=false;
     data=data||{};brain=brain||{};creative=creative||{};inventory=inventory||{};
     var scripts=data.ads||[],metrics=data.metrics||[],daily=data.social_ads_daily||[],measured={},spend=0,leads=0,revenue=0;
     var assignments=Array.isArray(brain.assignments)?brain.assignments:[],brainSummary=brain.summary||{};
@@ -1678,11 +1712,13 @@
     if(!cards)cards=studioEmpty(inventory._load_error||'Sto preparando le prossime Ads personalizzate. Le Ads già saltate restano conservate e potranno tornare più avanti.');
     content.innerHTML=creativeErrorBanner(creative)+studioHero('Ads','Hook, script e test','Il tuo banco Ads privato: cosa registrare, quale angolo testare e dove trovare gli asset.','Sola lettura · nessuna pubblicazione automatica')+
       '<div class="ops-kpis"><div class="ops-kpi"><strong>'+Number(inventorySummary.compatible_remaining==null?(matrix.eligible||0):inventorySummary.compatible_remaining)+'</strong><span>compatibili rimaste</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.personalized_ready==null?(brainSummary.fingerprinted||0):inventorySummary.personalized_ready)+'</strong><span>personalizzate pronte</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.claimed_today||0)+'</strong><span>prese oggi</span></div><div class="ops-kpi"><strong>'+Number(inventorySummary.in_production||0)+'</strong><span>in produzione</span></div></div>'+
-      '<div class="bar"><div class="muted"><b>'+Number(inventorySummary.compatible_total==null?matrix.eligible:inventorySummary.compatible_total)+'</b> compatibili totali · '+Number(inventorySummary.waiting_personalization||0)+' in personalizzazione · spesa tracciata '+fmtEur(spend)+' · '+fmtInt(leads)+' lead</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="studio-action" data-ad-inventory-refresh>Mostrami 20 nuove</button><button type="button" class="studio-action" data-studio-view="results">Apri risultati</button></div></div><div class="ad-inventory-status" role="status" aria-live="polite" data-ad-inventory-status></div><div class="studio-production">'+cards+'</div>';
+      '<div class="bar"><div class="muted"><b>'+Number(inventorySummary.compatible_total||0)+'</b> compatibili totali · '+Number(inventorySummary.waiting_personalization||0)+' in personalizzazione · metriche nella sezione Risultati</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="studio-action" data-ad-inventory-refresh>Mostrami 20 nuove</button><button type="button" class="studio-action" data-studio-view="production">Ads prese / Produzione</button><button type="button" class="studio-action" data-studio-view="results">Apri risultati</button></div></div><div class="ad-inventory-status" role="status" aria-live="polite" data-ad-inventory-status></div><div class="studio-production">'+cards+'</div>';
     bindTalentAdInventoryActions();
+    setInventoryButtonsBusy(talentAdInventoryBusy);
   }
 
   function loadTalentProduction(){
+    var context=inventoryContext('production');
     destroyCharts();content.innerHTML=spinner('Preparo la tua produzione…');
     if(opsFixtureEnabled()){
       Promise.all([
@@ -1692,15 +1728,52 @@
         .catch(function(){content.innerHTML=studioError('Fixture produzione non disponibile','Ricarica la vista o usa una sessione collegata.','production');bindStudioLinks();});
       return;
     }
-    var reelsPromise=reelsData?Promise.resolve(reelsData):fetch('reels_organici.json').then(function(r){if(!r.ok)throw new Error('reels');return r.json();}).then(function(j){reelsData=j.reels||[];return reelsData;});
-    var brainPromise=ensureSb().rpc('ops_ads_brain_talent_snapshot_v2',{p_session_token:auth.opsToken})
-      .then(function(r){return r&&!r.error&&r.data?r.data:{};}).catch(function(){return {};});
-    var creativePromise=ensureSb().rpc('ops_talent_creative_brain_snapshot',{p_session_token:auth.opsToken})
-      .then(creativeRpcPayload).catch(function(e){return {_load_error:String(e&&e.message||'Connessione Creative Brain non disponibile')};});
-    var inventoryPromise=studioTimeout(ensureSb().rpc('ops_talent_ad_inventory_snapshot',{p_session_token:auth.opsToken}),10000,null)
-      .then(function(r){return r&&!r.error&&r.data?r.data:{production_items:[]};}).catch(function(){return {production_items:[]};});
-    Promise.all([loadLegacySnapshot(),reelsPromise,brainPromise,creativePromise,inventoryPromise]).then(function(rows){talentProductionCache={legacy:rows[0],reels:rows[1],brain:rows[2],creative:rows[3],inventory:rows[4]};renderTalentProduction();})
-      .catch(function(){content.innerHTML=studioError('Produzione non disponibile','Riprova. Se il problema continua, esci e accedi di nuovo.','production');bindStudioLinks();});
+    var pack={legacy:{},reels:[],brain:{},creative:{},inventory:{},organicLoading:true,inventoryLoaded:false};
+    talentProductionCache=pack;
+    inventoryRpc('ops_talent_ad_inventory_snapshot',{p_session_token:context.token},8000).then(function(data){
+      if(!inventoryContextActive(context))return;
+      if(data.talent_id!==context.id||!Array.isArray(data.production_items))throw new Error('Perimetro produzione non valido');
+      pack.inventory=data;pack.inventoryLoaded=true;renderTalentProduction();
+    }).catch(function(e){
+      if(!inventoryContextActive(context))return;
+      content.innerHTML=studioError('Produzione non disponibile',String(e.message||'Riprova: le Ads prese restano conservate.'),'production');bindStudioLinks();
+    });
+    var reelsPromise=studioTimeout(reelsData?Promise.resolve(reelsData):fetch('reels_organici.json').then(function(r){if(!r.ok)throw new Error('reels');return r.json();}).then(function(j){reelsData=j.reels||[];return reelsData;}),6000,[]).catch(function(){return [];});
+    var creativePromise=inventoryRpc('ops_talent_creative_brain_snapshot',{p_session_token:context.token},6000)
+      .then(function(d){if(d.talent_id!==context.id)throw new Error('Perimetro organico non valido');return d;})
+      .catch(function(e){return {_load_error:String(e.message||'Organico non disponibile')};});
+    Promise.all([reelsPromise,creativePromise]).then(function(rows){
+      if(!inventoryContextActive(context))return;
+      pack.reels=rows[0];pack.creative=rows[1];pack.organicLoading=false;
+      // Don't replace a selection while the talent is choosing a Drive asset.
+      if(pack.inventoryLoaded&&!content.querySelector('[data-drive-link-form]:not([hidden])'))renderTalentProduction();
+    });
+  }
+  function bindTalentDriveLinks(){
+    Array.prototype.forEach.call(content.querySelectorAll('[data-drive-link-open]'),function(button){
+      button.onclick=function(){
+        var form=button.closest('article').querySelector('[data-drive-link-form]');
+        form.hidden=!form.hidden;button.setAttribute('aria-expanded',form.hidden?'false':'true');
+        if(!form.hidden)form.querySelector('select').focus();
+      };
+    });
+    Array.prototype.forEach.call(content.querySelectorAll('[data-drive-link-form]'),function(form){
+      form.onsubmit=function(event){
+        event.preventDefault();
+        var select=form.querySelector('select'),button=form.querySelector('[type=submit]'),status=form.querySelector('[role=status]');
+        if(!select.value||button.disabled)return;
+        var context={sequence:inventoryLoadSequence,target:'production',id:auth.id,token:auth.opsToken};
+        button.disabled=true;select.disabled=true;status.textContent='Salvo il collegamento…';
+        inventoryRpc('link_talent_ad_drive_asset',{p_session_token:context.token,p_inventory_id:form.getAttribute('data-inventory-id'),p_asset_id:select.value,p_previous_asset_id:form.getAttribute('data-current-asset')||null},10000)
+          .then(function(){if(inventoryContextActive(context))loadTalentProduction();})
+          .catch(function(e){
+            if(!inventoryContextActive(context))return;
+            button.disabled=false;select.disabled=false;
+            var labels={asset_outside_talent_ads_root:'Questa registrazione non risulta nella tua cartella ADS.',drive_catalog_stale:'Catalogo Drive da aggiornare: chiedi al team una nuova verifica.',drive_link_changed_reload:'Il collegamento è cambiato. Ricarica la vista.',claimed_ad_required:'Puoi collegare solo una Ads già presa.'};
+            status.textContent=labels[e.message]||'Collegamento non confermato. Ricarica per verificarlo prima di ripetere.';
+          });
+      };
+    });
   }
   function renderTalentProduction(){
     var pack=talentProductionCache||{legacy:{},reels:[],brain:{},creative:{},inventory:{}},legacy=pack.legacy||{},done={};
@@ -1711,7 +1784,7 @@
     // Production contains only Ads explicitly claimed by this talent. Proposed,
     // skipped and generic Creative Brain cards belong exclusively to the Ads tab.
     var talentDriveRoot=opsSafeDriveUrl(legacy.drive_url||'');
-    var ads=productionItems.map(function(a){return {kind:'ads',id:String(a.inventory_id||''),title:a.display_title||'Ads presa',copy:a.body||'',angle:a.angle||a.experiment_lane||'Ads',format:a.format||'',url:a.drive_folder_url||'',driveRootUrl:a.drive_ads_root_url||talentDriveRoot||'',driveExpected:a.drive_folder_expected||'',driveStatus:a.drive_folder_status||'missing',code:a.content_code||'',score:a.score,reason:a.rationale,status:a.status,source:'inventario Ads preso'};});
+    var ads=productionItems.map(function(a){return {kind:'ads',id:String(a.inventory_id||''),title:a.display_title||'Ads presa',legacyTitle:a.legacy_display_title||'',copy:a.body||'',angle:a.angle||a.experiment_lane||'Ads',format:a.format||'',url:a.drive_folder_url||'',driveAssetId:a.drive_asset_id||'',driveAssetType:a.drive_asset_type||'',driveAssetName:a.drive_asset_name||'',driveRootUrl:a.drive_ads_root_url||talentDriveRoot||'',driveExpected:a.drive_folder_expected||'',driveStatus:a.drive_folder_status||'unlinked',code:a.content_code||'',score:a.score,reason:a.rationale,status:a.status,source:'inventario Ads preso'};});
     var creativeReels=creativeItems.filter(function(x){return x.kind==='reel';}).map(function(x){var d=x.draft||{};return {kind:'organic',id:String(x.id||''),title:x.title||'Reel organico',copy:d.body||x.rationale||'',angle:x.angle||x.source_kind||'Organico',format:x.format||'',url:(x.evidence||{}).source_url||'',code:x.content_code||'',score:x.source_score,reason:x.rationale,status:x.production_status,source:x.source_kind};});
     var organics=creativeReels.length?creativeReels:(pack.reels||[]).filter(function(r){return INTEL.resolveTalent(r.talent)===INTEL.resolveTalent(auth.id);}).map(function(r){return {kind:'organic',id:String(r.id||''),title:r.testo_schermo||r.hook||'Reel organico',copy:r.script_parlato||r.caption||'',angle:r.format||'Organico',format:r.regia||'',url:r.drive_url||r.asset_url||''};});
     var all=productionFilter==='ads'?ads:(productionFilter==='organic'?organics:ads.concat(organics));
@@ -1726,15 +1799,27 @@
     }
     var cards=shown.length?shown.map(function(x){
       var metric=done[x.id],url=opsSafeDriveUrl(x.url),rootUrl=opsSafeDriveUrl(x.driveRootUrl);
-      var driveAction=x.kind==='ads'?(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri cartella Ads</a>':(rootUrl?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(rootUrl)+'">Apri ADS e crea la cartella '+esc(String(x.driveExpected||'ADS'))+'</a>':'<span class="studio-signal warn">Drive personale non collegato</span>')):(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri fonte</a>':'');
+      var driveAction=x.kind==='ads'?(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">'+(x.driveAssetType==='application/vnd.google-apps.folder'?'Apri cartella Ads':'Apri video Ads')+'</a>':(rootUrl?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(rootUrl)+'">Apri la tua cartella ADS</a>':'<span class="studio-signal warn">Root ADS da verificare</span>')):(url?'<a class="studio-action" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Apri fonte</a>':'');
+      if(x.kind==='ads'){
+        var options=((pack.inventory||{}).drive_assets||[]),selectId='drive-link-'+x.id;
+        driveAction+='<button type="button" class="studio-action" data-drive-link-open aria-expanded="false" aria-controls="'+esc(selectId)+'-form">'+(x.driveAssetId?'Cambia collegamento':'Collega cartella o video')+'</button>'+
+          '<form id="'+esc(selectId)+'-form" hidden data-drive-link-form data-inventory-id="'+esc(x.id)+'" data-current-asset="'+esc(x.driveAssetId)+'" style="flex-basis:100%;min-width:0">'+
+          '<label for="'+esc(selectId)+'">Registrazione nella tua cartella ADS</label><select id="'+esc(selectId)+'" required style="width:100%;min-height:44px;margin:8px 0;max-width:100%"><option value="">Scegli la cartella o il video corretto</option>'+
+          options.map(function(a){return '<option value="'+esc(a.asset_id)+'"'+(a.asset_id===x.driveAssetId?' selected':'')+'>'+esc(a.relative_path)+'</option>';}).join('')+
+          '</select><small>'+(!options.length?'Nessuna cartella o video selezionabile nel catalogo ADS. ': '')+'Colleghi il file esistente: non lo spostiamo e non lo rinominiamo.</small>'+
+          '<button type="submit" class="studio-action" style="min-height:44px;margin-top:8px">Conferma collegamento</button><div role="status" aria-live="polite"></div></form>';
+        if(x.legacyTitle)driveAction+='<small style="flex-basis:100%">Prima compariva come '+esc(x.legacyTitle)+'. Il codice contenuto non è cambiato.</small>';
+        if(x.driveStatus==='stale'||x.driveStatus==='unavailable')driveAction+='<small style="flex-basis:100%">Collegamento da riverificare: catalogo non aggiornato o file non più rilevato nella root ADS.</small>';
+      }
       return '<article class="studio-production-card"><div style="display:flex;justify-content:space-between;gap:10px"><span class="studio-signal '+(x.kind==='ads'?'warn':'good')+'">'+(x.kind==='ads'?'ADS PRESA':'ORGANICO')+'</span><span class="studio-signal">'+esc(String(x.status|| (metric?'misurato':'da produrre')).replace(/_/g,' '))+'</span></div>'+productionPipeline(x,metric,url)+(x.code?'<div class="studio-kicker" style="margin-top:10px">'+esc(String(x.code))+(x.score==null?'':' · score '+Math.round(Number(x.score)))+'</div>':'')+'<div class="hook">'+esc(String(x.title))+'</div>'+studioExpandableCopy(x.copy||'Brief in preparazione',x.kind==='ads'?'Leggi tutto lo script':'Leggi tutto il brief')+(x.reason?'<div class="studio-kicker" style="margin-top:9px">Perché: '+esc(String(x.reason))+'</div>':'')+(x.kind==='ads'&&x.driveExpected?'<div class="studio-kicker" style="margin-top:9px">Cartella attesa · '+esc(String(x.driveExpected))+'</div>':'')+'<div class="foot"><small class="muted">'+esc(String(x.source||x.angle))+(x.format?' · '+esc(String(x.format)):'')+'</small>'+driveAction+'</div></article>';
     }).join(''):studioEmpty('Nessun contenuto in questa vista.');
-    content.innerHTML=creativeErrorBanner(pack.creative)+studioHero('Produzione','Dal brief alla registrazione','Qui trovi soltanto le Ads che hai preso e i contenuti organici assegnati, con la cartella Drive collegata per titolo.','Drive in sola lettura · nessuna pubblicazione automatica')+
-      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+ads.length+'</strong><span>Ads prese</span></div><div class="ops-kpi"><strong>'+organics.length+'</strong><span>Reel assegnati</span></div><div class="ops-kpi"><strong>'+withDrive+'</strong><span>cartelle Ads trovate</span></div><div class="ops-kpi"><strong>'+measured+'</strong><span>contenuti misurati</span></div></div>'+
+    content.innerHTML=creativeErrorBanner(pack.creative)+studioHero('Produzione','Dal brief alla registrazione','Qui trovi le Ads che hai preso e i contenuti organici assegnati. Collega la cartella o il video corretto dal tuo Drive.','Nessun file spostato · nessuna pubblicazione automatica')+
+      '<div class="ops-kpis"><div class="ops-kpi"><strong>'+ads.length+'</strong><span>Ads prese</span></div><div class="ops-kpi"><strong>'+(pack.organicLoading?'…':organics.length)+'</strong><span>Reel assegnati</span></div><div class="ops-kpi"><strong>'+withDrive+'</strong><span>registrazioni collegate</span></div><div class="ops-kpi"><strong>'+(ads.length-withDrive)+'</strong><span>Ads da collegare</span></div></div>'+
       '<div class="studio-segment" role="group" aria-label="Filtra produzione"><button type="button" data-production-filter="all" class="'+(productionFilter==='all'?'on':'')+'">Tutti</button><button type="button" data-production-filter="ads" class="'+(productionFilter==='ads'?'on':'')+'">Ads</button><button type="button" data-production-filter="organic" class="'+(productionFilter==='organic'?'on':'')+'">Organico</button></div>'+
       '<div class="bar"><div class="muted"><b>'+all.length+'</b> contenuti · ne mostro '+shown.length+' per mantenere la vista leggibile</div></div><div class="studio-production">'+cards+'</div>';
     Array.prototype.forEach.call(content.querySelectorAll('[data-production-filter]'),function(b){b.onclick=function(){productionFilter=b.getAttribute('data-production-filter');renderTalentProduction();};});
     bindStudioCopyToggles();
+    bindTalentDriveLinks();
   }
 
   function loadTalentResults(){
